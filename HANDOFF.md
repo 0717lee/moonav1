@@ -10,11 +10,15 @@
 
 ## 基线与状态
 
-来源为 PixelForge `6f0c711c54f89d34f3e2ef97cde7a0a45458583d`，完整来源见 [PROVENANCE.md](PROVENANCE.md)。原项目中的 AV1/AVIF 主线验收已完成。本次独立包的检查及 native、JS、wasm-gc 各 1306 项测试已通过；PixelForge 的临时迁移候选通过三目标各 242 项测试及 Web/Worker/WASM 集成验证。公开仓库、Mooncakes 发布和 PixelForge 远端迁移尚未执行，撤回方式及发布范围等待维护者确认。
+来源为 PixelForge `6f0c711c54f89d34f3e2ef97cde7a0a45458583d`，完整来源见 [PROVENANCE.md](PROVENANCE.md)。原项目中的 AV1/AVIF 主线验收已完成。初始独立包候选的检查及 native、JS、wasm-gc 各 1306 项测试已通过；PixelForge 的迁移候选通过三目标各 242 项测试及 Web/Worker/WASM 集成验证。这些结果记录候选验证，不代替固定快照接入后的最终主线检查。
+
+维护者已选择保留 PixelForge 历史与功能，以新增迁移提交分离维护边界。MoonAV1 继续作为本地独立库，不创建公开仓库、不发布 Mooncakes；既有实现仍在 PixelForge 公开历史中。PixelForge 使用随源码提交的 `vendor/moonav1` 固定快照和 `moon.work`，构建不依赖未发布的 registry 包或同级开发目录。
 
 包名 `0717lee/moonav1`，初始版本 `0.1.0`，配置见 `moon.mod` 和 `moon.pkg`。根目录 `av1_*.mbt` 负责 AV1 语法、熵解码、预测、重建、滤波和状态；`avif_*.mbt` 负责容器、网格及动画。像素基础定义与外部图像库、浏览器、文件系统解耦。
 
-PixelForge 的可审查迁移候选为本地分支 `codex/extract-moonav1`，提交 `e366566e95b59173738bdb9bbbc5376550bd92cb`。该分支已准备解码委托、接口、产物和文档迁移；`main` 及远端仍保留原实现。发布新库、将该候选合入主分支以及推送尚未执行。
+PixelForge 的迁移提交 `e366566e95b59173738bdb9bbbc5376550bd92cb` 已快进合入本地 `main`，包含解码委托、接口、产物和文档迁移。固定快照接入及其最终验证见 PixelForge 的交接记录；本地合并不表示远端已更新。
+
+解码修复先在 MoonAV1 完成并提交，再在 PixelForge 执行 `node scripts/vendor-moonav1.mjs ../moonav1` 生成固定来源提交的快照。快照不手改；CI 以 `node scripts/vendor-moonav1.mjs --check` 离线验证已登记内容。222 个 MoonBit 文件、模块/包配置、接口、许可和 PROVENANCE 随快照分发，快照 README 由工具生成；完整 fixture、生成器、本交接与本库 CI 留在独立库。
 
 ## 能力与公开契约
 
@@ -30,7 +34,7 @@ PixelForge 的可审查迁移候选为本地分支 `codex/extract-moonav1`，提
 2. native、JS、wasm-gc 适用测试全部通过；迁移前的原始码流和独立像素保持不变。
 3. 独立消费者能够调用静态与动画解码，结果、像素和时间与迁移前一致。
 4. 文档、公开接口、版本配置和实际安装方式一致；第三方声明和样本来源可追溯。
-5. PixelForge 的迁移提交可审查，其他图像处理能力与集成检查通过；远端操作遵循维护者确认的范围。
+5. PixelForge 的迁移提交与固定来源快照可审查，干净源码检出无需同级独立库即可构建；其他图像处理能力与集成检查通过。公开仓库、包发布和远端更新另行决定。
 
 ## 验证命令
 
@@ -57,7 +61,7 @@ git diff --check
 
 ## 迁移验证记录
 
-以下为 2026-09-24 的本地实测；不等同于远端 CI 或已发布版本。
+以下为 2026-09-24 初始独立包与 PixelForge 迁移候选的本地实测；不等同于固定快照接入后的最终主线验证、远端 CI 或已发布版本。
 
 | 检查 | 结果 |
 | --- | --- |
@@ -75,6 +79,6 @@ git diff --check
 | 临时消费者 Web | 产物生成/复现、数字规范化、8/10/12-bit grid、alpha/prem 动画、真实 Worker 独立像素与错误路径、线性内存 WASM 检查通过 |
 | 临时消费者 native CLI | 10-bit YCgCo prem 图转 QOI 后，用 Pillow 独立解码得到的 1024 字节 RGBA 与 libavif 真值完全一致；彩色 12-bit grid 转 QOI 与迁移前输出逐字节相同 |
 
-PixelForge 原有的 1546 项总测试已分离为 1306 项解码测试和 240 项图像处理测试；临时消费者另新增 2 项适配边界测试。消费者验证应在最终安装/发布方式确定后，继续核对干净环境与远端 CI。
+PixelForge 原有的 1546 项总测试已分离为 1306 项解码测试和 240 项图像处理测试；临时消费者另新增 2 项适配边界测试。已选定固定快照接入方式；消费者最终验证须覆盖该方式下的干净环境、快照一致性、三后端及浏览器/CLI 集成，最终实测结果另记。
 
 注意 `tests/fixtures/avif-grid/manifest.json` 的 `color_rgba_contract`：彩色网格采用本库最近邻 4:2:0 约定，其 `scalar.rgba` 是保存的外部转换结果，并不声明完全相同。不能将该文件误用为 RGBA 零差异验收金值；原生 YUV、单色网格和具有明确 RGBA 约定的 prem 参考分别按各自契约检查。

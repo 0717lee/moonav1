@@ -2,7 +2,7 @@
 
 A pure MoonBit AV1/AVIF decoder for native, JavaScript and wasm-gc. The decoding core does not call browser image decoders or native codec libraries. External decoders are used only to produce independent test references.
 
-Extracted from [PixelForge](https://github.com/0717lee/pixelforge); see [provenance](PROVENANCE.md), [handoff and acceptance criteria](HANDOFF.md), and [third-party notices](THIRD_PARTY_NOTICES.md). This is a local migration revision and has not been published yet.
+Extracted from [PixelForge](https://github.com/0717lee/pixelforge); see [provenance](PROVENANCE.md), [handoff and acceptance criteria](HANDOFF.md), and [third-party notices](THIRD_PARTY_NOTICES.md). MoonAV1 is maintained locally as an independent library. It has no public repository and has not been published to Mooncakes. The existing implementation remains in PixelForge's public history.
 
 ## Scope
 
@@ -15,7 +15,7 @@ RGBA preserves source primaries/transfer, uses nearest-neighbor chroma replicati
 
 ## API
 
-Import `0717lee/moonav1` in a consumer package, then call:
+The package identifier is `0717lee/moonav1`; it currently requires a local workspace and is unavailable from Mooncakes. PixelForge includes a snapshot at `vendor/moonav1`, pinned to a committed MoonAV1 revision and resolved by its checked-in `moon.work`. Building PixelForge therefore does not require a sibling MoonAV1 checkout. Import the package in a consumer, then call:
 
 ```moonbit
 fn decode_image(bytes : Array[Byte]) -> @moonav1.Image? {
@@ -37,5 +37,7 @@ moon test --target native
 ```
 
 Ordinary tests are self-contained and do not require PixelForge or an external decoder. Fixture manifests preserve independent pixels, source versions and commands. Reference-generation tools are in `scripts/`.
+
+MoonAV1 is the canonical source for decoder changes. PixelForge's snapshot contains source, embedded tests, interfaces and licensing documents; a synchronization tool generates it from a committed MoonAV1 revision. Edit the independent library and regenerate the snapshot instead of editing vendored files. The complete fixtures and generators remain in MoonAV1. A public repository and package release are separate future decisions.
 
 Apache-2.0, with the upstream notices retained. “Pure MoonBit” describes the implementation language, not original authorship of every algorithm.
