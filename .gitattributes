@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# Independent references and historical manifests must retain their exact bytes.
+tests/fixtures/** -text -whitespace

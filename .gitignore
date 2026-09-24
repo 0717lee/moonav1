@@ -1,0 +1,9 @@
+.DS_Store
+_build/
+target/
+.mooncakes/
+.moonagent/
+__pycache__/
+_refs/
+!tests/fixtures/**/*.avif
+!tests/fixtures/**/*.avif.yuv
