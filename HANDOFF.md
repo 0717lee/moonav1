@@ -14,6 +14,8 @@
 
 包名 `0717lee/moonav1`，初始版本 `0.1.0`，配置见 `moon.mod` 和 `moon.pkg`。根目录 `av1_*.mbt` 负责 AV1 语法、熵解码、预测、重建、滤波和状态；`avif_*.mbt` 负责容器、网格及动画。像素基础定义与外部图像库、浏览器、文件系统解耦。
 
+PixelForge 的可审查迁移候选为本地分支 `codex/extract-moonav1`，提交 `e366566e95b59173738bdb9bbbc5376550bd92cb`。该分支已准备解码委托、接口、产物和文档迁移；`main` 及远端仍保留原实现。发布新库、将该候选合入主分支以及推送尚未执行。
+
 ## 能力与公开契约
 
 - 8/10/12-bit，单色与 4:2:0/4:2:2/4:4:4；帧内/帧间像素重建、多 tile、量化与环路滤波、film grain。
@@ -68,7 +70,11 @@ git diff --check
 | 参考迁移 | 41 组、2344 文件逐个 SHA-256 与来源相同；1847 个可定位 manifest 文件/哈希对一致 |
 | 脚本及说明 | 55 个 Python 文件通过 AST 解析，127 个 JSON 可解析，相对 Markdown 文件链接无缺失 |
 | `moon package --list` | 成功生成本地 `0717lee-moonav1-0.1.0.zip`，未上传 |
+| 干净源码归档 | 从初始提交导出的独立目录，JS 1306/1306；不使用原工作树构建缓存 |
 | PixelForge 临时消费者 | 三目标各 242 项通过；包含本地 Image、网格适配、公开 reference slot 修改与复制隔离检查 |
 | 临时消费者 Web | 产物生成/复现、数字规范化、8/10/12-bit grid、alpha/prem 动画、真实 Worker 独立像素与错误路径、线性内存 WASM 检查通过 |
+| 临时消费者 native CLI | 10-bit YCgCo prem 图转 QOI 后，用 Pillow 独立解码得到的 1024 字节 RGBA 与 libavif 真值完全一致；彩色 12-bit grid 转 QOI 与迁移前输出逐字节相同 |
 
 PixelForge 原有的 1546 项总测试已分离为 1306 项解码测试和 240 项图像处理测试；临时消费者另新增 2 项适配边界测试。消费者验证应在最终安装/发布方式确定后，继续核对干净环境与远端 CI。
+
+注意 `tests/fixtures/avif-grid/manifest.json` 的 `color_rgba_contract`：彩色网格采用本库最近邻 4:2:0 约定，其 `scalar.rgba` 是保存的外部转换结果，并不声明完全相同。不能将该文件误用为 RGBA 零差异验收金值；原生 YUV、单色网格和具有明确 RGBA 约定的 prem 参考分别按各自契约检查。
