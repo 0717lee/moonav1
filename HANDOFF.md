@@ -16,7 +16,9 @@
 
 包名 `0717lee/moonav1`，初始版本 `0.1.0`，配置见 `moon.mod` 和 `moon.pkg`。根目录 `av1_*.mbt` 负责 AV1 语法、熵解码、预测、重建、滤波和状态；`avif_*.mbt` 负责容器、网格及动画。像素基础定义与外部图像库、浏览器、文件系统解耦。
 
-PixelForge 的迁移提交 `e366566e95b59173738bdb9bbbc5376550bd92cb` 已快进合入本地 `main`，包含解码委托、接口、产物和文档迁移。固定快照接入及其最终验证见 PixelForge 的交接记录；本地合并不表示远端已更新。
+PixelForge 的迁移提交 `e366566e95b59173738bdb9bbbc5376550bd92cb` 与固定快照接入提交 `cb8169b2495bdaee9d829515e4811639d096165c` 已正常推送到原仓库 `main`，没有改写历史。快照来源为本库 `9f0f0c31a3ab35f169836223e6505b584882a15a`，本次后续交接文档更新不改变已固定的解码实现。
+
+最终集成验收已完成：[GitHub CI 35965584975](https://github.com/0717lee/pixelforge/actions/runs/35965584975) 在上述 PixelForge 提交的干净 Ubuntu 检出中全部通过，覆盖依赖解析、229 文件快照校验、三后端测试、Web 产物复现、真实 Worker 独立像素、WASM 和 CLI。本地固定快照也已通过 native、JS、wasm-gc 各 1548 项测试（本库 1306 + PixelForge 242），native AVIF→QOI 的 1024 字节 RGBA 与独立参考完全一致。MoonAV1 本身仍没有公开仓库或 Mooncakes 发布。
 
 解码修复先在 MoonAV1 完成并提交，再在 PixelForge 执行 `node scripts/vendor-moonav1.mjs ../moonav1` 生成固定来源提交的快照。快照不手改；CI 以 `node scripts/vendor-moonav1.mjs --check` 离线验证已登记内容。222 个 MoonBit 文件、模块/包配置、接口、许可和 PROVENANCE 随快照分发，快照 README 由工具生成；完整 fixture、生成器、本交接与本库 CI 留在独立库。
 
