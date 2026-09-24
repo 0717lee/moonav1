@@ -14,6 +14,8 @@
 
 维护者已暂停 PixelForge 集成：以新增 revert 提交撤回迁移和固定快照接入，PixelForge 恢复来源版本的内置解码实现，保留历史与现有功能。当前没有活动的 MoonAV1 vendor、workspace 依赖或同步流程。MoonAV1 继续作为本地独立库，尚未创建公开仓库或发布 Mooncakes；正式发布后再通过发布版本接入 PixelForge，不承诺发布时间。
 
+撤回提交 [`edebb1f`](https://github.com/0717lee/pixelforge/commit/edebb1f0a597b8d1e11d6c90ebfad0b40e38299d) 已推送至 PixelForge `main`，[CI 35968739744](https://github.com/0717lee/pixelforge/actions/runs/35968739744) 全部通过。本地复验为 native、JS、wasm-gc 各 1546/1546，Web/Worker、WASM 和 native CLI 保持可用；这验证的是恢复后的 PixelForge 内置实现。本库源码及独立测试未被撤回。
+
 包名 `0717lee/moonav1`，初始版本 `0.1.0`，配置见 `moon.mod` 和 `moon.pkg`。根目录 `av1_*.mbt` 负责 AV1 语法、熵解码、预测、重建、滤波和状态；`avif_*.mbt` 负责容器、网格及动画。像素基础定义与外部图像库、浏览器、文件系统解耦。
 
 ## 已撤回的 PixelForge 集成记录
