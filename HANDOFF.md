@@ -4,23 +4,25 @@
 
 ## 最终目标
 
-交付可独立安装、构建、测试和维护的纯 MoonBit AV1/AVIF 解码基础库。native、JavaScript、wasm-gc 共享解码核心，不通过浏览器原生解码或 FFI 调用宿主编解码器补足能力。PixelForge 等图像应用可作为消费者，核心实现只维护一份。
+交付可独立安装、构建、测试和维护的纯 MoonBit AV1/AVIF 解码基础库。native、JavaScript、wasm-gc 共享解码核心，不通过浏览器原生解码或 FFI 调用宿主编解码器补足能力。MoonAV1 正式发布后，PixelForge 等图像应用再通过正式版本接入，最终使共享解码核心只维护一份。
 
 本次迁移要求保持既有像素与错误处理契约，迁出对应参考样本、生成器、许可证和文档；不改变解码算法，不将迁移包装为新算法实现。
 
 ## 基线与状态
 
-来源为 PixelForge `6f0c711c54f89d34f3e2ef97cde7a0a45458583d`，完整来源见 [PROVENANCE.md](PROVENANCE.md)。原项目中的 AV1/AVIF 主线验收已完成。初始独立包候选的检查及 native、JS、wasm-gc 各 1306 项测试已通过；PixelForge 的迁移候选通过三目标各 242 项测试及 Web/Worker/WASM 集成验证。这些结果记录候选验证，不代替固定快照接入后的最终主线检查。
+来源为 PixelForge `6f0c711c54f89d34f3e2ef97cde7a0a45458583d`，完整来源见 [PROVENANCE.md](PROVENANCE.md)。原项目中的 AV1/AVIF 主线验收已完成。初始独立包的检查及 native、JS、wasm-gc 各 1306 项测试已通过；本地 MoonAV1 的完整源码、测试、fixture 和生成器继续保留。
 
-维护者已选择保留 PixelForge 历史与功能，以新增迁移提交分离维护边界。MoonAV1 继续作为本地独立库，不创建公开仓库、不发布 Mooncakes；既有实现仍在 PixelForge 公开历史中。PixelForge 使用随源码提交的 `vendor/moonav1` 固定快照和 `moon.work`，构建不依赖未发布的 registry 包或同级开发目录。
+维护者已暂停 PixelForge 集成：以新增 revert 提交撤回迁移和固定快照接入，PixelForge 恢复来源版本的内置解码实现，保留历史与现有功能。当前没有活动的 MoonAV1 vendor、workspace 依赖或同步流程。MoonAV1 继续作为本地独立库，尚未创建公开仓库或发布 Mooncakes；正式发布后再通过发布版本接入 PixelForge，不承诺发布时间。
 
 包名 `0717lee/moonav1`，初始版本 `0.1.0`，配置见 `moon.mod` 和 `moon.pkg`。根目录 `av1_*.mbt` 负责 AV1 语法、熵解码、预测、重建、滤波和状态；`avif_*.mbt` 负责容器、网格及动画。像素基础定义与外部图像库、浏览器、文件系统解耦。
 
-PixelForge 的迁移提交 `e366566e95b59173738bdb9bbbc5376550bd92cb` 与固定快照接入提交 `cb8169b2495bdaee9d829515e4811639d096165c` 已正常推送到原仓库 `main`，没有改写历史。快照来源为本库 `9f0f0c31a3ab35f169836223e6505b584882a15a`，本次后续交接文档更新不改变已固定的解码实现。
+## 已撤回的 PixelForge 集成记录
 
-最终集成验收已完成：[GitHub CI 35965584975](https://github.com/0717lee/pixelforge/actions/runs/35965584975) 在上述 PixelForge 提交的干净 Ubuntu 检出中全部通过，覆盖依赖解析、229 文件快照校验、三后端测试、Web 产物复现、真实 Worker 独立像素、WASM 和 CLI。本地固定快照也已通过 native、JS、wasm-gc 各 1548 项测试（本库 1306 + PixelForge 242），native AVIF→QOI 的 1024 字节 RGBA 与独立参考完全一致。MoonAV1 本身仍没有公开仓库或 Mooncakes 发布。
+以下是已执行、现已撤回的接入方式的历史证据，不表示当前 PixelForge 依赖 MoonAV1。
 
-解码修复先在 MoonAV1 完成并提交，再在 PixelForge 执行 `node scripts/vendor-moonav1.mjs ../moonav1` 生成固定来源提交的快照。快照不手改；CI 以 `node scripts/vendor-moonav1.mjs --check` 离线验证已登记内容。222 个 MoonBit 文件、模块/包配置、接口、许可和 PROVENANCE 随快照分发，快照 README 由工具生成；完整 fixture、生成器、本交接与本库 CI 留在独立库。
+PixelForge 的迁移提交 `e366566e95b59173738bdb9bbbc5376550bd92cb` 与固定快照接入提交 `cb8169b2495bdaee9d829515e4811639d096165c` 曾正常推送到原仓库 `main`。当时快照来源为本库 `9f0f0c31a3ab35f169836223e6505b584882a15a`，包括 222 个 MoonBit 文件及配置、接口和许可等共 229 个登记文件。这两项接入变更通过新增 revert 提交撤回，原提交及其验收证据保留在历史中。
+
+当时的 [GitHub CI 35965584975](https://github.com/0717lee/pixelforge/actions/runs/35965584975) 在干净 Ubuntu 检出中通过，覆盖依赖解析、快照校验、三后端测试、Web 产物复现、真实 Worker 独立像素、WASM 和 CLI。本地快照接入也通过 native、JS、wasm-gc 各 1548 项测试（本库 1306 + PixelForge 242），native AVIF→QOI 的 1024 字节 RGBA 与独立参考完全一致。这些结果不替代未来正式发布版本接入时的验证。
 
 ## 能力与公开契约
 
@@ -36,7 +38,7 @@ PixelForge 的迁移提交 `e366566e95b59173738bdb9bbbc5376550bd92cb` 与固定�
 2. native、JS、wasm-gc 适用测试全部通过；迁移前的原始码流和独立像素保持不变。
 3. 独立消费者能够调用静态与动画解码，结果、像素和时间与迁移前一致。
 4. 文档、公开接口、版本配置和实际安装方式一致；第三方声明和样本来源可追溯。
-5. PixelForge 的迁移提交与固定来源快照可审查，干净源码检出无需同级独立库即可构建；其他图像处理能力与集成检查通过。公开仓库、包发布和远端更新另行决定。
+5. MoonAV1 正式发布后，PixelForge 才通过正式版本接入，并验证干净环境安装、其他图像处理能力与浏览器/CLI 集成。当前暂停消费者迁移，公开仓库与包发布由维护者另行决定。
 
 ## 验证命令
 
@@ -63,7 +65,7 @@ git diff --check
 
 ## 迁移验证记录
 
-以下为 2026-09-24 初始独立包与 PixelForge 迁移候选的本地实测；不等同于固定快照接入后的最终主线验证、远端 CI 或已发布版本。
+以下为 2026-09-24 初始独立包与 PixelForge 迁移候选的本地实测。PixelForge 接入现已撤回，这些历史结果不表示当前依赖关系或已发布版本。
 
 | 检查 | 结果 |
 | --- | --- |
@@ -81,6 +83,6 @@ git diff --check
 | 临时消费者 Web | 产物生成/复现、数字规范化、8/10/12-bit grid、alpha/prem 动画、真实 Worker 独立像素与错误路径、线性内存 WASM 检查通过 |
 | 临时消费者 native CLI | 10-bit YCgCo prem 图转 QOI 后，用 Pillow 独立解码得到的 1024 字节 RGBA 与 libavif 真值完全一致；彩色 12-bit grid 转 QOI 与迁移前输出逐字节相同 |
 
-PixelForge 原有的 1546 项总测试已分离为 1306 项解码测试和 240 项图像处理测试；临时消费者另新增 2 项适配边界测试。已选定固定快照接入方式；消费者最终验证须覆盖该方式下的干净环境、快照一致性、三后端及浏览器/CLI 集成，最终实测结果另记。
+迁移验证时，PixelForge 原有的 1546 项总测试拆为 1306 项解码测试和 240 项图像处理测试，临时消费者另新增 2 项适配边界测试。该消费者拆分和固定快照接入已撤回；MoonAV1 独立测试继续保留。未来正式版本接入时，须重新验证干净环境安装、三后端及浏览器/CLI 集成。
 
 注意 `tests/fixtures/avif-grid/manifest.json` 的 `color_rgba_contract`：彩色网格采用本库最近邻 4:2:0 约定，其 `scalar.rgba` 是保存的外部转换结果，并不声明完全相同。不能将该文件误用为 RGBA 零差异验收金值；原生 YUV、单色网格和具有明确 RGBA 约定的 prem 参考分别按各自契约检查。

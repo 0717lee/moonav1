@@ -4,6 +4,8 @@ A pure MoonBit AV1/AVIF decoder for native, JavaScript and wasm-gc. The decoding
 
 Extracted from [PixelForge](https://github.com/0717lee/pixelforge); see [provenance](PROVENANCE.md), [handoff and acceptance criteria](HANDOFF.md), and [third-party notices](THIRD_PARTY_NOTICES.md). MoonAV1 is maintained locally as an independent library. It has no public repository and has not been published to Mooncakes. The existing implementation remains in PixelForge's public history.
 
+PixelForge integration is paused. PixelForge continues to use its built-in AV1/AVIF decoder; the earlier snapshot and workspace integration has been withdrawn. Integration through a released package version will be revisited after MoonAV1 is formally published.
+
 ## Scope
 
 - 8/10/12-bit AV1, monochrome and 4:2:0/4:2:2/4:4:4; intra/inter reconstruction, persistent references and entropy state, tiles, quantization, filtering and film grain.
@@ -15,7 +17,7 @@ RGBA preserves source primaries/transfer, uses nearest-neighbor chroma replicati
 
 ## API
 
-The package identifier is `0717lee/moonav1`; it currently requires a local workspace and is unavailable from Mooncakes. PixelForge includes a snapshot at `vendor/moonav1`, pinned to a committed MoonAV1 revision and resolved by its checked-in `moon.work`. Building PixelForge therefore does not require a sibling MoonAV1 checkout. Import the package in a consumer, then call:
+The package identifier is `0717lee/moonav1` and is currently unavailable from Mooncakes. The example below shows the `@moonav1` alias used by a consumer after importing the package. PixelForge currently has no active dependency on this library:
 
 ```moonbit
 fn decode_image(bytes : Array[Byte]) -> @moonav1.Image? {
@@ -38,6 +40,6 @@ moon test --target native
 
 Ordinary tests are self-contained and do not require PixelForge or an external decoder. Fixture manifests preserve independent pixels, source versions and commands. Reference-generation tools are in `scripts/`.
 
-MoonAV1 is the canonical source for decoder changes. PixelForge's snapshot contains source, embedded tests, interfaces and licensing documents; a synchronization tool generates it from a committed MoonAV1 revision. Edit the independent library and regenerate the snapshot instead of editing vendored files. The complete fixtures and generators remain in MoonAV1. A public repository and package release are separate future decisions.
+This independent library retains its complete source, tests, fixtures, generators and licensing documents for standalone development. PixelForge temporarily maintains its built-in implementation without synchronizing this library's source. Public hosting and package publication remain maintainer decisions; consumer migration follows a formal release.
 
 Apache-2.0, with the upstream notices retained. “Pure MoonBit” describes the implementation language, not original authorship of every algorithm.
