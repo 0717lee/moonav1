@@ -1,0 +1,21 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "0717lee/moonav1/tests/container_decode"
+
+// Values
+
+// Errors
+
+// Types and methods
+type ExpectedContainer
+
+type ExpectedPacket
+
+type PacketPass
+
+type PacketStreamState
+
+type StreamRun
+
+// Type aliases
+
+// Traits

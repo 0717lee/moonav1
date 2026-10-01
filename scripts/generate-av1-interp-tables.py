@@ -17,7 +17,6 @@ import hashlib
 import os
 import re
 import subprocess
-import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SOURCE = os.path.join(ROOT, "_refs", "go-av1", "decode", "subpel_gen.go")

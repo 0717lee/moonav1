@@ -1,0 +1,14 @@
+import {
+  "0717lee/moonav1",
+}
+
+pkgtype(kind: "executable")
+
+options(
+  "native-stub": [ "reader.c" ],
+  targets: {
+    "io_native.mbt": [ "native" ],
+    "io_js.mbt": [ "js" ],
+    "io_wasm.mbt": [ "wasm-gc" ],
+  },
+)

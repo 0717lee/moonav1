@@ -6601,7 +6601,7 @@
       "_refs/go-av1/decode/coeff.go"
     ],
     "support_hashes": {
-      "scripts/craft_av1_fixture.py": "18001dabc30d67638b7e5f0d6b24a871b84a2ca87eb8af8251af8e05cbcb7e9a",
+      "scripts/craft_av1_fixture.py": "17ed7679a03f83983bf5eb20792e524944a438be3e862031b8439a2ccd501ae6",
       "_refs/go-av1/cdf/tables_gen.go": "583c969851ff9f5fc42369ab77adf80944ce1c049636d0e2dbb7d435daebcdd4",
       "_refs/go-av1/cdf/tables_coeff_gen.go": "d245f2e09feffc07289cee9e7a09c1fe6210a22b7bfb612796a08d9e82191e6f",
       "_refs/go-av1/cdf/tables_coeff2_gen.go": "4c5d9997e182b32fe5242523504363a1bb359116711a8c7602d84de923fe7177",

@@ -14,7 +14,6 @@ import argparse
 import importlib.util
 import itertools
 import json
-import math
 import re
 import shutil
 import sys
@@ -94,7 +93,7 @@ def q0_stream(monochrome):
         "unchanged_entropy_boundary":"only header/sequence synthesized; no entropy bytes modified; independent decoders validate complete result"}
 
 
-def header_evidence(data,trace,width,height,depth,monochrome,denom,tiles,q0=False):
+def header_evidence(trace,width,height,depth,monochrome,denom,tiles,q0=False):
     fields={name:trace_value(trace,name) for name in ("enable_superres","use_superres","coded_denom","enable_restoration","enable_cdef",
         "base_q_idx","mono_chrome","high_bitdepth","color_range","max_frame_width_minus_1","max_frame_height_minus_1",
         "use_128x128_superblock","allow_screen_content_tools","tile_cols_log2","tile_rows_log2","uniform_tile_spacing_flag")}
@@ -267,7 +266,7 @@ def check(args):
                 raise ValueError("q0 header construction/source entropy changed")
             params=(32,16,10,candidate["monochrome"],16,1)
         trace=(args.out/candidate["trace_file"]).read_text(encoding="utf-8")
-        if header_evidence(data,trace,*params,q0)!=candidate["superres"]:
+        if header_evidence(trace,*params,q0)!=candidate["superres"]:
             raise ValueError("actual superres header evidence changed")
     for name,expected in manifest["support_hashes"].items():
         if sha256((ROOT/name).read_bytes())!=expected:
@@ -304,8 +303,9 @@ def append_grid_pair(args):
         run(encode)
         trace=run([args.ffmpeg,"-hide_banner","-i",str(op),"-c","copy","-bsf:v","trace_headers","-f","null","-"]).stderr
         tp.write_text(trace,encoding="utf-8",newline="\n")
-        fact=header_evidence(op.read_bytes(),trace,128,64,10,mono,12,1)
-        record=fi.references(args,name,op.read_bytes(),128,64,10,mono,scalar)
+        obu=op.read_bytes()
+        fact=header_evidence(trace,128,64,10,mono,12,1)
+        record=fi.references(args,name,obu,128,64,10,mono,scalar)
         record.update(provenance="untouched libaom encoder output",superres=fact)
         record["filter_order_evidence"]=filter_toggles(args,name,record,fact)
         entry={"name":name,"kind":"stock","candidate":candidate,"encoder_command":encode,"superres":fact,"outcome":"native validated"}
@@ -361,8 +361,9 @@ def main():
         run(encode)
         trace=run([args.ffmpeg,"-hide_banner","-i",str(op),"-c","copy","-bsf:v","trace_headers","-f","null","-"]).stderr
         tp.write_text(trace,encoding="utf-8",newline="\n")
-        fact=header_evidence(op.read_bytes(),trace,width,height,depth,mono,denom,tiles)
-        record=fi.references(args,name,op.read_bytes(),width,height,depth,mono,scalar)
+        obu=op.read_bytes()
+        fact=header_evidence(trace,width,height,depth,mono,denom,tiles)
+        record=fi.references(args,name,obu,width,height,depth,mono,scalar)
         record.update(provenance="untouched libaom encoder output",superres=fact)
         record["filter_order_evidence"]=filter_toggles(args,name,record,fact)
         entry={"name":name,"kind":"stock","candidate":candidate,"encoder_command":encode,"superres":fact,"outcome":"native validated"}
@@ -377,7 +378,7 @@ def main():
         op.write_bytes(data);sy.write_text(json.dumps(syntax,indent=2)+"\n",encoding="utf-8",newline="\n")
         trace=run([args.ffmpeg,"-hide_banner","-i",str(op),"-c","copy","-bsf:v","trace_headers","-f","null","-"]).stderr
         tp.write_text(trace,encoding="utf-8",newline="\n")
-        fact=header_evidence(data,trace,32,16,10,mono,16,1,True)
+        fact=header_evidence(trace,32,16,10,mono,16,1,True)
         record=fi.references(args,name,data,32,16,10,mono,scalar)
         record.update(provenance=syntax["provenance"],superres=fact,syntax_file=sy.name,syntax_sha256=sha256(sy.read_bytes()))
         records.append(record)

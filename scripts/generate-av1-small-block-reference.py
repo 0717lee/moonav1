@@ -57,7 +57,6 @@ run, sha256, trace_value, rle = large.run, large.sha256, large.trace_value, larg
 
 PARTITION16 = [15597, 20929, 24571, 26706, 27664, 28821, 29601, 30571, 31902, 32768, 0]
 PARTITION8 = [19132, 25510, 30392, 32768, 0]
-WIDTH = HEIGHT = 16
 PATTERN = {
     "name": "strong_2d_gradient_with_small_separable_cosine",
     "base_slope_x_slope_y": [[40, 112, 64], [80, 80, -30], [160, -50, 45]],

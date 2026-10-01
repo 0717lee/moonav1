@@ -4983,7 +4983,7 @@
   },
   "support_hashes": {
     "scripts/generate-av1-directional-tile-reference.py": "6b93a42ca61c0a02c3ebab5569148850d127ffb7340eb695f1691e3bdf76cbbc",
-    "scripts/craft_av1_fixture.py": "18001dabc30d67638b7e5f0d6b24a871b84a2ca87eb8af8251af8e05cbcb7e9a",
+    "scripts/craft_av1_fixture.py": "17ed7679a03f83983bf5eb20792e524944a438be3e862031b8439a2ccd501ae6",
     "scripts/generate-av1-small-lossy-reference.py": "bf7632753d651c491eb0cee34730d95d2146e4c5480409788d93626dd79d0a02",
     "scripts/generate-av1-directional-reference.py": "ed7511258d2efc172a242f4b05a5d548e068723646e1246c5af2ab7d072cdd12",
     "scripts/generate-av1-cfl-reference.py": "75779c366128b4006883143f63a9d543cc9acf84419d55715b2820f2a1eb094a",

@@ -1,0 +1,68 @@
+[
+  {
+    "file": "SPARKS_HDR10_4K_2020_PQ_1000nits_01200.tif",
+    "url": "https://s3.amazonaws.com/download.opencontent.netflix.com/sparks/HDR10_1000nit_PQ_2020_image_sequence/SPARKS_HDR10_4K_2020_PQ_1000nits_01200.tif",
+    "bytes": 53084342,
+    "sha256": "da4df2ab38d849abbbe8e4ab29f771f2609cbb406af04ddafed4a437c0490f19"
+  },
+  {
+    "file": "SPARKS_HDR10_4K_2020_PQ_1000nits_01201.tif",
+    "url": "https://s3.amazonaws.com/download.opencontent.netflix.com/sparks/HDR10_1000nit_PQ_2020_image_sequence/SPARKS_HDR10_4K_2020_PQ_1000nits_01201.tif",
+    "bytes": 53084342,
+    "sha256": "0d30dd41da1c252ef552c14ff440bb4924fccd1c0eee44206cf0dd2196d990a2"
+  },
+  {
+    "file": "SPARKS_HDR10_4K_2020_PQ_1000nits_01202.tif",
+    "url": "https://s3.amazonaws.com/download.opencontent.netflix.com/sparks/HDR10_1000nit_PQ_2020_image_sequence/SPARKS_HDR10_4K_2020_PQ_1000nits_01202.tif",
+    "bytes": 53084342,
+    "sha256": "0bd3cfa824db28ee18231ea64c44c59ccd89fc0282dbb915dcfc1d90a526b51e"
+  },
+  {
+    "file": "SPARKS_HDR10_4K_2020_PQ_1000nits_01203.tif",
+    "url": "https://s3.amazonaws.com/download.opencontent.netflix.com/sparks/HDR10_1000nit_PQ_2020_image_sequence/SPARKS_HDR10_4K_2020_PQ_1000nits_01203.tif",
+    "bytes": 53084342,
+    "sha256": "465530ce5ae2d5fc876c72c0fccf2e180259ca33d78c1fd05b9a4c52176bb6a4"
+  },
+  {
+    "file": "SPARKS_HDR10_4K_2020_PQ_1000nits_01204.tif",
+    "url": "https://s3.amazonaws.com/download.opencontent.netflix.com/sparks/HDR10_1000nit_PQ_2020_image_sequence/SPARKS_HDR10_4K_2020_PQ_1000nits_01204.tif",
+    "bytes": 53084342,
+    "sha256": "cac15ab8634c974e3e96d41063fb5a0dba566f60eccc18f2fdd81cb06af0c3fe"
+  },
+  {
+    "file": "SPARKS_HDR10_4K_2020_PQ_1000nits_01205.tif",
+    "url": "https://s3.amazonaws.com/download.opencontent.netflix.com/sparks/HDR10_1000nit_PQ_2020_image_sequence/SPARKS_HDR10_4K_2020_PQ_1000nits_01205.tif",
+    "bytes": 53084342,
+    "sha256": "78d1c2a33f012f88ce133a439b53dab870e8c1624a5f728782fb4e913054678d"
+  },
+  {
+    "file": "SPARKS_HDR10_4K_2020_PQ_1000nits_01206.tif",
+    "url": "https://s3.amazonaws.com/download.opencontent.netflix.com/sparks/HDR10_1000nit_PQ_2020_image_sequence/SPARKS_HDR10_4K_2020_PQ_1000nits_01206.tif",
+    "bytes": 53084342,
+    "sha256": "5d3509a74360e0c93e56d6d3760af22250cd37213cf77efde200be32151643cb"
+  },
+  {
+    "file": "SPARKS_HDR10_4K_2020_PQ_1000nits_01207.tif",
+    "url": "https://s3.amazonaws.com/download.opencontent.netflix.com/sparks/HDR10_1000nit_PQ_2020_image_sequence/SPARKS_HDR10_4K_2020_PQ_1000nits_01207.tif",
+    "bytes": 53084342,
+    "sha256": "84fa06039dbc79a5d379a2a6c05cf6e6651459d9fe6d4531797fb8be492e5521"
+  },
+  {
+    "file": "sparks-license.txt",
+    "url": "https://s3.amazonaws.com/download.opencontent.netflix.com/sparks/creative-commons-attribution-4-intl-public-license.txt",
+    "bytes": 105020,
+    "sha256": "7d3512159f970cdcf296e8404be05947228d0bfaf72801cb5b3077f4330f71f9"
+  },
+  {
+    "file": "tears-of-steel-copyright.txt",
+    "url": "https://mirror.nju.edu.cn/blender/blender-demo/movies/ToS/copyright.txt",
+    "bytes": 610,
+    "sha256": "05ca97eeac2b81eec4239b9fe82fc2ffff4f08c37731430bb14a518657341811"
+  },
+  {
+    "file": "tears_of_steel_720p.mov",
+    "url": "https://mirror.nju.edu.cn/blender/blender-demo/movies/ToS/tears_of_steel_720p.mov",
+    "bytes": 372178639,
+    "sha256": "efa9062d9cdb7a338e40ad530dfdf234806743f29ae6a1a136b97ece4e588e8f"
+  }
+]

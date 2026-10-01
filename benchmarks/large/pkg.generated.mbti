@@ -1,0 +1,13 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "0717lee/moonav1/benchmarks/large"
+
+// Values
+
+// Errors
+
+// Types and methods
+type LargeFixture
+
+// Type aliases
+
+// Traits

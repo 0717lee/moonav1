@@ -1665,14 +1665,12 @@ def run(fixture: dict, check: bool) -> dict:
         os.remove(path)
     if len(data) != plane * nframes:
         raise SystemExit("%s: dav1d gave %d bytes, expected %d" % (name, len(data), plane * nframes))
-    if "gm_inject" in fixture:
-        # The injected model is the only header change, but the picture does
-        # move: the base reads no subpel-filter symbol for a GLOBAL(Global)MV
-        # block, and a translation model makes that block read one, so the tile
-        # symbols after it re-symbolise into a different legal decode. dav1d's
-        # planes on the patched stream are the truth for that decode, which is
-        # what the MoonBit test pins sample-exactly.
-        pass
+    # The injected model is the only header change, but the picture does
+    # move: the base reads no subpel-filter symbol for a GLOBAL(Global)MV
+    # block, and a translation model makes that block read one, so the tile
+    # symbols after it re-symbolise into a different legal decode. dav1d's
+    # planes on the patched stream are the truth for that decode, which is
+    # what the MoonBit test pins sample-exactly.
     if check:
         if fresh_obu != committed_obu:
             raise SystemExit(

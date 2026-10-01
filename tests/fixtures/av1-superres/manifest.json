@@ -6870,11 +6870,11 @@
     ]
   },
   "support_hashes": {
-    "scripts/generate-av1-superres-reference.py": "27807cc27ef48e9a71089135843a45393db401e871cf66ad831145c809600402",
+    "scripts/generate-av1-superres-reference.py": "b4626bcbefc268bf4cba0c4a035347c223006e7b9e037f8a5079b441c700a39e",
     "scripts/generate-av1-filter-intra-reference.py": "86e611bce28b616ef92bd6e822f7bc4e80d595008ca7b4e7ee9a4563c34cd0b4",
     "scripts/generate-av1-cdef-frame-reference.py": "b02a4f71f540af717520c94f3310c530d6d4d6850b5ecac4298f16a33619e127",
     "scripts/generate-av1-small-block-reference.py": "84ae532fd727571f3bc4ed657155dded8e3227fdfb151c124f159bd3635299b5",
-    "scripts/craft_av1_fixture.py": "18001dabc30d67638b7e5f0d6b24a871b84a2ca87eb8af8251af8e05cbcb7e9a"
+    "scripts/craft_av1_fixture.py": "17ed7679a03f83983bf5eb20792e524944a438be3e862031b8439a2ccd501ae6"
   },
   "normative_sources": [
     "https://aomedia.googlesource.com/aom/+/8e7b6a567df174d795479b92b4ac766d271add73/av1/common/resize.c",

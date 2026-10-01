@@ -116,7 +116,7 @@ def main() -> int:
             decoded = dec.read_bytes()
             if len(decoded) != YUV_BYTES:
                 raise RuntimeError(f"{name}: decoded {len(decoded)} bytes, expected {YUV_BYTES}")
-            if vals is None and any(decoded[y * W : (y + 1) * W] != decoded[:W] for y in range(H)):
+            if vals is None and any(decoded[y * W : (y + 1) * W] != decoded[:W] for y in range(1, H)):
                 raise RuntimeError(f"{name}: decoded luma rows are not identical")
             run([
                 args.ffmpeg, "-hide_banner", "-loglevel", "error", "-c:v", "libdav1d",

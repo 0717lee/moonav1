@@ -1,10 +1,11 @@
 # AV1/AVIF reference generators
 
-These 54 generators and their shared helpers produce independent AV1/AVIF
-references. The 41 directories under
-[`tests/fixtures`](../tests/fixtures) retain all 2,344 tracked evidence files,
-including original manifests, encoder inputs, bitstreams, native planes, RGBA
-references, syntax traces, oracle C sources, and license notices. See
+These generators and their shared helpers produce independent AV1/AVIF
+references. [`tests/fixtures`](../tests/fixtures) retains manifests, small
+reference data, encoder commands, syntax records and license notices. Larger
+media are distributed as versioned release assets; restore selected groups with
+`python scripts/fetch-fixtures.py --list` and `python scripts/fetch-fixtures.py GROUP`.
+See
 [`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) for source attribution.
 
 The MoonBit tests embed their expected values, so normal `moon test` and CI do
@@ -12,6 +13,19 @@ not require Python, external codecs, or a reference-source cache. Regeneration
 is a separate operation. Run generators from the repository root and consult
 the corresponding fixture README and manifest for exact tool versions and
 commands; different encoder builds need not produce the same bitstream.
+
+## Consumer and benchmark tools
+
+- `benchmark.py`: API, large-image and streaming benchmark suites.
+- `check-file-fixtures.py`: exact native pixels and independent RGBA16/ICC comparisons.
+- `check-long-containers.py`: complete/incremental file readers, timestamps, seeking and ownership.
+- `check-robustness.py`: process-isolated malformed input checks with deadlines.
+- `check-standalone-consumer.py`: separate consumer modules using the public examples.
+- `check-stream-memory.py` and `check-large-termination.py`: process memory and bounded termination checks.
+
+Commands and prerequisites are in [validation](../docs/VALIDATION.md) and
+[benchmarking](../docs/PERFORMANCE.md). Generated reports belong in `_build/`
+or the ignored `benchmarks/results/` directory.
 
 ## External reference sources
 

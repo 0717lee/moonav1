@@ -1,0 +1,7 @@
+import {
+  "0717lee/moonav1",
+  "moonbitlang/core/bench",
+  "moonbitlang/core/env",
+}
+
+pkgtype(kind: "executable")

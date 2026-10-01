@@ -13,7 +13,6 @@ import argparse
 from collections import Counter
 import hashlib
 import json
-import os
 from pathlib import Path
 from fixture_paths import fixture_path
 import re

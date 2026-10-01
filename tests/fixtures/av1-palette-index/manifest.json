@@ -240,7 +240,7 @@
     "diagnostics": "oracle.c\nentcode.c\nentdec.c\nentenc.c\nbitreader.c\nbitwriter.c\n正在生成代码...\n"
   },
   "generator_sha256": "8811bf67e4b66a3b33cf1ebe92bb4da6b4567899a4e39dc23ed635f44fcbbc6c",
-  "msac_source_sha256": "18001dabc30d67638b7e5f0d6b24a871b84a2ca87eb8af8251af8e05cbcb7e9a",
+  "msac_source_sha256": "17ed7679a03f83983bf5eb20792e524944a438be3e862031b8439a2ccd501ae6",
   "generation_command": [
     "D:\\ProgramData\\anaconda3\\python.exe",
     "C:\\Users\\谦友Lee\\Desktop\\Project\\mb\\pixelforge\\scripts\\generate-av1-palette-index-reference.py",

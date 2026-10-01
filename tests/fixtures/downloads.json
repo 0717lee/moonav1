@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "release": "v0.2.0",
+  "repository": "0717lee/moonav1",
+  "groups": {
+    "av1-large-images": {
+      "files": 16,
+      "uncompressed_bytes": 7456421,
+      "archive_sha256": "f35c1a836c3916311fcfff5c0e68bf0a41b03a849f64b8ca47c04f0cf0f01451",
+      "parts": [
+        {
+          "name": "av1-large-images.zip",
+          "bytes": 2584788,
+          "sha256": "f35c1a836c3916311fcfff5c0e68bf0a41b03a849f64b8ca47c04f0cf0f01451"
+        }
+      ]
+    },
+    "av1-stream": {
+      "files": 11,
+      "uncompressed_bytes": 17011553,
+      "archive_sha256": "f5efdbcb9d842d0d1852a243da4405938207610cbfc5e7bac0e13b74d00d16b7",
+      "parts": [
+        {
+          "name": "av1-stream.zip",
+          "bytes": 6105704,
+          "sha256": "f5efdbcb9d842d0d1852a243da4405938207610cbfc5e7bac0e13b74d00d16b7"
+        }
+      ]
+    },
+    "av1-maturity": {
+      "files": 91,
+      "uncompressed_bytes": 460522008,
+      "archive_sha256": "ad22f056014d6804ece264e74194fc0ce6cd958b9cee786f88395eb77ff22f2c",
+      "parts": [
+        {
+          "name": "av1-maturity.zip",
+          "bytes": 151912908,
+          "sha256": "ad22f056014d6804ece264e74194fc0ce6cd958b9cee786f88395eb77ff22f2c"
+        }
+      ]
+    },
+    "av1-realvideo": {
+      "files": 8,
+      "uncompressed_bytes": 181402708,
+      "archive_sha256": "9fa12bd777b78da20066ea48d8c9fe1f5558dcdd64fe89fc70d69355ccb4d248",
+      "parts": [
+        {
+          "name": "av1-realvideo.zip",
+          "bytes": 100561827,
+          "sha256": "9fa12bd777b78da20066ea48d8c9fe1f5558dcdd64fe89fc70d69355ccb4d248"
+        }
+      ]
+    },
+    "av1-long-containers": {
+      "files": 18,
+      "uncompressed_bytes": 10074572,
+      "archive_sha256": "4de6ead38e65d55ee382809521fc171697aae0966dfd3b392e24869e0a95c0ba",
+      "parts": [
+        {
+          "name": "av1-long-containers.zip",
+          "bytes": 7296702,
+          "sha256": "4de6ead38e65d55ee382809521fc171697aae0966dfd3b392e24869e0a95c0ba"
+        }
+      ]
+    },
+    "avif-real-images": {
+      "files": 32,
+      "uncompressed_bytes": 13208877,
+      "archive_sha256": "a7f2b9ecaba6de4949fe20c3652098a29eeb654091e9a1438f3c341730102ce9",
+      "parts": [
+        {
+          "name": "avif-real-images.zip",
+          "bytes": 7798350,
+          "sha256": "a7f2b9ecaba6de4949fe20c3652098a29eeb654091e9a1438f3c341730102ce9"
+        }
+      ]
+    },
+    "av1-diverse-video": {
+      "files": 205,
+      "uncompressed_bytes": 7349925699,
+      "archive_sha256": "6b41c46582dd8050f1ebf9a67c360d2adbf760930ef5d2ff8f40a6bd043c5db5",
+      "parts": [
+        {
+          "name": "av1-diverse-video.zip.part01",
+          "bytes": 1073741824,
+          "sha256": "fc3b0fdae93642393616ad3a9afd05d62f3319aeb5d86da0f80505c45ed32131"
+        },
+        {
+          "name": "av1-diverse-video.zip.part02",
+          "bytes": 1073741824,
+          "sha256": "d86d15f2200c754f52a1833ef5e505b7f561718320c3bd49599add6975c4c28b"
+        },
+        {
+          "name": "av1-diverse-video.zip.part03",
+          "bytes": 876240039,
+          "sha256": "cfe57be74d8903d81e7969f8f189aebabbcd4c944378d555259dab992c726fa9"
+        }
+      ]
+    }
+  }
+}

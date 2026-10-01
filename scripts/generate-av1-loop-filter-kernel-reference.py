@@ -14,7 +14,6 @@ from collections import Counter
 from dataclasses import dataclass
 import hashlib
 import json
-import os
 from pathlib import Path
 from fixture_paths import fixture_path
 import shutil

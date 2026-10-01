@@ -494,7 +494,6 @@ def encode_leaf_coeffs(enc, T, base_q_idx, side, plane, levels, scan_class, dc_s
 def craft_tile(T, base_q_idx, width, tx_depth, leaf_plans, chroma_plans):
     """leaf_plans/chroma_plans follow raster/plane order."""
     enc = MsacEncoder()
-    enc.allow_update = True
     qctx = T.qctx(base_q_idx)
     enc.encode_symbol(T.partition_w64[0] if width == 64 else T.partition_w32[0], 0)
     enc.encode_symbol(T.skip[0], 0)
@@ -505,7 +504,6 @@ def craft_tile(T, base_q_idx, width, tx_depth, leaf_plans, chroma_plans):
     enc.encode_symbol(uv_cdf, 0)  # DC_PRED (row indexed by luma mode)
     tx_depth_cdf = T.tx64[0] if width == 64 else T.tx32[0]
     enc.encode_symbol(tx_depth_cdf, tx_depth)
-    leaves = []
     side = width >> tx_depth
     count = 1 << (2 * tx_depth)
     assert len(leaf_plans) == count
@@ -529,7 +527,7 @@ def craft_tile(T, base_q_idx, width, tx_depth, leaf_plans, chroma_plans):
         top = max(above_level[x4 : x4 + w4])
         left = max(left_level[y4 : y4 + w4])
         ctx = txb_skip_ctx_luma(top, left, side == width)
-        zero = enc.encode_symbol(T.txb_skip[qctx][tx_size_ctx(side)][ctx], 0 if not plan.zero else 1)
+        enc.encode_symbol(T.txb_skip[qctx][tx_size_ctx(side)][ctx], 0 if not plan.zero else 1)
         if not plan.zero:
             if plan.tx_symbol is not None:
                 if side == 16:
@@ -688,7 +686,6 @@ class MsacDecoder:
         buf = self._read_bits(num_bits)
         padded_buf = buf << (15 - num_bits)
         self.symbol_value = ((1 << 15) - 1) ^ padded_buf
-        self.symbol_range = 1 << 15
         self.symbol_range = 1 << 15
         self.symbol_max_bits = len(data) * 8 - 15
 

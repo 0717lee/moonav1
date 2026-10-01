@@ -21,7 +21,7 @@ RGBA preserves source primaries/transfer, uses nearest-neighbor chroma replicati
 Add the dependency to a MoonBit project:
 
 ```sh
-moon add 0717lee/moonav1@0.1.0
+moon add 0717lee/moonav1@0.2.0
 ```
 
 Import it in the caller's `moon.pkg`:
@@ -83,6 +83,10 @@ moon test --target native
 ```
 
 Ordinary tests are self-contained and do not require an external decoder. Fixture manifests preserve independent pixels, source versions and commands. Reference-generation tools are in `scripts/`.
+
+## Extended validation and benchmarks
+
+See [validation](docs/VALIDATION.md) for file consumers, real media and long-video checks, and [benchmarking](docs/PERFORMANCE.md) for reproducible measurements. Versioned release assets retain larger encoded inputs and independent pixels. Select groups with `python scripts/fetch-fixtures.py --list`; ordinary tests need no download.
 
 ## License
 

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "case": "wide_gamut_adobe_600x400",
+  "width": 600,
+  "height": 400,
+  "avif_sha256": "1d7d26f3ac198b67c63b6987f5cc0633b154881a845ffec3cecaabce93ac6f1a",
+  "icc_sha256": "60fb2adecacf82132db0b1c09b303316f3bbd9e2823e7ba096d01627d12d57c9",
+  "libavif_version": "0.11.1",
+  "libavif_options": {
+    "depth": 16,
+    "avoidLibYUV": 1,
+    "chromaUpsampling": 3,
+    "alphaPremultiplied": 0
+  },
+  "lcms_version_encoded": 2190,
+  "intent": 1,
+  "flags": 67109120,
+  "output": "Straight RGBA UNORM16 little endian, ICC destination sRGB",
+  "tolerance": {
+    "rgba16_rgb": 1,
+    "icc_rgb": 8,
+    "alpha": 0
+  },
+  "artifacts": {
+    "wide_gamut_adobe_600x400.icc-input.rgba16": "c365e1c0022bb342288255add2cd101fb0eb541d8759e0fc8b43e2c72612c9fc",
+    "wide_gamut_adobe_600x400.icc-output.rgba16": "048ded1c0667eeb31b8ae87b299314f79ddd642b4e072f9d53dd498b4c10bbcd"
+  }
+}

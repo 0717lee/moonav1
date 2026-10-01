@@ -17,16 +17,10 @@ repository is not currently fmt-clean under the pinned compiler.
 """
 
 import os
-import subprocess
-
-MOONFMT = os.path.join(os.path.expanduser("~"), ".moon", "bin", "moonfmt")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIX = os.path.join(ROOT, "tests", "fixtures", "av1-inter")
 OUT = os.path.join(ROOT, "av1_inter_reference_wbtest.mbt")
-
-WIDTH = HEIGHT = 64
-PLANE = WIDTH * HEIGHT + 2 * (WIDTH // 2) * (HEIGHT // 2)
 
 
 def frame_plane_of(spec):
@@ -235,10 +229,9 @@ SPECS = {
         "animation_note": "The second sample is a translated picture, so the presented pixels must differ.",
     },
     # The unfrozen twin of inter_primary_ref_64x64: one byte differs from
-    # inter_minimal_64x64, the key frame keeps its adapted distributions, and this
-    # decoder still starts the tile from scratch, so the disagreement with dav1d is
-    # pinned as explicit sample counts until the AV1 7.21 entropy-state snapshot
-    # exists. Those counts are the fence, not an acceptance.
+    # inter_minimal_64x64, and the key frame keeps its adapted distributions.
+    # The decoder now starts the tile from the named primary reference as well,
+    # so all three planes reconstruct sample-exactly against dav1d.
     "inter_cdf_inherit_64x64": {
         "order_hint": "false",
         "warped": "false",
@@ -255,9 +248,9 @@ SPECS = {
         "inter_q": "128",
         "width": "64",
         "height": "64",
-        "bad_counts": "3992, 842, 928",
+        "bad_counts": "0, 0, 0",
         "inter_decodable": "true",
-        "inter_note": "inherited entropy state not implemented yet: these counts are the fence and must fall to 0, 0, 0",
+        "inter_note": "inherited entropy state from the primary reference: every plane is sample-exact",
         "animation_changed": "true",
         "animation_note": "The second sample is a translated picture, so the presented pixels must differ.",
     },
@@ -456,15 +449,17 @@ test "@NAME@: inter frame reconstruction" {
     }
     // dav1d's native planes for the inter frame: sample-exact evidence that
     // motion compensation, the residual and the frame filters agree with an
-    // external decoder. Every sample of every plane is counted, so a fixture
-    // that is not exact yet carries its disagreement as an explicit number
-    // rather than as an excluded region.
+    // external decoder. Every sample of every plane is counted explicitly.
     let reference = av1_inter_expand(@NAME@_frame1_reference)
     let chroma = @PLANE@ / 6
     let luma_size = @PLANE@ - chroma * 2
+    assert_eq(frame.width, @WIDTH@)
+    assert_eq(frame.height, @HEIGHT@)
+    let expected_lengths = [@Y_LENGTH@, @CHROMA_LENGTH@, @CHROMA_LENGTH@]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start =
         if p == 0 { 0 } else if p == 1 { luma_size } else { luma_size + chroma }
       for i in 0..<got.length() {
@@ -778,6 +773,11 @@ def main():
             ("@INTER_Q@", spec["inter_q"]),
             ("@WIDTH@", spec["width"]),
             ("@HEIGHT@", spec["height"]),
+            ("@Y_LENGTH@", str(int(spec["width"]) * int(spec["height"]))),
+            (
+                "@CHROMA_LENGTH@",
+                str((int(spec["width"]) // 2) * (int(spec["height"]) // 2)),
+            ),
             ("@BAD_COUNTS@", spec["bad_counts"]),
             ("@PLANE@", str(frame_plane_of(spec))),
             ("@INTER_UNIT@", str(units[name][0])),

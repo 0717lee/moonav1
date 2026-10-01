@@ -3566,7 +3566,7 @@
     "scripts/generate-av1-directional-tile-reference.py": "6b93a42ca61c0a02c3ebab5569148850d127ffb7340eb695f1691e3bdf76cbbc",
     "scripts/generate-av1-small-lossy-reference.py": "bf7632753d651c491eb0cee34730d95d2146e4c5480409788d93626dd79d0a02",
     "scripts/generate-av1-small-block-reference.py": "84ae532fd727571f3bc4ed657155dded8e3227fdfb151c124f159bd3635299b5",
-    "scripts/craft_av1_fixture.py": "18001dabc30d67638b7e5f0d6b24a871b84a2ca87eb8af8251af8e05cbcb7e9a",
+    "scripts/craft_av1_fixture.py": "17ed7679a03f83983bf5eb20792e524944a438be3e862031b8439a2ccd501ae6",
     "_refs/go-av1/cdf/tables_angle_gen.go": "e817a2a2816d1c189e1c54e67c8edd2218b5c0a261043c6611ca663b428acb52",
     "_refs/go-av1/cdf/tables_cfl_gen.go": "5cdb22b914add141e459ab0a03da47e4286e6db7e225b6dfa78f9cd03364c502",
     "_refs/go-av1/cdf/tables_coeff2_gen.go": "4c5d9997e182b32fe5242523504363a1bb359116711a8c7602d84de923fe7177",

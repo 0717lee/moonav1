@@ -370,7 +370,9 @@ def binding_cases(source: dict, base: Path, library) -> tuple[list[dict], list[d
 
 def assemble_alpha_grids(color: list[dict], alpha: list[dict], rows: int,
                          columns: int, width: int, height: int, *,
-                         color_grid: bool, alpha_grid: bool) -> tuple[bytes, dict]:
+                         color_grid: bool, alpha_grid: bool,
+                         cell_size: tuple[int, int] = (64, 64),
+                         handler_name: bytes = b"PixelForge alpha grid reference") -> tuple[bytes, dict]:
     depth = color[0]["depth"]
     if any(source["depth"] != depth or source["monochrome"] for source in color):
         raise RuntimeError("invalid original color source")
@@ -394,7 +396,7 @@ def assemble_alpha_grids(color: list[dict], alpha: list[dict], rows: int,
     if alpha_grid:
         items.append((auxiliary, b"grid", grid, True))
     ftyp = box(b"ftyp", b"avif" + bytes(4) + b"avifmif1miaf")
-    hdlr = full_box(b"hdlr", 0, 0, bytes(4) + b"pict" + bytes(12) + b"PixelForge alpha grid reference\0")
+    hdlr = full_box(b"hdlr", 0, 0, bytes(4) + b"pict" + bytes(12) + handler_name + b"\0")
     pitm = full_box(b"pitm", 0, 0, struct.pack(">H", primary))
     entries = b"".join(full_box(b"infe", 2, int(identifier != primary),
                                 struct.pack(">HH", identifier, 0) + typ + b"Image\0")
@@ -402,7 +404,7 @@ def assemble_alpha_grids(color: list[dict], alpha: list[dict], rows: int,
     iinf = full_box(b"iinf", 0, 0, struct.pack(">H", len(items)) + entries)
     properties = [
         full_box(b"ispe", 0, 0, struct.pack(">II", width, height)),
-        full_box(b"ispe", 0, 0, struct.pack(">II", 64, 64)),
+        full_box(b"ispe", 0, 0, struct.pack(">II", *cell_size)),
         full_box(b"pixi", 0, 0, bytes([3, depth, depth, depth])),
         full_box(b"pixi", 0, 0, bytes([1, depth])),
         box(b"colr", color[0]["colr"]), box(b"colr", alpha[0]["colr"]),

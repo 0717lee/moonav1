@@ -6,5 +6,15 @@ target/
 __pycache__/
 _refs/
 /HANDOFF.md
+/PROVENANCE.md
+.local-artifacts/
+/benchmarks/results/
+/tests/fixtures/av1-large-images/
+/tests/fixtures/av1-stream/
+/tests/fixtures/av1-maturity/
+/tests/fixtures/av1-realvideo/
+/tests/fixtures/av1-long-containers/
+/tests/fixtures/avif-real-images/
+/tests/fixtures/av1-diverse-video/
 !tests/fixtures/**/*.avif
 !tests/fixtures/**/*.avif.yuv

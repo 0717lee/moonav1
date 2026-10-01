@@ -1,0 +1,138 @@
+{
+  "streams": [
+    {
+      "index": 0,
+      "id": "0x1",
+      "codec_type": "video",
+      "codec_name": "av1",
+      "width": 512,
+      "height": 270,
+      "time_base": "1/60000",
+      "start_time": "0.000000",
+      "duration": "0.133467",
+      "extradata_size": 4,
+      "disposition": {
+        "default": 1,
+        "dub": 0,
+        "original": 0,
+        "comment": 0,
+        "lyrics": 0,
+        "karaoke": 0,
+        "forced": 0,
+        "hearing_impaired": 0,
+        "visual_impaired": 0,
+        "clean_effects": 0,
+        "attached_pic": 0,
+        "timed_thumbnails": 0,
+        "non_diegetic": 0,
+        "captions": 0,
+        "descriptions": 0,
+        "metadata": 0,
+        "dependent": 0,
+        "still_image": 0,
+        "multilayer": 0
+      }
+    }
+  ],
+  "packets": [
+    {
+      "stream_index": 0,
+      "pts": 0,
+      "dts": 0,
+      "duration": 1001,
+      "size": "12159",
+      "pos": "861",
+      "flags": "K__",
+      "data_hash": "SHA256:2c274535c643b9b1c2c8730c698d91c6e21689cecb90b6d7348ef955f62b508d",
+      "crc32": 1503074262
+    },
+    {
+      "stream_index": 0,
+      "pts": 1001,
+      "dts": 1001,
+      "duration": 1001,
+      "size": "3222",
+      "pos": "13020",
+      "flags": "___",
+      "data_hash": "SHA256:f81b804a16656930f8c5b2959c98bfb12727b6197b029692f401797e1459ba8a",
+      "crc32": 1388948837
+    },
+    {
+      "stream_index": 0,
+      "pts": 2002,
+      "dts": 2002,
+      "duration": 1001,
+      "size": "3",
+      "pos": "16242",
+      "flags": "___",
+      "data_hash": "SHA256:60595adbda69a8b6b7edbf29c5cfd8b17a96b808b4ac2a4d25feec79fc9ce174",
+      "crc32": 1649706103
+    },
+    {
+      "stream_index": 0,
+      "pts": 3003,
+      "dts": 3003,
+      "duration": 1001,
+      "size": "47",
+      "pos": "16245",
+      "flags": "___",
+      "data_hash": "SHA256:38c6e78fa8d8daf19f7efe17ac4614a82409daa925bbae8bc32d6de42289f470",
+      "crc32": 208540256
+    },
+    {
+      "stream_index": 0,
+      "pts": 4004,
+      "dts": 4004,
+      "duration": 1001,
+      "size": "3",
+      "pos": "16292",
+      "flags": "___",
+      "data_hash": "SHA256:2462c05dc66bab7b49b651d764d86bd62253f642067c1a4de636cffebb7d5656",
+      "crc32": 155178371
+    },
+    {
+      "stream_index": 0,
+      "pts": 5005,
+      "dts": 5005,
+      "duration": 1001,
+      "size": "1551",
+      "pos": "16295",
+      "flags": "___",
+      "data_hash": "SHA256:71c185c2911c3343f78652595d24fe4e6faf7530f0b32f90b7332f590d8f75e9",
+      "crc32": 1425506578
+    },
+    {
+      "stream_index": 0,
+      "pts": 6006,
+      "dts": 6006,
+      "duration": 1001,
+      "size": "3",
+      "pos": "17846",
+      "flags": "___",
+      "data_hash": "SHA256:60595adbda69a8b6b7edbf29c5cfd8b17a96b808b4ac2a4d25feec79fc9ce174",
+      "crc32": 1649706103
+    },
+    {
+      "stream_index": 0,
+      "pts": 7007,
+      "dts": 7007,
+      "duration": 1001,
+      "size": "446",
+      "pos": "17849",
+      "flags": "___",
+      "data_hash": "SHA256:739de38b7203d2382221f1efa36440352674532841fd05475608e9181b30388b",
+      "crc32": 1090879631
+    }
+  ],
+  "format": {
+    "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+    "start_time": "0.000000",
+    "duration": "0.133467",
+    "tags": {
+      "major_brand": "isom",
+      "minor_version": "512",
+      "compatible_brands": "isomav01iso2mp41",
+      "encoder": "Lavf63.1.101"
+    }
+  }
+}

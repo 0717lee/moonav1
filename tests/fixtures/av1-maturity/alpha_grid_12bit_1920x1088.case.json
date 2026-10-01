@@ -1,0 +1,75 @@
+{
+  "name": "alpha_grid_12bit_1920x1088",
+  "width": 1920,
+  "height": 1088,
+  "depth": 12,
+  "sampling": "420",
+  "frames": 1,
+  "alpha": true,
+  "alpha_full_range": true,
+  "premultiplied": false,
+  "grid": {
+    "primary_item_id": 9,
+    "alpha_item_id": 10,
+    "primary_type": "grid",
+    "alpha_type": "grid",
+    "auxl": {
+      "from": 10,
+      "to": 9
+    },
+    "color_dimg_order": [
+      29,
+      32,
+      31,
+      30
+    ],
+    "alpha_dimg_order": [
+      49,
+      52,
+      51,
+      50
+    ],
+    "auxc_item": 10,
+    "av1c_items": [
+      29,
+      32,
+      31,
+      30,
+      49,
+      52,
+      51,
+      50
+    ]
+  },
+  "sequence_metadata": {
+    "color_primaries": 2,
+    "transfer_characteristics": 2,
+    "matrix_coefficients": 1,
+    "color_range": 0
+  },
+  "libavif_metadata": {
+    "width": 1920,
+    "height": 1088,
+    "depth": 12,
+    "format": 3,
+    "color_primaries": 2,
+    "transfer_characteristics": 2,
+    "matrix_coefficients": 1,
+    "color_range": 0
+  },
+  "source_cells": [
+    "grid_color_0",
+    "grid_color_1",
+    "grid_color_2",
+    "grid_color_3",
+    "grid_alpha_0",
+    "grid_alpha_1",
+    "grid_alpha_2",
+    "grid_alpha_3"
+  ],
+  "artifacts": {
+    "alpha_grid_12bit_1920x1088.alpha.yuv": "48def9aa601662438671244d55cc9891ec4977c4b93122ab89fc64cba8e41a00",
+    "alpha_grid_12bit_1920x1088.avif": "b920246f6a16302fa73eb45372822fd21fbd8ebc97297249f8ac558d119056f1",
+    "alpha_grid_12bit_1920x1088.reference.yuv": "5f03c96894ec2e26f066c79fa657b963df6ac303a1065ccd83a82c048538bb93"
+  }
+}

@@ -7,7 +7,6 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
-import re
 import struct
 import subprocess
 import sys

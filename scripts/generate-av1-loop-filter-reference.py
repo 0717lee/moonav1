@@ -16,7 +16,6 @@ import itertools
 import json
 import re
 import shutil
-import struct
 import sys
 from pathlib import Path
 

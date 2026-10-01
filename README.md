@@ -21,7 +21,7 @@ RGBA 使用源 primaries/transfer、最近邻色度上采样及最终裁剪/舍�
 在 MoonBit 项目中添加依赖：
 
 ```sh
-moon add 0717lee/moonav1@0.1.0
+moon add 0717lee/moonav1@0.2.0
 ```
 
 在调用方的 `moon.pkg` 中导入：
@@ -100,6 +100,10 @@ moon test --target native
 ```
 
 普通测试使用随库提交的独立参考，不需要外部解码器。`tests/fixtures/` 中的说明和 manifest 记录样本来源、工具版本和像素约定。生成器位于 `scripts/`，外部参考工具只在重新生成或复核参考时使用。
+
+## 扩展验证与基准
+
+文件消费、真实媒体和长视频工具见[验证指南](docs/VALIDATION.md)，基准复现见[性能指南](docs/PERFORMANCE.md)。大型输入及独立像素参考按版本保存在 Release 下载包中，可通过 `python scripts/fetch-fixtures.py --list` 选择恢复；普通测试无需下载。
 
 ## 许可证
 

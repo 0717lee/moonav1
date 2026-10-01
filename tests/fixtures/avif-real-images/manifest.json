@@ -1,0 +1,458 @@
+{
+  "schema": "file-consumer-v1",
+  "scope": "bounded real application-exported AVIF images: portrait, food/product, landscape, street, transparent illustration/icon, browser-rendered webpage, and one ICC-tagged wide-gamut RGB case",
+  "generator": "scripts/generate-real-image-reference.py",
+  "tool_versions": {
+    "python": "3.11.7",
+    "Pillow": "12.3.0",
+    "scikit-image": "0.22.0",
+    "Playwright": "1.58.0",
+    "Chromium": "145.0.7632.6",
+    "libavif": "0.11.1",
+    "Pillow_linked_libavif": "1.4.2",
+    "Pillow_AVIF_encoder": "3.14.1",
+    "Pillow_AVIF_decoder": "1.5.3-0-gb546257",
+    "Pillow_AVIF_codec_versions": "dav1d [dec]:1.5.3-0-gb546257, aom [enc]:3.14.1",
+    "LittleCMS": "2.19"
+  },
+  "libavif_path": "D:\\ProgramData\\anaconda3\\Library\\bin\\avif.dll",
+  "cases": [
+    {
+      "name": "portrait_astronaut_512",
+      "width": 512,
+      "height": 512,
+      "depth": 8,
+      "sampling": "420",
+      "frames": 1,
+      "sequence_metadata": {
+        "color_primaries": 2,
+        "transfer_characteristics": 2,
+        "matrix_coefficients": 6,
+        "color_range": 1
+      },
+      "alpha": false,
+      "alpha_full_range": false,
+      "premultiplied": false,
+      "modes": [
+        "avif"
+      ],
+      "source": {
+        "provider": "scikit-image 0.22.0 data asset",
+        "primary_source": "https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.astronaut",
+        "license": "Public domain; no known copyright restrictions (NASA image)",
+        "credit": "NASA / Eileen Collins; distributed through scikit-image data"
+      },
+      "source_sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+      "transform": "Loaded the exact bundled 512x512 RGB PNG; no resize or crop.",
+      "export_command": [
+        "Pillow.Image.save",
+        "format=AVIF",
+        "quality=75",
+        "speed=6",
+        "subsampling=4:2:0",
+        "range=full",
+        "max_threads=16",
+        "autotiling=true",
+        "icc_profile=source-embedded"
+      ],
+      "artifacts": {
+        "portrait_astronaut_512.source.png": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+        "portrait_astronaut_512.avif": "c0ca0ca0219f7fb0b456a89f50f1fb862860b102d48897c236c6469e20f70ecb",
+        "portrait_astronaut_512.reference.yuv": "02436e8e95583883c285a164ebb6400f6ecaf83c62e21be86f8be82a2e6be1f3"
+      },
+      "libavif_metadata": {
+        "width": 512,
+        "height": 512,
+        "depth": 8,
+        "format": 3,
+        "color_primaries": 2,
+        "transfer_characteristics": 2,
+        "matrix_coefficients": 6,
+        "color_range": 1,
+        "premultiplied": 0,
+        "sampling": "420",
+        "icc_sha256": "2b3aa1645779a9e634744faf9b01e9102b0c9b88fd6deced7934df86b949af7e"
+      }
+    },
+    {
+      "name": "food_coffee_600x400",
+      "width": 600,
+      "height": 400,
+      "depth": 8,
+      "sampling": "420",
+      "frames": 1,
+      "sequence_metadata": {
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1
+      },
+      "alpha": false,
+      "alpha_full_range": false,
+      "premultiplied": false,
+      "modes": [
+        "avif"
+      ],
+      "source": {
+        "provider": "scikit-image 0.22.0 data asset",
+        "primary_source": "https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.coffee",
+        "license": "CC0; no copyright restrictions",
+        "credit": "Rachel Michetti / Pikolo Espresso Bar; distributed through scikit-image data"
+      },
+      "source_sha256": "cc02f8ca188b167c775a7101b5d767d1e71792cf762c33d6fa15a4599b5a8de7",
+      "transform": "Loaded the exact bundled 600x400 RGB PNG; no resize or crop.",
+      "export_command": [
+        "Pillow.Image.save",
+        "format=AVIF",
+        "quality=75",
+        "speed=6",
+        "subsampling=4:2:0",
+        "range=full",
+        "max_threads=16",
+        "autotiling=true"
+      ],
+      "artifacts": {
+        "food_coffee_600x400.source.png": "cc02f8ca188b167c775a7101b5d767d1e71792cf762c33d6fa15a4599b5a8de7",
+        "food_coffee_600x400.avif": "980eae2231f9a5d015b40af7ca0f0d018bd5c1d2628afaa712fd1453e5c83043",
+        "food_coffee_600x400.reference.yuv": "0d07e5d4b1009916e8b8709fff2f666e96145709ee6c6d915e7c2f3446524c16"
+      },
+      "libavif_metadata": {
+        "width": 600,
+        "height": 400,
+        "depth": 8,
+        "format": 3,
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1,
+        "premultiplied": 0,
+        "sampling": "420",
+        "icc_sha256": null
+      }
+    },
+    {
+      "name": "landscape_sunset_640x480",
+      "width": 640,
+      "height": 480,
+      "depth": 8,
+      "sampling": "420",
+      "frames": 1,
+      "sequence_metadata": {
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1
+      },
+      "alpha": false,
+      "alpha_full_range": false,
+      "premultiplied": false,
+      "modes": [
+        "avif"
+      ],
+      "source": {
+        "provider": "Wikimedia Commons original upload",
+        "primary_source": "https://commons.wikimedia.org/wiki/File:Landscape_picture.JPG",
+        "download_url": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Landscape_picture.JPG",
+        "license": "Public domain; copyright holder released the work worldwide",
+        "credit": "Michae2109, Landscape picture.JPG (sunset in Oslo, Norway)"
+      },
+      "source_sha256": "fd589149cddb338e271619656eaf3833b992c8ce3df8f94eb05ef3ebfc1e0fa4",
+      "transform": "Decoded the retained 1632x1224 JPEG and resized to 640x480 with Pillow LANCZOS; no crop.",
+      "export_command": [
+        "Pillow.Image.save",
+        "format=AVIF",
+        "quality=75",
+        "speed=6",
+        "subsampling=4:2:0",
+        "range=full",
+        "max_threads=16",
+        "autotiling=true"
+      ],
+      "artifacts": {
+        "landscape_sunset_640x480.source.JPG": "fd589149cddb338e271619656eaf3833b992c8ce3df8f94eb05ef3ebfc1e0fa4",
+        "landscape_sunset_640x480.avif": "0cf07a94f3da6f5ed342bc81549166580897d870e3bb977bf13d51743e30da25",
+        "landscape_sunset_640x480.reference.yuv": "efd931403fca8caa191894f163dc8fd396780cd091bd9ecfadbb71ad4b371647"
+      },
+      "libavif_metadata": {
+        "width": 640,
+        "height": 480,
+        "depth": 8,
+        "format": 3,
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1,
+        "premultiplied": 0,
+        "sampling": "420",
+        "icc_sha256": null
+      }
+    },
+    {
+      "name": "street_vendor_640x480",
+      "width": 640,
+      "height": 480,
+      "depth": 8,
+      "sampling": "420",
+      "frames": 1,
+      "sequence_metadata": {
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1
+      },
+      "alpha": false,
+      "alpha_full_range": false,
+      "premultiplied": false,
+      "modes": [
+        "avif"
+      ],
+      "source": {
+        "provider": "Wikimedia Commons original upload",
+        "primary_source": "https://commons.wikimedia.org/wiki/File:Street_photography.jpeg",
+        "download_url": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Street_photography.jpeg",
+        "license": "CC0 1.0 Universal Public Domain Dedication",
+        "credit": "Kumar Mangal Roy, Street photography.jpeg (street vendor in Kolkata)"
+      },
+      "source_sha256": "f479817a2163a193ae96b688e837d54b6717ecbb23824f149292040a0a0b4267",
+      "transform": "Decoded the retained 4160x3120 JPEG and resized to 640x480 with Pillow LANCZOS; no crop.",
+      "export_command": [
+        "Pillow.Image.save",
+        "format=AVIF",
+        "quality=75",
+        "speed=6",
+        "subsampling=4:2:0",
+        "range=full",
+        "max_threads=16",
+        "autotiling=true"
+      ],
+      "artifacts": {
+        "street_vendor_640x480.source.jpeg": "f479817a2163a193ae96b688e837d54b6717ecbb23824f149292040a0a0b4267",
+        "street_vendor_640x480.avif": "673996efbe7f9888ef9938acedd99f0b27e122762276f7a4c47033c1fc428ee5",
+        "street_vendor_640x480.reference.yuv": "c641237ef9128129f4808adf550de03649f259047ec23ebd3f0a64b3ce8711eb"
+      },
+      "libavif_metadata": {
+        "width": 640,
+        "height": 480,
+        "depth": 8,
+        "format": 3,
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1,
+        "premultiplied": 0,
+        "sampling": "420",
+        "icc_sha256": null
+      }
+    },
+    {
+      "name": "transparent_window_icon_512",
+      "width": 512,
+      "height": 512,
+      "depth": 8,
+      "sampling": "444",
+      "frames": 1,
+      "sequence_metadata": {
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1
+      },
+      "alpha": true,
+      "alpha_full_range": true,
+      "premultiplied": false,
+      "modes": [
+        "avif"
+      ],
+      "source": {
+        "provider": "MoonAV1 fixture author",
+        "primary_source": "inline source retained in transparent_window_icon_512.source.svg",
+        "license": "CC0 1.0 Universal Public Domain Dedication",
+        "credit": "Original simple SVG fixture artwork; no third-party pixels"
+      },
+      "source_sha256": "60d9bd2b72ce806b72b0a0696de10d8ff2238a8a5787b64fb0aba2cce0ac390f",
+      "transform": "Rendered the retained SVG with Playwright Chromium to a 512x512 RGBA PNG with transparent background, then exported the PNG as AVIF.",
+      "render_command": [
+        "Playwright Chromium headless",
+        "viewport=512x512",
+        "device_scale_factor=1",
+        "page.screenshot(omit_background=true)"
+      ],
+      "export_command": [
+        "Pillow.Image.save",
+        "format=AVIF",
+        "quality=75",
+        "speed=6",
+        "subsampling=4:4:4",
+        "range=full",
+        "max_threads=16",
+        "autotiling=true",
+        "alpha_premultiplied=false"
+      ],
+      "artifacts": {
+        "transparent_window_icon_512.source.svg": "60d9bd2b72ce806b72b0a0696de10d8ff2238a8a5787b64fb0aba2cce0ac390f",
+        "transparent_window_icon_512.source.png": "a9be0c7f99cd588e63d26929ff797907b5711bf951d4f12c30aaf51210740406",
+        "transparent_window_icon_512.avif": "f326e0a3b396978fa50ab6c17970b2e777866b5e2bf370df54b40852d7a5f1ea",
+        "transparent_window_icon_512.reference.yuv": "70e5ab47e58e606dd85b89470c61dcc17d7e87544bc7f3869b2a6425aa169293",
+        "transparent_window_icon_512.alpha.yuv": "4d14f0636e6b914d53b9b3784123c3c5611b11a0dcb7b5f2f83674a8a7fae12a"
+      },
+      "libavif_metadata": {
+        "width": 512,
+        "height": 512,
+        "depth": 8,
+        "format": 1,
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1,
+        "premultiplied": 0,
+        "sampling": "444",
+        "icc_sha256": null
+      }
+    },
+    {
+      "name": "webpage_dashboard_768x512",
+      "width": 768,
+      "height": 512,
+      "depth": 8,
+      "sampling": "420",
+      "frames": 1,
+      "sequence_metadata": {
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1
+      },
+      "alpha": false,
+      "alpha_full_range": false,
+      "premultiplied": false,
+      "modes": [
+        "avif"
+      ],
+      "source": {
+        "provider": "MoonAV1 fixture author",
+        "primary_source": "inline source retained in webpage_dashboard_768x512.source.html",
+        "license": "CC0 1.0 Universal Public Domain Dedication",
+        "credit": "Original static HTML/CSS page; all content is synthetic",
+        "content_type": "synthetic page content, not a photograph"
+      },
+      "source_sha256": "2449885d290e3e7b025e0fa742c13c4c4bb1f31ed84184973e3fc72957cc1de9",
+      "transform": "Rendered the retained HTML/CSS with Playwright Chromium at a 768x512 viewport and exported the screenshot as AVIF.",
+      "render_command": [
+        "Playwright Chromium headless",
+        "viewport=768x512",
+        "device_scale_factor=1",
+        "page.screenshot(animations=disabled)"
+      ],
+      "export_command": [
+        "Pillow.Image.save",
+        "format=AVIF",
+        "quality=75",
+        "speed=6",
+        "subsampling=4:2:0",
+        "range=full",
+        "max_threads=16",
+        "autotiling=true"
+      ],
+      "artifacts": {
+        "webpage_dashboard_768x512.source.html": "2449885d290e3e7b025e0fa742c13c4c4bb1f31ed84184973e3fc72957cc1de9",
+        "webpage_dashboard_768x512.source.png": "90084e418dc406d817cb0c7c3a8135ba02be635c9535ede67ea4c4f017b2bcaa",
+        "webpage_dashboard_768x512.avif": "a1f13e4315dbe6e95d0e36c1f2f3bf6462bf3bb1394603432a856f6cfd87edc9",
+        "webpage_dashboard_768x512.reference.yuv": "8c812090bdfbffdf79954c24ebe9829c4a89415049c2af3d8042d0fa1baab8f7"
+      },
+      "libavif_metadata": {
+        "width": 768,
+        "height": 512,
+        "depth": 8,
+        "format": 3,
+        "color_primaries": 1,
+        "transfer_characteristics": 13,
+        "matrix_coefficients": 6,
+        "color_range": 1,
+        "premultiplied": 0,
+        "sampling": "420",
+        "icc_sha256": null
+      }
+    },
+    {
+      "name": "wide_gamut_adobe_600x400",
+      "width": 600,
+      "height": 400,
+      "depth": 8,
+      "sampling": "444",
+      "frames": 1,
+      "sequence_metadata": {
+        "color_primaries": 2,
+        "transfer_characteristics": 2,
+        "matrix_coefficients": 6,
+        "color_range": 1
+      },
+      "alpha": false,
+      "alpha_full_range": false,
+      "premultiplied": false,
+      "modes": [
+        "avif"
+      ],
+      "source": {
+        "provider": "scikit-image 0.22.0 data asset",
+        "primary_source": "https://scikit-image.org/docs/stable/api/skimage.data.html#skimage.data.astronaut",
+        "license": "Public domain; no known copyright restrictions (NASA image)",
+        "credit": "NASA / Eileen Collins; distributed through scikit-image data"
+      },
+      "source_sha256": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+      "transform": "Loaded the retained 512x512 sRGB astronaut PNG, converted RGB pixels with LittleCMS to AdobeCompat-v2 using rendering intent 0 and flags 0, then resized to 600x400 with Pillow LANCZOS before AVIF export.",
+      "export_command": [
+        "Pillow.Image.save",
+        "format=AVIF",
+        "quality=75",
+        "speed=6",
+        "subsampling=4:4:4",
+        "range=full",
+        "max_threads=16",
+        "autotiling=true",
+        "icc_profile=wide_gamut_adobe_600x400.AdobeCompat-v2.icc"
+      ],
+      "artifacts": {
+        "wide_gamut_adobe_600x400.input.srgb.png": "88431cd9653ccd539741b555fb0a46b61558b301d4110412b5bc28b5e3ea6cb5",
+        "wide_gamut_adobe_600x400.input.srgb.icc": "2b3aa1645779a9e634744faf9b01e9102b0c9b88fd6deced7934df86b949af7e",
+        "wide_gamut_adobe_600x400.source.png": "2b2b6dd97282e53fb8b4d5a10bf95e1164ba36e7c336d7ded1486aa29550aac7",
+        "wide_gamut_adobe_600x400.AdobeCompat-v2.icc": "60fb2adecacf82132db0b1c09b303316f3bbd9e2823e7ba096d01627d12d57c9",
+        "wide_gamut_adobe_600x400.avif": "1d7d26f3ac198b67c63b6987f5cc0633b154881a845ffec3cecaabce93ac6f1a",
+        "wide_gamut_adobe_600x400.reference.yuv": "81b58bcedd5fb2e794c77f17e81969d6f3f03e997c96b3e7453c29c36b0c0bbb"
+      },
+      "libavif_metadata": {
+        "width": 600,
+        "height": 400,
+        "depth": 8,
+        "format": 1,
+        "color_primaries": 2,
+        "transfer_characteristics": 2,
+        "matrix_coefficients": 6,
+        "color_range": 1,
+        "premultiplied": 0,
+        "sampling": "444",
+        "icc_sha256": "60fb2adecacf82132db0b1c09b303316f3bbd9e2823e7ba096d01627d12d57c9"
+      },
+      "icc": {
+        "profile": "AdobeCompat-v2.icc",
+        "url": "https://raw.githubusercontent.com/saucecontrol/Compact-ICC-Profiles/master/profiles/AdobeCompat-v2.icc",
+        "repository": "https://github.com/saucecontrol/Compact-ICC-Profiles",
+        "license": "CC0 1.0 (repository LICENSE)",
+        "color_space": "Adobe RGB (1998) compatible RGB wide-gamut profile",
+        "artifact": "wide_gamut_adobe_600x400.AdobeCompat-v2.icc",
+        "sha256": "60fb2adecacf82132db0b1c09b303316f3bbd9e2823e7ba096d01627d12d57c9"
+      },
+      "converted_source_sha256": "2b2b6dd97282e53fb8b4d5a10bf95e1164ba36e7c336d7ded1486aa29550aac7",
+      "input_icc_sha256": "2b3aa1645779a9e634744faf9b01e9102b0c9b88fd6deced7934df86b949af7e",
+      "color_conversion": {
+        "engine": "LittleCMS",
+        "version": "2.19",
+        "source_profile_artifact": "wide_gamut_adobe_600x400.input.srgb.icc",
+        "target_profile_artifact": "wide_gamut_adobe_600x400.AdobeCompat-v2.icc",
+        "rendering_intent": 0,
+        "flags": 0,
+        "pixel_format": "RGB -> RGB",
+        "resize": "Pillow LANCZOS 512x512 -> 600x400 after profile conversion"
+      }
+    }
+  ]
+}

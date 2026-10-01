@@ -1,0 +1,110 @@
+{
+  "source": {
+    "file": "BigBuckBunny1080p30s.mp4",
+    "sha256": "41a001818945206dff46470c5df9075f6a063ae31e50116b96c99ac4ce92ddaa",
+    "url": "https://raw.githubusercontent.com/chintan9/Big-Buck-Bunny/master/BigBuckBunny1080p30s.mp4",
+    "attribution": "(c) copyright 2008, Blender Foundation / www.bigbuckbunny.org",
+    "license": "CC BY 3.0",
+    "license_url": "https://peach.blender.org/about/",
+    "changes": "30-second excerpt from the mirrored clip, scaled to 512x288 and encoded as 8-bit AV1/AVIF; no audio"
+  },
+  "libavif": "0.11.1",
+  "dav1d": "1.2.1",
+  "ffmpeg": "ffmpeg version 9.0.1-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers",
+  "cases": [
+    {
+      "name": "bbb_8bit_512x288",
+      "width": 512,
+      "height": 288,
+      "depth": 8,
+      "sampling": "420",
+      "frames": 706,
+      "animation": true,
+      "sequence_metadata": {
+        "color_primaries": 1,
+        "transfer_characteristics": 1,
+        "matrix_coefficients": 1,
+        "color_range": 0
+      },
+      "evidence": {
+        "temporal_units": 706,
+        "presentations": 706,
+        "hidden_frames": 44,
+        "show_existing_frames": 39,
+        "inter_frames": 705
+      },
+      "encoder_command": [
+        "ffmpeg",
+        "-hide_banner",
+        "-y",
+        "-i",
+        "BigBuckBunny1080p30s.mp4",
+        "-map",
+        "0:v:0",
+        "-an",
+        "-vf",
+        "scale=512:288:flags=lanczos",
+        "-pix_fmt",
+        "yuv420p",
+        "-frames:v",
+        "720",
+        "-c:v",
+        "libaom-av1",
+        "-cpu-used",
+        "6",
+        "-crf",
+        "32",
+        "-b:v",
+        "0",
+        "-threads",
+        "1",
+        "-g",
+        "120",
+        "-lag-in-frames",
+        "16",
+        "-color_primaries",
+        "bt709",
+        "-color_trc",
+        "bt709",
+        "-colorspace",
+        "bt709",
+        "-color_range",
+        "tv",
+        "-f",
+        "obu",
+        "bbb_8bit_512x288.obu"
+      ],
+      "decoder_command": [
+        "dav1d",
+        "-q",
+        "--threads=1",
+        "--framedelay=1",
+        "-i",
+        "bbb_8bit_512x288.obu",
+        "--muxer=yuv",
+        "-o",
+        "bbb_8bit_512x288.reference.yuv"
+      ],
+      "container_command": [
+        "ffmpeg",
+        "-hide_banner",
+        "-y",
+        "-r",
+        "24",
+        "-i",
+        "bbb_8bit_512x288.obu",
+        "-c:v",
+        "copy",
+        "-f",
+        "avif",
+        "bbb_8bit_512x288.avif"
+      ],
+      "artifacts": {
+        "bbb_8bit_512x288.avif": "2d496f87d33d14c3796756549c780847051a1c9cdd23e51e8e4e17db6fa64c4b",
+        "bbb_8bit_512x288.obu": "441384f4514cefc33e57202ce2c9037cffe7d53b49503fabefdfd5d223708499",
+        "bbb_8bit_512x288.reference.yuv": "dbf7f4ec72b77de7893f0da46e1d7f9e1e5da201909a62c3e9cb15c4532f7bf4",
+        "bbb_8bit_512x288.trace.txt": "9630cef590bfd1fed5ce070efaf5e4cc873b0898f8869c74c745500502470e52"
+      }
+    }
+  ]
+}
