@@ -1,6 +1,16 @@
 # MoonAV1 开发交接
 
-更新日期：2026-09-24。本文供取得仓库的任意开发者使用，无需聊天记录或原作者临时目录。
+更新日期：2026-10-01。本文供取得仓库的任意开发者使用，无需聊天记录或原作者临时目录。
+
+## 首个公开 MVP
+
+公开版本基于 2026-09-24 的 `6138973`，保留原始提取与验证历史，提供基础 AV1/AVIF 解码及 RGBA8 输出。`examples/decode` 演示公共 API 的成功解码和空输入拒绝；CI 在三个后端运行它。
+
+后续本地扩展单独整理提交，原生像素公共接口、RGBA16、流式输入、ICC/HDR 和视频容器不在本次公开范围内。分批公开的时间不代表代码首次实现的时间。
+
+当前 PixelForge `0.19.0` 已移除内置 AV1/AVIF 像素解码器，也没有 MoonAV1 依赖。MoonAV1 尚未发布到 Mooncakes，后续消费者接入使用正式包版本。下文 9 月 24 日迁移及撤回记录作为历史证据保留。
+
+2026-10-01 在独立发布工作树复验：`moon info` 未改变根包公共接口，`moon fmt` 与 `git diff --check` 通过；JS、wasm-gc、Windows native 各通过 1306/1306 项测试，三个后端的 `examples/decode` 均输出 `64x64 AV1 -> RGBA8 OK`。编译器为 `0.10.11+6ff76a5f9`；类型检查保留基线的 72 条告警，0 错误。
 
 ## 最终目标
 
@@ -12,7 +22,7 @@
 
 来源为 PixelForge `6f0c711c54f89d34f3e2ef97cde7a0a45458583d`，完整来源见 [PROVENANCE.md](PROVENANCE.md)。原项目中的 AV1/AVIF 主线验收已完成。初始独立包的检查及 native、JS、wasm-gc 各 1306 项测试已通过；本地 MoonAV1 的完整源码、测试、fixture 和生成器继续保留。
 
-维护者已暂停 PixelForge 集成：以新增 revert 提交撤回迁移和固定快照接入，PixelForge 恢复来源版本的内置解码实现，保留历史与现有功能。当前没有活动的 MoonAV1 vendor、workspace 依赖或同步流程。MoonAV1 继续作为本地独立库，尚未创建公开仓库或发布 Mooncakes；正式发布后再通过发布版本接入 PixelForge，不承诺发布时间。
+2026-09-24，维护者暂停 PixelForge 集成：以新增 revert 提交撤回迁移和固定快照接入，PixelForge 当时恢复来源版本的内置解码实现，保留历史与现有功能。此后的公开状态与 PixelForge 变更见本文开头。
 
 撤回提交 [`edebb1f`](https://github.com/0717lee/pixelforge/commit/edebb1f0a597b8d1e11d6c90ebfad0b40e38299d) 已推送至 PixelForge `main`，[CI 35968739744](https://github.com/0717lee/pixelforge/actions/runs/35968739744) 全部通过。本地复验为 native、JS、wasm-gc 各 1546/1546，Web/Worker、WASM 和 native CLI 保持可用；这验证的是恢复后的 PixelForge 内置实现。本库源码及独立测试未被撤回。
 
@@ -40,7 +50,7 @@ PixelForge 的迁移提交 `e366566e95b59173738bdb9bbbc5376550bd92cb` 与固定�
 2. native、JS、wasm-gc 适用测试全部通过；迁移前的原始码流和独立像素保持不变。
 3. 独立消费者能够调用静态与动画解码，结果、像素和时间与迁移前一致。
 4. 文档、公开接口、版本配置和实际安装方式一致；第三方声明和样本来源可追溯。
-5. MoonAV1 正式发布后，PixelForge 才通过正式版本接入，并验证干净环境安装、其他图像处理能力与浏览器/CLI 集成。当前暂停消费者迁移，公开仓库与包发布由维护者另行决定。
+5. MoonAV1 包正式发布后，PixelForge 通过正式版本接入时，须验证干净环境安装、其他图像处理能力与浏览器/CLI 集成。消费者迁移不在首个公开 MVP 范围内。
 
 ## 验证命令
 

@@ -2,9 +2,9 @@
 
 A pure MoonBit AV1/AVIF decoder for native, JavaScript and wasm-gc. The decoding core does not call browser image decoders or native codec libraries. External decoders are used only to produce independent test references.
 
-Extracted from [PixelForge](https://github.com/0717lee/pixelforge); see [provenance](PROVENANCE.md), [handoff and acceptance criteria](HANDOFF.md), and [third-party notices](THIRD_PARTY_NOTICES.md). MoonAV1 is maintained locally as an independent library. It has no public repository and has not been published to Mooncakes. The existing implementation remains in PixelForge's public history.
+Extracted from [PixelForge](https://github.com/0717lee/pixelforge); see [provenance](PROVENANCE.md), [handoff and acceptance criteria](HANDOFF.md), and [third-party notices](THIRD_PARTY_NOTICES.md). This public MVP is based on the independent decoder from September 24, 2026 and provides RGBA8 output. It has not been published to Mooncakes. The existing implementation remains in PixelForge's public history.
 
-PixelForge integration is paused. PixelForge continues to use its built-in AV1/AVIF decoder; the earlier snapshot and workspace integration has been withdrawn. Integration through a released package version will be revisited after MoonAV1 is formally published.
+PixelForge has no active MoonAV1 dependency and removed its built-in AV1/AVIF pixel decoder in `0.19.0`. Future integration will use a released MoonAV1 package.
 
 ## Scope
 
@@ -15,7 +15,19 @@ PixelForge integration is paused. PixelForge continues to use its built-in AV1/A
 
 RGBA preserves source primaries/transfer, uses nearest-neighbor chroma replication and rounds/clips at final conversion. Unspecified matrices use BT.601; XYZ is converted to BT.709/sRGB. There is no HDR tone mapping or display-gamut adaptation. Four PQ reference channels match independent high-precision H.273 results with at most one unit of difference from zimg; see the [color contract](tests/fixtures/av1-color/README.md).
 
-## API
+## Quick start
+
+Install MoonBit, clone the source and run the example from the repository root:
+
+```sh
+git clone https://github.com/0717lee/moonav1.git
+cd moonav1
+moon run examples/decode --target js
+```
+
+Expected output: `64x64 AV1 -> RGBA8 OK`. The example decodes an embedded 10-bit AV1 sample, checks dimensions and pixels, and verifies rejection of empty input. No external decoder or image download is needed. It also runs with `--target wasm-gc` and `--target native`.
+
+## Library API
 
 The package identifier is `0717lee/moonav1` and is currently unavailable from Mooncakes. The example below shows the `@moonav1` alias used by a consumer after importing the package. PixelForge currently has no active dependency on this library:
 
@@ -40,6 +52,6 @@ moon test --target native
 
 Ordinary tests are self-contained and do not require PixelForge or an external decoder. Fixture manifests preserve independent pixels, source versions and commands. Reference-generation tools are in `scripts/`.
 
-This independent library retains its complete source, tests, fixtures, generators and licensing documents for standalone development. PixelForge temporarily maintains its built-in implementation without synchronizing this library's source. Public hosting and package publication remain maintainer decisions; consumer migration follows a formal release.
+This independent library retains its base decoder source, tests, fixtures, generators and licensing documents for standalone development. Public native-pixel APIs, RGBA16, streaming, ICC/HDR and video containers are outside this public MVP. Existing local extensions will be prepared for publication in separate changes.
 
 Apache-2.0, with the upstream notices retained. “Pure MoonBit” describes the implementation language, not original authorship of every algorithm.

@@ -2,9 +2,9 @@
 
 纯 MoonBit AV1/AVIF 解码基础库，面向 native、JavaScript 和 wasm-gc。核心解码不调用浏览器图片解码器，不通过 FFI 调用 libaom、dav1d 或 libavif；这些工具仅用于生成独立测试参考。
 
-本库从 [PixelForge](https://github.com/0717lee/pixelforge) 提取，已有实现及其来源见 [PROVENANCE.md](PROVENANCE.md)。本次独立工程不改变原代码的完成时间或贡献归属。MoonAV1 当前只在本地独立维护，尚未创建公开仓库，也未发布到 Mooncakes；既有代码仍保留在 PixelForge 的公开历史中。
+本库从 [PixelForge](https://github.com/0717lee/pixelforge) 提取，已有实现及其来源见 [PROVENANCE.md](PROVENANCE.md)。本次独立工程不改变原代码的完成时间或贡献归属。当前公开 MVP 基于 2026-09-24 的独立解码版本，提供 RGBA8 输出；尚未发布到 Mooncakes。
 
-PixelForge 集成已暂停，继续使用内置 AV1/AVIF 解码实现。此前的固定快照和 workspace 接入已撤回；待 MoonAV1 正式发布后，再通过发布版本接入 PixelForge。
+PixelForge 当前没有 MoonAV1 依赖，已在 `0.19.0` 移除内置 AV1/AVIF 像素解码器。后续接入将使用正式发布的 MoonAV1 包。
 
 [English](README.en.md) · [开发交接与最终目标](HANDOFF.md) · [第三方声明](THIRD_PARTY_NOTICES.md)
 
@@ -17,7 +17,19 @@ PixelForge 集成已暂停，继续使用内置 AV1/AVIF 解码实现。此前�
 
 RGBA 使用源 primaries/transfer、最近邻色度上采样及最终裁剪/舍入；未指定矩阵采用 BT.601。XYZ 转为 BT.709/sRGB。这里不进行 HDR 色调映射或显示器色域适配。PQ 参考中的四个通道严格匹配独立高精度 H.273 金值，并限定与 zimg 的差值不超过 1；不能将这一特例描述成与 zimg 全部字节相同。见 [颜色参考](tests/fixtures/av1-color/README.md)。
 
-## 主要接口
+## 快速运行
+
+安装 MoonBit 后克隆源码，在仓库根目录运行：
+
+```sh
+git clone https://github.com/0717lee/moonav1.git
+cd moonav1
+moon run examples/decode --target js
+```
+
+预期输出 `64x64 AV1 -> RGBA8 OK`。示例解码内嵌的 10-bit AV1 样本，核对输出尺寸和像素，并检查空输入被拒绝；不需要下载图片或安装外部解码器。也可使用 `--target wasm-gc` 或 `--target native`。
+
+## 库接口
 
 包名为 `0717lee/moonav1`，目前尚不能从 Mooncakes 安装。以下示例说明消费端导入该包后使用的 `@moonav1` 别名；PixelForge 当前没有对此库的活动依赖：
 
@@ -52,7 +64,7 @@ moon test --target native
 
 普通测试使用随库提交的独立参考，不需要外部解码器或 PixelForge 目录。`tests/fixtures/` 中的说明和 manifest 记录样本来源、工具版本和像素约定。生成器位于 `scripts/`，外部参考工具只在重新生成或复核参考时使用。
 
-本独立库完整保留解码源码、测试、fixture、生成器和许可文档，可继续单独构建与维护。PixelForge 暂时保留自己的内置实现，不同步本库源码。公开仓库与包发布由维护者另行决定，正式发布后再进行消费者迁移。
+本独立库完整保留基础解码源码、测试、fixture、生成器和许可文档，可单独构建与维护。原生像素公共接口、RGBA16、流式输入、ICC/HDR 和视频容器等扩展尚未包含在本次公开 MVP 中；本地已有扩展将分批整理发布。
 
 ## 许可证
 

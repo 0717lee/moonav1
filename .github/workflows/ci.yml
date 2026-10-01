@@ -48,3 +48,6 @@ jobs:
 
       - name: Test
         run: moon test --target ${{ matrix.target }}
+
+      - name: Run public API example
+        run: moon run examples/decode --target ${{ matrix.target }}
