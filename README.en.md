@@ -39,10 +39,11 @@ Use `av1_decode` for raw AV1, `avif_decode_rgba` for AVIF with alpha/grid compos
 
 ## Build
 
-The pinned compiler is `0.10.11+6ff76a5f9`; native tests require a C toolchain.
+The pinned compiler is `0.10.14+7d59c7ec9`; native tests require a C toolchain.
 
 ```sh
 moon check
+moon build
 moon test --target js
 moon test --target wasm-gc
 moon test --target native

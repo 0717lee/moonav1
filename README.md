@@ -48,11 +48,12 @@ fn decode_image(bytes : Array[Byte]) -> @moonav1.Image? {
 
 ## 本地构建与验证
 
-使用与 CI 相同的 MoonBit 编译器 `0.10.11+6ff76a5f9`；native 目标需要 C 工具链。在本目录执行：
+使用与 CI 相同的 MoonBit 编译器 `0.10.14+7d59c7ec9`；native 目标需要 C 工具链。在本目录执行：
 
 ```sh
 moon version --all
 moon check
+moon build
 moon test --target js
 moon test --target wasm-gc
 moon test --target native

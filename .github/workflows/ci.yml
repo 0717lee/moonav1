@@ -15,7 +15,7 @@ concurrency:
 
 env:
   # This is the compiler release, rather than the Moon CLI date version.
-  MOONBIT_VERSION: 0.10.11+6ff76a5f9
+  MOONBIT_VERSION: 0.10.14+7d59c7ec9
 
 jobs:
   check-and-test:
@@ -40,6 +40,9 @@ jobs:
 
       - name: Type check
         run: moon check --target ${{ matrix.target }}
+
+      - name: Build
+        run: moon build --target ${{ matrix.target }}
 
       - name: Verify committed public interface
         run: |
