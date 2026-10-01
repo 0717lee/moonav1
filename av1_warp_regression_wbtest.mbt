@@ -171,6 +171,48 @@ test "warp regression excludes top-right for a 128-pixel block axis" {
 }
 
 ///|
+test "warp matching stops at a partial bottom block" {
+  let field = av1_motion_field(8, 6)
+  av1_warp_regression_store(field, 4, 3, 1, 1, 0, 0)
+  av1_warp_regression_store(field, 5, 3, 1, 1, 2, 1)
+  // Nominal height is four MIs, but only rows 4 and 5 exist. A scan at
+  // row 6 used to get a zero neighbour extent and never advance.
+  assert_eq(
+    av1_warp_matching_masks(field, 4, 4, 4, 4, 4, 4, true, false, 1),
+    (0L, 3L),
+  )
+}
+
+///|
+test "warp matching stops at a partial right block" {
+  let field = av1_motion_field(6, 8)
+  av1_warp_regression_store(field, 3, 4, 1, 1, 0, 0)
+  av1_warp_regression_store(field, 3, 5, 1, 1, 2, 1)
+  assert_eq(
+    av1_warp_matching_masks(field, 4, 4, 4, 4, 4, 4, false, true, 1),
+    (3L, 0L),
+  )
+}
+
+///|
+test "warp matching clipped corner retains requested smaller extents" {
+  let field = av1_motion_field(6, 6)
+  av1_warp_regression_store(field, 3, 3, 1, 1, 0, 0)
+  av1_warp_regression_store(field, 3, 4, 1, 1, 0, 0)
+  av1_warp_regression_store(field, 3, 5, 1, 1, 2, 1)
+  av1_warp_regression_store(field, 4, 3, 1, 1, 0, 0)
+  av1_warp_regression_store(field, 5, 3, 1, 1, 2, 1)
+  assert_eq(
+    av1_warp_matching_masks(field, 4, 4, 4, 4, 4, 4, true, true, 1),
+    (3L, (1L << 32) | 3L),
+  )
+  assert_eq(
+    av1_warp_matching_masks(field, 4, 4, 4, 4, 1, 1, true, true, 1),
+    (1L, (1L << 32) | 1L),
+  )
+}
+
+///|
 fn av1_warp_regression_frame(
   planes : Array[Array[Int]],
   width : Int,

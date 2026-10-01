@@ -585,6 +585,13 @@ fn av1_warp_matching_masks(
   ref_name : Int,
   have_top_right? : Bool = true,
 ) -> (Int64, Int64) {
+  // The coded block may extend beyond the frame. Keep its nominal bw4/bh4
+  // for neighbour geometry, but clip the scan extents as in dav1d decode_b.
+  // An out-of-frame neighbour has extent zero and cannot advance the scan.
+  let available_w4 = field.cols - mi_col
+  let available_h4 = field.rows - mi_row
+  let w4 = if w4 < available_w4 { w4 } else { available_w4 }
+  let h4 = if h4 < available_h4 { h4 } else { available_h4 }
   // The corner markers live at bit 32, so both masks are Int64: a 32-bit Int
   // would shift them away entirely.
   let mut top_mask = 0L
