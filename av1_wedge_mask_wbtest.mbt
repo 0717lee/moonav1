@@ -3549,6 +3549,24 @@ test "av1_wedge_mask: every mask matches dav1d's generated table" {
 }
 
 ///|
+test "av1_wedge_mask rejects non-codeable shapes and indices" {
+  for shape in [(4, 4), (5, 5), (8, 4)] {
+    let (width, height) = shape
+    assert_eq(av1_wedge_shape_ok(width, height), false)
+    match av1_wedge_mask(width, height, 0, 0) {
+      Some(_) => fail("non-codeable wedge shape returned a mask")
+      None => ()
+    }
+  }
+  for index in [-1, 16] {
+    match av1_wedge_mask(8, 8, index, 0) {
+      Some(_) => fail("out-of-range wedge index returned a mask")
+      None => ()
+    }
+  }
+}
+
+///|
 /// Every wedge mask a stream can select, with `wedge_sign = 0` and the block's
 /// own dimensions, as extracted from dav1d's generated table
 /// (`dav1d_init_wedge_masks`, `src/wedge.c`). The nine sizes are the ones

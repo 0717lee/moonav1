@@ -177,13 +177,20 @@ fn av1_wedge_master() -> Array[Array[Array[Int]]] {
 /// The `width x height` wedge mask for one block, indexed `[y][x]`, or None
 /// when the block size cannot code a wedge. The sign chooses each of the two
 /// mirrored variants: the mask whose average is at least 32, or its
-/// complement (AV1 §7.11.3.11).
+/// complement (AV1 §7.11.3.11). Valid indices are 0 through 15; invalid
+/// indices also return None.
 pub fn av1_wedge_mask(
   width : Int,
   height : Int,
   index : Int,
   sign : Int,
 ) -> Array[Int]? {
+  if !av1_wedge_shape_ok(width, height) {
+    return None
+  }
+  if index < 0 || index >= 16 {
+    return None
+  }
   let master = av1_wedge_master()
   let shape = if height > width { 0 } else if height < width { 1 } else { 2 }
   let entry = av1_wedge_codebook[shape][index]
