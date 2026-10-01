@@ -1,0 +1,15 @@
+/*
+!/.moonignore
+!/moon.mod
+!/moon.pkg
+!/*.mbt
+!/*.mbti
+!/README.md
+!/README.en.md
+!/LICENSE
+!/THIRD_PARTY_NOTICES.md
+!/docs/
+!/examples/
+*_test.mbt
+*_wbtest.mbt
+__pycache__/

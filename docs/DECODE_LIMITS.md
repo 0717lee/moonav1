@@ -74,7 +74,7 @@ The previous JS decoder crashed with `RangeError: Maximum call stack size
 exceeded` on a 160,000-byte, 20,000-level input. The corrected parsers reject it
 normally. Tests accept the exact 64-level traversal boundary and reject level 65.
 
-[Limit regressions](../decode_limits_test.mbt) exercise exact byte/pixel/frame
+[Limit regressions](https://github.com/0717lee/moonav1/blob/main/decode_limits_test.mbt) exercise exact byte/pixel/frame
 boundaries, shared alpha/grid/animation budgets, hidden pictures, show-existing,
 super-resolution padding and per-call reset. A separate regression prevents
 repeated grid extents from amplifying a payload beyond the selected byte budget.

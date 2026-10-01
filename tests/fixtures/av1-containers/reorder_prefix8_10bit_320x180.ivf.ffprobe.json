@@ -1,0 +1,79 @@
+{
+  "streams": [
+    {
+      "index": 0,
+      "codec_name": "av1",
+      "width": 320,
+      "height": 180,
+      "time_base": "1/1200000",
+      "start_time": "2.500000",
+      "extradata_size": 16
+    }
+  ],
+  "packets": [
+    {
+      "pts": 3000000,
+      "dts": 3000000,
+      "size": "3268",
+      "pos": "32",
+      "flags": "K__",
+      "data_hash": "SHA256:f27fcc9b25678a0238e9188b6d08c73e4159adc3cdccf470a404ed649ce34df0"
+    },
+    {
+      "pts": 3048000,
+      "dts": 3048000,
+      "size": "4248",
+      "pos": "3312",
+      "flags": "___",
+      "data_hash": "SHA256:444183d9950f942cd4a2eded39254e840e094a2965eb4595354e0e245f24b2e8"
+    },
+    {
+      "pts": 3096000,
+      "dts": 3096000,
+      "size": "426",
+      "pos": "7572",
+      "flags": "___",
+      "data_hash": "SHA256:4d6059769971537be3077f7110bc35d582cf3e50f12b8105a317bfbdb03150ca"
+    },
+    {
+      "pts": 3144000,
+      "dts": 3144000,
+      "size": "5",
+      "pos": "8010",
+      "flags": "___",
+      "data_hash": "SHA256:e9e33cf3c379510fa68d4b4fc7d0bfb5677c717177cf5831033332b14cc15bdb"
+    },
+    {
+      "pts": 3192000,
+      "dts": 3192000,
+      "size": "459",
+      "pos": "8027",
+      "flags": "___",
+      "data_hash": "SHA256:ebd9215642364fc1f6317dd03f97d168f42b392e8a73382cac0a478dd5418fa3"
+    },
+    {
+      "pts": 3240000,
+      "dts": 3240000,
+      "size": "342",
+      "pos": "8498",
+      "flags": "___",
+      "data_hash": "SHA256:9564e0b53ba8dccc95dcf38d9c8f5ff9ce904fe21102fe92483d66d030aab9f3"
+    },
+    {
+      "pts": 3288000,
+      "dts": 3288000,
+      "size": "5",
+      "pos": "8852",
+      "flags": "___",
+      "data_hash": "SHA256:f5ed02db3266a0887ead55352763cdc6de84eae78ac77d1d6c528cad3498bd57"
+    },
+    {
+      "pts": 3336000,
+      "dts": 3336000,
+      "size": "3891",
+      "pos": "8869",
+      "flags": "___",
+      "data_hash": "SHA256:468d6330a1e6e4572da4400ca7bd28acbd9684953db5b2a3b267354095e7dcbb"
+    }
+  ]
+}

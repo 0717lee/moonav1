@@ -39,7 +39,7 @@
 
 alpha 保留解码后的原始样本以及它自己的 `full_range` 标记。limited-range alpha 尚未扩展到 full range；不能直接把其码值除以最大样本值作为覆盖率。`premultiplied` 表示已验证的 color→alpha `prem` 关联；原生输出不撤销预乘，也不把 alpha 写进颜色平面。损坏的辅助 alpha 会使整个调用返回 `None`。
 
-需要现有 straight RGBA8、范围扩展和预乘处理时，调用 `avif_decode_rgba`，动画调用 `avif_decode_animation`。其最近邻色度、矩阵与舍入约定保持原样，见 [颜色参考](../tests/fixtures/av1-color/README.md) 和 [prem 参考](../tests/fixtures/avif-premultiplied-alpha/README.md)。需要 16 位整数通道时，原生帧和图像都提供 `to_rgba16()`，完整布局与高精度舍入顺序见 [RGBA16 契约](RGBA16.md)。
+需要现有 straight RGBA8、范围扩展和预乘处理时，调用 `avif_decode_rgba`，动画调用 `avif_decode_animation`。其最近邻色度、矩阵与舍入约定保持原样，见 [颜色参考](https://github.com/0717lee/moonav1/blob/main/tests/fixtures/av1-color/README.md) 和 [prem 参考](https://github.com/0717lee/moonav1/blob/main/tests/fixtures/avif-premultiplied-alpha/README.md)。需要 16 位整数通道时，原生帧和图像都提供 `to_rgba16()`，完整布局与高精度舍入顺序见 [RGBA16 契约](RGBA16.md)。
 
 ## 原生动画与时间选择
 
@@ -85,11 +85,11 @@ fn first_luma(bytes : Array[Byte]) -> Int? {
 
 原生视频接口接收完整 temporal unit。任意切分的字节块可使用 [Av1StreamDecoder](EXTENSIONS.md#arbitrary-av1-byte-chunks)，由流式接口保留定界和解码状态。
 
-[native_pixels_test.mbt](../native_pixels_test.mbt) 仅使用公共接口，逐样本核对既有 dav1d/libavif 参考，覆盖三个深度、单色、4:2:0/4:2:2/4:4:4、奇数尺寸、帧间状态、film grain、grid、alpha/prem 和 nclx。另检查隐藏帧、show-existing、修改返回值后的参考隔离、原生/RGBA 视频交替调用，以及损坏输入拒绝。
+[native_pixels_test.mbt](https://github.com/0717lee/moonav1/blob/main/native_pixels_test.mbt) 仅使用公共接口，逐样本核对既有 dav1d/libavif 参考，覆盖三个深度、单色、4:2:0/4:2:2/4:4:4、奇数尺寸、帧间状态、film grain、grid、alpha/prem 和 nclx。另检查隐藏帧、show-existing、修改返回值后的参考隔离、原生/RGBA 视频交替调用，以及损坏输入拒绝。
 
-[native_animation_test.mbt](../native_animation_test.mbt) 覆盖 29 个动画用例。`avif-premultiplied-alpha` 保存的每帧原生颜色和 alpha 均逐样本核对；`avif-animation-alpha` 保存的是原生 alpha 和 RGBA，因此新测试对这一组核对原生 alpha、时序、元数据及拒绝行为。另覆盖选帧区间端点、大时间戳、循环、所选帧共享与不同帧隔离，以及后续样本损坏时整段拒绝。原 RGBA8 独立参考测试继续保留。
+[native_animation_test.mbt](https://github.com/0717lee/moonav1/blob/main/native_animation_test.mbt) 覆盖 29 个动画用例。`avif-premultiplied-alpha` 保存的每帧原生颜色和 alpha 均逐样本核对；`avif-animation-alpha` 保存的是原生 alpha 和 RGBA，因此新测试对这一组核对原生 alpha、时序、元数据及拒绝行为。另覆盖选帧区间端点、大时间戳、循环、所选帧共享与不同帧隔离，以及后续样本损坏时整段拒绝。原 RGBA8 独立参考测试继续保留。
 
-测试常量与示例码流由 [generate-native-api-tests.py](../scripts/generate-native-api-tests.py) 从现有 fixture 序列化。正常 `moon test` 不需要 Python。以下命令只读取已保存参考并检查嵌入内容，不运行外部解码器、不重生成参考：
+测试常量与示例码流由 [generate-native-api-tests.py](https://github.com/0717lee/moonav1/blob/main/scripts/generate-native-api-tests.py) 从现有 fixture 序列化。正常 `moon test` 不需要 Python。以下命令只读取已保存参考并检查嵌入内容，不运行外部解码器、不重生成参考：
 
 ```sh
 python scripts/generate-native-api-tests.py --check

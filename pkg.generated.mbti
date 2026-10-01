@@ -72,6 +72,14 @@ pub fn av1_decode_tile_group_with_boundaries(Int, Int, Array[Int], Array[Int], I
 
 pub fn av1_decode_tx_partition_tree_payload(Array[Byte], Av1TxNode, Int, disable_cdf_update? : Bool) -> Array[Av1TxLeaf]?
 
+pub fn av1_demux(Array[Byte], format? : Av1ContainerFormat?, track_id? : Int64?, limits? : DecodeLimits) -> Result[Av1DemuxedTrack, DecodeError]
+
+pub fn av1_demux_ivf(Array[Byte], limits? : DecodeLimits) -> Result[Av1DemuxedTrack, DecodeError]
+
+pub fn av1_demux_mp4(Array[Byte], track_id? : Int64?, limits? : DecodeLimits) -> Result[Av1DemuxedTrack, DecodeError]
+
+pub fn av1_demux_webm(Array[Byte], track_id? : Int64?, limits? : DecodeLimits) -> Result[Av1DemuxedTrack, DecodeError]
+
 pub fn av1_extract_tile_payloads(Array[Byte], Int, Int, Int) -> Array[Av1TilePayload]?
 
 pub fn av1_find_mv_stack(Av1MotionField, Av1MvBlock, Av1MvFrame, Bool) -> Av1MvStack?
@@ -297,6 +305,112 @@ pub(all) struct Av1CdefParams {
   secondary_strength : Int
   damping : Int
   direction : Int
+}
+
+pub struct Av1ContainerDecoder {
+  // private fields
+}
+pub fn Av1ContainerDecoder::format(Self) -> Av1ContainerFormat
+pub fn Av1ContainerDecoder::new(Array[Byte], format? : Av1ContainerFormat?, track_id? : Int64?, limits? : DecodeLimits) -> Result[Self, DecodeError]
+pub fn Av1ContainerDecoder::next_frame(Self) -> Result[Av1ContainerFrame?, DecodeError]
+pub fn Av1ContainerDecoder::packet_count(Self) -> Int
+pub fn Av1ContainerDecoder::position(Self) -> Int
+pub fn Av1ContainerDecoder::presentation_timeline(Self) -> Result[Av1PresentationTimeline, DecodeError]
+pub fn Av1ContainerDecoder::reset(Self) -> Unit
+pub fn Av1ContainerDecoder::seek_timestamp(Self, Int64) -> Result[Av1ContainerSeekResult, DecodeError]
+pub fn Av1ContainerDecoder::timescale(Self) -> Int64
+
+pub(all) enum Av1ContainerFormat {
+  Ivf
+  Mp4
+  WebM
+} derive(Eq, @debug.Debug)
+
+pub struct Av1ContainerFrame {
+  packet_index : Int
+  timestamp : Int64?
+  duration : Int64?
+  timescale : Int64
+  frame : Av1NativeFrame
+}
+
+pub struct Av1ContainerFrameBatch {
+  frames : Array[Av1ContainerFrame]
+  status : Av1ContainerStreamStatus
+}
+
+pub struct Av1ContainerPacketBatch {
+  packets : Array[Av1Packet]
+  status : Av1ContainerStreamStatus
+}
+
+pub(all) enum Av1ContainerSeekOutcome {
+  Exact
+  Next
+  End
+  UnknownTimestamp
+} derive(Eq, @debug.Debug)
+
+pub struct Av1ContainerSeekResult {
+  requested_timestamp : Int64
+  outcome : Av1ContainerSeekOutcome
+  frame : Av1ContainerFrame?
+}
+
+pub struct Av1ContainerStream {
+  // private fields
+}
+pub fn Av1ContainerStream::bytes_received(Self) -> Int64
+pub fn Av1ContainerStream::feed(Self, Array[Byte]) -> Result[Av1ContainerPacketBatch, DecodeError]
+pub fn Av1ContainerStream::finish(Self) -> Result[Av1ContainerPacketBatch, DecodeError]
+pub fn Av1ContainerStream::new(format? : Av1ContainerFormat?, track_id? : Int64?, limits? : DecodeLimits) -> Result[Self, DecodeError]
+pub fn Av1ContainerStream::packet_count(Self) -> Int
+pub fn Av1ContainerStream::peak_pending_bytes(Self) -> Int
+pub fn Av1ContainerStream::pending_bytes(Self) -> Int
+pub fn Av1ContainerStream::replay(Self) -> Result[Unit, DecodeError]
+pub fn Av1ContainerStream::reset(Self) -> Unit
+pub fn Av1ContainerStream::track_info(Self) -> Av1ContainerStreamInfo?
+
+pub struct Av1ContainerStreamDecoder {
+  // private fields
+}
+pub fn Av1ContainerStreamDecoder::feed(Self, Array[Byte]) -> Result[Av1ContainerFrameBatch, DecodeError]
+pub fn Av1ContainerStreamDecoder::finish(Self) -> Result[Av1ContainerFrameBatch, DecodeError]
+pub fn Av1ContainerStreamDecoder::new(format? : Av1ContainerFormat?, track_id? : Int64?, limits? : DecodeLimits) -> Result[Self, DecodeError]
+pub fn Av1ContainerStreamDecoder::peak_pending_bytes(Self) -> Int
+pub fn Av1ContainerStreamDecoder::pending_bytes(Self) -> Int
+pub fn Av1ContainerStreamDecoder::replay(Self) -> Result[Unit, DecodeError]
+pub fn Av1ContainerStreamDecoder::reset(Self) -> Unit
+pub fn Av1ContainerStreamDecoder::track_info(Self) -> Av1ContainerStreamInfo?
+
+pub struct Av1ContainerStreamInfo {
+  format : Av1ContainerFormat
+  track_id : Int64
+  width : Int
+  height : Int
+  timescale : Int64
+  movie_timescale : Int64?
+  edits : Array[Av1TrackEdit]
+  codec_initialization : Array[Byte]
+}
+
+pub(all) enum Av1ContainerStreamStatus {
+  NeedMoreInput
+  Ready
+  ReplayRequired
+  Finished
+} derive(Eq, @debug.Debug)
+
+pub struct Av1DemuxedTrack {
+  format : Av1ContainerFormat
+  track_id : Int64
+  width : Int
+  height : Int
+  timescale : Int64
+  movie_timescale : Int64?
+  edits : Array[Av1TrackEdit]
+  codec_initialization : Array[Byte]
+  packets : Array[Av1Packet]
 }
 
 pub(all) struct Av1FilmGrainParams {
@@ -609,11 +723,35 @@ pub fn Av1NativeFrame::copy_plane_into(Self, Int, FixedArray[Byte], Int, PixelPa
 pub fn Av1NativeFrame::to_rgba16(Self) -> Image16?
 pub fn Av1NativeFrame::to_rgba16_into(Self, FixedArray[UInt16], Int, offset? : Int) -> Result[Unit, DecodeError]
 
+pub struct Av1Packet {
+  data : Array[Byte]
+  presentation_timestamp : Int64?
+  decode_timestamp : Int64?
+  duration : Int64?
+  sync_sample : Bool?
+}
+
 pub struct Av1PixelPlane {
   width : Int
   height : Int
   data : FixedArray[Int]
 }
+
+pub(all) enum Av1PresentationPoint {
+  Empty
+  Media(Av1RationalTime)
+  End
+} derive(Eq, @debug.Debug)
+
+pub struct Av1PresentationTimeline {
+  // private fields
+}
+pub fn Av1PresentationTimeline::edit_count(Self) -> Int
+pub fn Av1PresentationTimeline::has_edits(Self) -> Bool
+pub fn Av1PresentationTimeline::map_movie_time(Self, Int64) -> Result[Av1PresentationPoint, DecodeError]
+pub fn Av1PresentationTimeline::media_timescale(Self) -> Int64
+pub fn Av1PresentationTimeline::movie_timescale(Self) -> Int64?
+pub fn Av1PresentationTimeline::new(Av1DemuxedTrack) -> Result[Self, DecodeError]
 
 pub(all) struct Av1QuantDeltas {
   y_dc : Int
@@ -627,6 +765,11 @@ pub(all) struct Av1QuantMatrix {
   y : Int
   u : Int
   v : Int
+} derive(Eq, @debug.Debug)
+
+pub struct Av1RationalTime {
+  numerator : Int64
+  denominator : Int64
 } derive(Eq, @debug.Debug)
 
 pub(all) struct Av1RefFrame {
@@ -897,6 +1040,12 @@ pub(all) struct Av1TilePayload {
   offset : Int
   length : Int
   bytes : Array[Byte]
+}
+
+pub struct Av1TrackEdit {
+  duration : Int64
+  media_time : Int64
+  media_rate : Int
 }
 
 pub struct Av1TxDepthState {

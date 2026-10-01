@@ -6,6 +6,8 @@ readme = "README.md"
 
 license = "Apache-2.0"
 
+repository = "https://github.com/0717lee/moonav1"
+
 keywords = [ "av1", "avif", "decoder", "image", "wasm" ]
 
 preferred_target = "wasm-gc"

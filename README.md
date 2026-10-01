@@ -10,9 +10,28 @@
 - AVIF：主图、辅助 alpha、grid、静态/动画的 `prem` 关联，以及带独立颜色/alpha 轨道的动画。
 - 输出原生 8/10/12-bit 像素平面、straight RGBA8 或 RGBA16，包含静态图和动画的高位深 alpha。
 - 提供分块 AV1 输入、惰性 AVIF 动画、错误诊断、解码限额、显示变换和可复用输出缓冲区。
+- 支持 IVF、MP4/fMP4、WebM/Matroska 的 AV1 轨道读取、分块容器输入和时间定位。
 - 库仅负责解码，不包含 AV1/AVIF 编码、图像滤镜、浏览器 UI 或文件系统。
 
-RGBA 使用源 primaries/transfer、最近邻色度上采样及最终裁剪/舍入；未指定矩阵采用 BT.601。XYZ 转为 BT.709/sRGB。这里不进行 HDR 色调映射或显示器色域适配。PQ 参考中的四个通道严格匹配独立高精度 H.273 金值，并限定与 zimg 的差值不超过 1；不能将这一特例描述成与 zimg 全部字节相同。见 [颜色参考](tests/fixtures/av1-color/README.md)。
+RGBA 使用源 primaries/transfer、最近邻色度上采样及最终裁剪/舍入；未指定矩阵采用 BT.601。XYZ 转为 BT.709/sRGB。这里不进行 HDR 色调映射或显示器色域适配。PQ 参考中的四个通道严格匹配独立高精度 H.273 金值，并限定与 zimg 的差值不超过 1；不能将这一特例描述成与 zimg 全部字节相同。见 [颜色参考](https://github.com/0717lee/moonav1/blob/main/tests/fixtures/av1-color/README.md)。
+
+## 安装
+
+在 MoonBit 项目中添加依赖：
+
+```sh
+moon add 0717lee/moonav1@0.1.0
+```
+
+在调用方的 `moon.pkg` 中导入：
+
+```moonbit
+import {
+  "0717lee/moonav1",
+}
+```
+
+随后可通过 `@moonav1` 调用下方接口。native、JavaScript 和 wasm-gc 共用同一个包。
 
 ## 快速运行
 
@@ -28,9 +47,11 @@ moon run examples/decode --target js
 
 `moon run examples/native_pixels --target js` 演示高位深平面、RGBA16 和动画选帧；`moon run examples/extensions --target js` 演示流式输入、元数据和缓冲区复用。两个示例同样支持 native 和 wasm-gc。
 
+`moon run examples/containers --target js` 演示 IVF 整文件及分块解码，并按时间戳取帧；同样支持 native 和 wasm-gc。
+
 ## 库接口
 
-包名为 `0717lee/moonav1`，尚未发布到 Mooncakes。消费端导入后可通过 `@moonav1` 调用：
+消费端导入后可通过 `@moonav1` 调用：
 
 ```moonbit
 fn decode_image(bytes : Array[Byte]) -> @moonav1.Image? {
@@ -50,14 +71,17 @@ fn decode_image(bytes : Array[Byte]) -> @moonav1.Image? {
 | RGBA16 输出 | `av1_decode_rgba16`、`avif_decode_rgba16`、`Av1NativeFrame::to_rgba16` |
 | 流式与惰性解码 | `Av1StreamDecoder`、`AvifAnimationDecoder` |
 | 诊断与资源限额 | `av1_decode_native_result`、`avif_decode_native_result`、`DecodeLimits` |
+| 容器解码与定位 | `Av1ContainerDecoder`、`Av1ContainerStreamDecoder`、`Av1PresentationTimeline` |
 
 解码接口通过 `None` 拒绝无效或不支持的输入。状态化接口的 `Some([])` 表示合法但无显示帧的单元；隐藏帧仍更新参考状态。完整接口以 [pkg.generated.mbti](pkg.generated.mbti) 为准。
 
 新增 `Result` 接口返回错误类别、上下文和可定位的字节偏移。像素布局、精度、所有权、流式边界和限额计数分别见 [原生像素](docs/NATIVE_PIXELS.md)、[RGBA16](docs/RGBA16.md)、[调用者接口](docs/EXTENSIONS.md)和[解码限额](docs/DECODE_LIMITS.md)。
 
+容器支持范围见 [IVF/MP4/WebM](docs/VIDEO_CONTAINERS.md)，分块状态与 MP4 索引回放见[容器流式接口](docs/CONTAINER_STREAMING.md)，时间单位与 edit-list 映射见[时间定位](docs/CONTAINER_TIMELINE.md)。
+
 ## 本地构建与验证
 
-使用与 CI 相同的 MoonBit 编译器 `0.10.14+7d59c7ec9`；native 目标需要 C 工具链。在本目录执行：
+使用与 CI 相同的 MoonBit 编译器 `0.10.14+7d59c7ec9`；native 目标需要 C 工具链。从 GitHub 克隆源码后，在仓库根目录执行：
 
 ```sh
 moon version --all

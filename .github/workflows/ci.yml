@@ -57,3 +57,4 @@ jobs:
           moon run examples/decode --target ${{ matrix.target }}
           moon run examples/native_pixels --target ${{ matrix.target }}
           moon run examples/extensions --target ${{ matrix.target }}
+          moon run examples/containers --target ${{ matrix.target }}

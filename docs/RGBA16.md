@@ -35,7 +35,7 @@ RGBA8 保留已有兼容舍入路径；RGBA16 使用上述高精度顺序，因�
 
 ## 独立精度证据
 
-[RGBA16 参考集](../tests/fixtures/rgba16/README.md) 从既有独立原生像素建立有理数/80 位 Decimal 参考，覆盖 37 组、55 幅图像，包括 14 组颜色矩阵/曲线、8/10/12-bit、单色、三种色度采样、grid、alpha/prem 和动画。
+[RGBA16 参考集](https://github.com/0717lee/moonav1/blob/main/tests/fixtures/rgba16/README.md) 从既有独立原生像素建立有理数/80 位 Decimal 参考，覆盖 37 组、55 幅图像，包括 14 组颜色矩阵/曲线、8/10/12-bit、单色、三种色度采样、grid、alpha/prem 和动画。
 
 参考验收要求 RGB16 与独立数值结果最多相差 1 个 UNORM16 单位，alpha16 完全一致。原生 YUV/alpha 仍要求零差异。生成时还使用实际 libavif 0.11.1 重解码完整容器，逐样本核对原生颜色/alpha，并另存它的 RGBA16 输出及差异记录。来源与每幅图的比较结果见 manifest；期望值不来自 MoonAV1 输出。
 

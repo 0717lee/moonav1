@@ -61,10 +61,8 @@ track's metadata and returns an independent copy. `AvifMetadata` contains owned
 ICC, Exif and XMP byte buffers, optional pixel aspect ratio, the item/track ID,
 and transform properties in association order.
 
-Metadata extraction keeps ICC and XMP bytes opaque. Call
-`IccProfile::parse(bytes)` and `apply_rgba8` / `apply_rgba16` explicitly to
-convert supported ICC input profiles to sRGB; see [ICC.md](ICC.md). XMP is
-not parsed as XML.
+Metadata extraction keeps ICC and XMP bytes opaque for callers to process.
+XMP is not parsed as XML.
 Exif omits the item's four-byte TIFF-offset field, and `exif_tiff_offset` locates
 TIFF within the returned bytes. Item metadata follows `cdsc` associations to the
 primary image; track `meta` descriptions belong to their track. Unsupported
@@ -79,21 +77,10 @@ uses anticlockwise quarter turns, and HEIF mirror mode 0 swaps top/bottom while
 mode 1 swaps left/right. Channel values and alpha move together, unchanged.
 Every result owns a new buffer, including an empty transform chain.
 
-For a fractional crop or a caller-selected output size, use
-`resample_rgba8(image, width, height)` or `resample_rgba16`. These compose the
-ordered transforms and use alpha-aware bilinear interpolation in the input
-channel domain. Rational crop containment is exact; the sampling coordinates
-are floating point. See [RESAMPLING.md](RESAMPLING.md).
-
 Ordinary decode APIs keep the stored raster orientation. These methods do not
 automatically apply Exif orientation, pixel-aspect resampling, ICC conversion
 or HDR tone mapping. Definitions follow the
 [libavif 0.11.1 public metadata contract](https://github.com/AOMediaCodec/libavif/blob/v0.11.1/include/avif/avif.h).
-
-`Av1NativeFrame::to_sdr_rgba16` and `AvifNativeImage::to_sdr_rgba16` provide
-explicit PQ/HLG-to-SDR conversion, gamut conversion and tone mapping with
-native alpha precision. Existing `to_rgba16` semantics remain unchanged.
-The luminance units, exposure and color contract are in [HDR.md](HDR.md).
 
 ## MP4, IVF and WebM video
 
