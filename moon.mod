@@ -10,4 +10,4 @@ keywords = [ "av1", "avif", "decoder", "image", "wasm" ]
 
 preferred_target = "wasm-gc"
 
-description = "Pure MoonBit AV1 and AVIF decoder extracted from PixelForge, supporting native, JavaScript, and WebAssembly GC targets."
+description = "Pure MoonBit AV1 and AVIF decoder for native, JavaScript, and WebAssembly GC."

@@ -1,11 +1,11 @@
 # AV1/AVIF reference generators
 
-These 54 generators and their shared helpers were extracted from PixelForge
-commit `6f0c711c54f89d34f3e2ef97cde7a0a45458583d`. The 41 directories under
+These 54 generators and their shared helpers produce independent AV1/AVIF
+references. The 41 directories under
 [`tests/fixtures`](../tests/fixtures) retain all 2,344 tracked evidence files,
 including original manifests, encoder inputs, bitstreams, native planes, RGBA
 references, syntax traces, oracle C sources, and license notices. See
-[`PROVENANCE.md`](../PROVENANCE.md) for the extraction boundary and attribution.
+[`THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md) for source attribution.
 
 The MoonBit tests embed their expected values, so normal `moon test` and CI do
 not require Python, external codecs, or a reference-source cache. Regeneration

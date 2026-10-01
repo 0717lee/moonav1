@@ -2,11 +2,7 @@
 
 纯 MoonBit AV1/AVIF 解码基础库，面向 native、JavaScript 和 wasm-gc。核心解码不调用浏览器图片解码器，不通过 FFI 调用 libaom、dav1d 或 libavif；这些工具仅用于生成独立测试参考。
 
-本库从 [PixelForge](https://github.com/0717lee/pixelforge) 提取，已有实现及其来源见 [PROVENANCE.md](PROVENANCE.md)。本次独立工程不改变原代码的完成时间或贡献归属。当前公开 MVP 基于 2026-09-24 的独立解码版本，提供 RGBA8 输出；尚未发布到 Mooncakes。
-
-PixelForge 当前没有 MoonAV1 依赖，已在 `0.19.0` 移除内置 AV1/AVIF 像素解码器。后续接入将使用正式发布的 MoonAV1 包。
-
-[English](README.en.md) · [开发交接与最终目标](HANDOFF.md) · [第三方声明](THIRD_PARTY_NOTICES.md)
+[English](README.en.md) · [第三方声明](THIRD_PARTY_NOTICES.md)
 
 ## 能力与边界
 
@@ -31,7 +27,7 @@ moon run examples/decode --target js
 
 ## 库接口
 
-包名为 `0717lee/moonav1`，目前尚不能从 Mooncakes 安装。以下示例说明消费端导入该包后使用的 `@moonav1` 别名；PixelForge 当前没有对此库的活动依赖：
+包名为 `0717lee/moonav1`，尚未发布到 Mooncakes。消费端导入后可通过 `@moonav1` 调用：
 
 ```moonbit
 fn decode_image(bytes : Array[Byte]) -> @moonav1.Image? {
@@ -62,10 +58,8 @@ moon test --target wasm-gc
 moon test --target native
 ```
 
-普通测试使用随库提交的独立参考，不需要外部解码器或 PixelForge 目录。`tests/fixtures/` 中的说明和 manifest 记录样本来源、工具版本和像素约定。生成器位于 `scripts/`，外部参考工具只在重新生成或复核参考时使用。
-
-本独立库完整保留基础解码源码、测试、fixture、生成器和许可文档，可单独构建与维护。原生像素公共接口、RGBA16、流式输入、ICC/HDR 和视频容器等扩展尚未包含在本次公开 MVP 中；本地已有扩展将分批整理发布。
+普通测试使用随库提交的独立参考，不需要外部解码器。`tests/fixtures/` 中的说明和 manifest 记录样本来源、工具版本和像素约定。生成器位于 `scripts/`，外部参考工具只在重新生成或复核参考时使用。
 
 ## 许可证
 
-项目采用 [Apache-2.0](LICENSE)。移植的算法、表和参考工具保留各自声明，见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。纯 MoonBit 描述的是实现语言，不表示所有算法原创。
+项目采用 [Apache-2.0](LICENSE)。算法、表和参考工具的声明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

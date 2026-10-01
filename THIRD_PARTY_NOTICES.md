@@ -1,5 +1,11 @@
 # Third-party notices
 
+## Development history
+
+Early AV1/AVIF implementation and reference history is retained in
+[PixelForge revision 6f0c711](https://github.com/0717lee/pixelforge/tree/6f0c711c54f89d34f3e2ef97cde7a0a45458583d).
+MoonAV1 is maintained as an independent library.
+
 ## libaom reference algorithms
 
 The AV1 CfL prediction and probability defaults in `av1_cfl.mbt`, directional

@@ -2,9 +2,7 @@
 
 A pure MoonBit AV1/AVIF decoder for native, JavaScript and wasm-gc. The decoding core does not call browser image decoders or native codec libraries. External decoders are used only to produce independent test references.
 
-Extracted from [PixelForge](https://github.com/0717lee/pixelforge); see [provenance](PROVENANCE.md), [handoff and acceptance criteria](HANDOFF.md), and [third-party notices](THIRD_PARTY_NOTICES.md). This public MVP is based on the independent decoder from September 24, 2026 and provides RGBA8 output. It has not been published to Mooncakes. The existing implementation remains in PixelForge's public history.
-
-PixelForge has no active MoonAV1 dependency and removed its built-in AV1/AVIF pixel decoder in `0.19.0`. Future integration will use a released MoonAV1 package.
+[简体中文](README.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
 
 ## Scope
 
@@ -29,7 +27,7 @@ Expected output: `64x64 AV1 -> RGBA8 OK`. The example decodes an embedded 10-bit
 
 ## Library API
 
-The package identifier is `0717lee/moonav1` and is currently unavailable from Mooncakes. The example below shows the `@moonav1` alias used by a consumer after importing the package. PixelForge currently has no active dependency on this library:
+The package identifier is `0717lee/moonav1`; it has not been published to Mooncakes. After importing the package, consumers can use the `@moonav1` alias:
 
 ```moonbit
 fn decode_image(bytes : Array[Byte]) -> @moonav1.Image? {
@@ -50,8 +48,8 @@ moon test --target wasm-gc
 moon test --target native
 ```
 
-Ordinary tests are self-contained and do not require PixelForge or an external decoder. Fixture manifests preserve independent pixels, source versions and commands. Reference-generation tools are in `scripts/`.
+Ordinary tests are self-contained and do not require an external decoder. Fixture manifests preserve independent pixels, source versions and commands. Reference-generation tools are in `scripts/`.
 
-This independent library retains its base decoder source, tests, fixtures, generators and licensing documents for standalone development. Public native-pixel APIs, RGBA16, streaming, ICC/HDR and video containers are outside this public MVP. Existing local extensions will be prepared for publication in separate changes.
+## License
 
-Apache-2.0, with the upstream notices retained. “Pure MoonBit” describes the implementation language, not original authorship of every algorithm.
+[Apache-2.0](LICENSE). Algorithm, table and reference-tool attribution is retained in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
