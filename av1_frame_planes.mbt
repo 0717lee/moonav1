@@ -373,9 +373,17 @@ fn av1_decode_tile_planes(
   let mi_cols = coded_width / 4
   let segment_ids = Array::make(mi_cols * (coded_height / 4), 0)
   let lf_deltas = Array::make(mi_cols * (coded_height / 4) * 4, 0)
-  let skips = Array::make(mi_cols * (coded_height / 4), 0)
+  let skips : Array[Int] = if cdef is Some(_) {
+    Array::make(mi_cols * (coded_height / 4), 0)
+  } else {
+    []
+  }
   let cdef_cols = (coded_width + 63) / 64
-  let indices = Array::make(cdef_cols * ((coded_height + 63) / 64), -1)
+  let indices : Array[Int] = if cdef is Some(_) {
+    Array::make(cdef_cols * ((coded_height + 63) / 64), -1)
+  } else {
+    []
+  }
   // Global loop-restoration unit grid, computed once for the frame. The
   // entropy ownership uses the unshifted grid against the upscaled
   // visible geometry; filtering later shifts vertical boundaries.
@@ -517,9 +525,11 @@ fn av1_decode_tile_planes(
               k]
           }
         }
-        skips[(top / 4 + row) * mi_cols + left / 4 + col] = state.skips[row *
-          state.cols +
-          col]
+        if cdef is Some(_) {
+          skips[(top / 4 + row) * mi_cols + left / 4 + col] = state.skips[row *
+            state.cols +
+            col]
+        }
       }
     }
     if cdef is Some(_) {
@@ -780,6 +790,7 @@ fn av1_decode_frame_planes(
   sequence? : Av1SequenceInfo,
   operating_point? : Int = 0,
   spatial_layer? : Int? = None,
+  budget? : DecodeBudget? = None,
 ) -> Av1FramePlanes? {
   let state = match map {
     Some(value) => value
@@ -793,6 +804,7 @@ fn av1_decode_frame_planes(
       allow_monochrome,
       operating_point~,
       spatial_layer~,
+      budget~,
     ) {
     Some(value) => value
     None => return None
@@ -811,18 +823,39 @@ fn av1_decode_parsed_frame_planes(
   header : Av1FrameHeaderInfo,
   seq : Av1SequenceInfo,
   state : Av1FrameMap,
+  budget? : DecodeBudget? = None,
 ) -> Av1FramePlanes? {
+  let width = if header.upscaled_width > header.frame_width {
+    header.upscaled_width
+  } else {
+    header.frame_width
+  }
+  if !decode_reserve(budget, width, header.frame_height) {
+    return None
+  }
   // An inter frame is only decodable once every tool it signals can be acted
   // on; a frame that uses one the block stage lacks is refused whole rather
   // than decoded as a prefix of itself.
   let inter = if header.frame_is_intra {
     None
   } else if !av1_inter_frame_supported(header, seq) {
+    decode_fail(
+      budget,
+      Unsupported,
+      "The signaled inter-picture tools are not supported",
+    )
     return None
   } else {
     match av1_inter_frame_of(header, seq, state) {
       Some(value) => Some(value)
-      None => return None
+      None => {
+        decode_fail(
+          budget,
+          MissingReference,
+          "Inter-picture reference state is unavailable or incompatible",
+        )
+        return None
+      }
     }
   }
   let frame_height = header.frame_height

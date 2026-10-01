@@ -364,7 +364,7 @@ fn av1_restoration_read_sb(
   sb_size : Int,
   subsampling_x? : Bool = false,
   subsampling_y? : Bool = false,
-) -> Bool {
+) -> Unit {
   let mc1 = mc0 + sb_size / 4
   let mr1 = mr0 + sb_size / 4
   for plane in 0..<layout.config.modes.length() {
@@ -384,5 +384,4 @@ fn av1_restoration_read_sb(
       }
     }
   }
-  true
 }

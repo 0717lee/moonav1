@@ -1899,18 +1899,16 @@ fn av1_decode_intra_tile_state(
         Some(lr_state) =>
           match restoration_layout {
             Some(layout) =>
-              if !av1_restoration_read_sb(
-                  decoder,
-                  lr_state,
-                  layout,
-                  tile_origin_col_mi + col / 4,
-                  tile_origin_row_mi + row / 4,
-                  sb_size,
-                  subsampling_x=!monochrome && sub_x == 1,
-                  subsampling_y=!monochrome && sub_y == 1,
-                ) {
-                return None
-              }
+              av1_restoration_read_sb(
+                decoder,
+                lr_state,
+                layout,
+                tile_origin_col_mi + col / 4,
+                tile_origin_row_mi + row / 4,
+                sb_size,
+                subsampling_x=!monochrome && sub_x == 1,
+                subsampling_y=!monochrome && sub_y == 1,
+              )
             None => ()
           }
         None => ()

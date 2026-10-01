@@ -197,6 +197,7 @@ pub fn avif_grid_descriptor(data : Array[Byte]) -> AvifGridDescriptor? {
 fn avif_grid_properties_match(
   data : Array[Byte],
   descriptor : AvifGridDescriptor,
+  limits? : DecodeLimits? = None,
 ) -> Bool {
   try {
     let boxes : Array[AuxBox] = []
@@ -248,6 +249,9 @@ fn avif_grid_properties_match(
       }
       let payload : Array[Byte] = []
       for extent in tile.extents {
+        if !decode_payload_allowed(payload.length(), extent.length, limits) {
+          return false
+        }
         for i in extent.offset..<(extent.offset + extent.length) {
           payload.push(data[i])
         }

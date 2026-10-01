@@ -5,6 +5,7 @@
 fn avif_decode_grid_frame(
   data : Array[Byte],
   descriptor : AvifGridDescriptor,
+  budget? : DecodeBudget? = None,
 ) -> Av1FramePlanes? {
   let width = descriptor.output_width
   let height = descriptor.output_height
@@ -22,6 +23,9 @@ fn avif_decode_grid_frame(
   if width > MAX_IMAGE_PIXELS / height {
     return None
   }
+  if !decode_reserve(budget, width, height, picture=false, padded=false) {
+    return None
+  }
   // The extent API also accepts raw concatenated samples. When the input is
   // an AVIF grid, preserve each coded item's selectors and actual ispe size.
   let container_grid = avif_grid_descriptor_for_item(
@@ -32,6 +36,13 @@ fn avif_decode_grid_frame(
   let decode_cell = fn(tile : AvifGridTile) -> Av1FramePlanes? {
     let sample : Array[Byte] = []
     for extent in tile.extents {
+      if !decode_payload_allowed(
+          sample.length(),
+          extent.length,
+          budget.map(value => value.limits),
+        ) {
+        return None
+      }
       if extent.offset < 0 ||
         extent.length < 0 ||
         extent.offset > data.length() - extent.length ||
@@ -46,7 +57,7 @@ fn avif_decode_grid_frame(
       return None
     }
     if !container_grid {
-      return av1_decode_frame_planes(sample, allow_monochrome=true)
+      return av1_decode_frame_planes(sample, allow_monochrome=true, budget~)
     }
     let (cell_width, cell_height, operating_point, spatial_layer) = match
       avif_item_decode_config(data, tile.item_id) {
@@ -59,6 +70,7 @@ fn avif_decode_grid_frame(
         allow_monochrome=true,
         operating_point~,
         spatial_layer~,
+        budget~,
       ) {
       Some(value) => value
       None => return None

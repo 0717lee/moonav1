@@ -1,0 +1,526 @@
+{
+  "libavif": "0.11.1",
+  "provenance": "Locally generated libavif fixtures; Fraction native-alpha RGBA16; NumPy crop/rot90/flip. Actual libavif RGBA16 retained separately. No MoonAV1 output used as oracle.",
+  "cases": [
+    {
+      "name": "metadata_8_r0_m0",
+      "depth": 8,
+      "animated": false,
+      "metadata": {
+        "crop": [
+          12,
+          1,
+          10,
+          1,
+          4294967295,
+          1,
+          1,
+          1
+        ],
+        "rect": [
+          1,
+          4,
+          12,
+          10
+        ],
+        "rotation": 0,
+        "mirror": 0,
+        "aspect": [
+          1,
+          1
+        ]
+      },
+      "frames": [
+        {
+          "libavif_max_difference": 51,
+          "display_size": [
+            12,
+            10
+          ],
+          "timing": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "artifacts": {
+        "metadata_8_r0_m0.avif": "f9e382f083c1e5acb9ca218c1e22b19a5c5b754b57ce047a90f56ba914dd824b",
+        "metadata_8_r0_m0.icc": "5faa8eb1723fc802636783a5436dfe0f6493b220aed191a2beb8cb8cde759299",
+        "metadata_8_r0_m0.exif": "dcae79fcf012827589ddda09ee91e663fd19f1427afa212ae25909bbe4763ba1",
+        "metadata_8_r0_m0.xmp": "04f4711a46e75faac7fba997c8ff5bb801cd05ed1170c203b365a150543156d6",
+        "metadata_8_r0_m0_0.yuv": "90d17f425e8691e7ad03340d871953ec3ecb9bd534f3eddc4b5ad9ef1bc097f3",
+        "metadata_8_r0_m0_0.alpha": "edb0eed6f1c6c406585659d0e897479ad5132ef7ea4cb9a77acb461e5ccdc3ae",
+        "metadata_8_r0_m0_0.rgba16": "82c84458639e5c67adfa0ece80fb493cbb262b1e3a800767347c300e9dfe8ede",
+        "metadata_8_r0_m0_0.libavif_rgba16": "721f2fa0eb61e71098116eb949cb889f90384e1094b29f7caacc96539a927695",
+        "metadata_8_r0_m0_0.display": "d6e6a94f6d159e7cd4ad3829949e028971906dadcdd7234f95dbfcae6ac686ea"
+      }
+    },
+    {
+      "name": "metadata_8_r0_m1",
+      "depth": 8,
+      "animated": false,
+      "metadata": {
+        "crop": [
+          12,
+          1,
+          10,
+          1,
+          4294967295,
+          1,
+          1,
+          1
+        ],
+        "rect": [
+          1,
+          4,
+          12,
+          10
+        ],
+        "rotation": 0,
+        "mirror": 1,
+        "aspect": [
+          1,
+          1
+        ]
+      },
+      "frames": [
+        {
+          "libavif_max_difference": 51,
+          "display_size": [
+            12,
+            10
+          ],
+          "timing": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "artifacts": {
+        "metadata_8_r0_m1.avif": "7f3f10867a99359801bb816fdc67f1b6dd79b19d39aab1ff5d5b4507dad61c30",
+        "metadata_8_r0_m1.icc": "5faa8eb1723fc802636783a5436dfe0f6493b220aed191a2beb8cb8cde759299",
+        "metadata_8_r0_m1.exif": "dcae79fcf012827589ddda09ee91e663fd19f1427afa212ae25909bbe4763ba1",
+        "metadata_8_r0_m1.xmp": "04f4711a46e75faac7fba997c8ff5bb801cd05ed1170c203b365a150543156d6",
+        "metadata_8_r0_m1_0.yuv": "90d17f425e8691e7ad03340d871953ec3ecb9bd534f3eddc4b5ad9ef1bc097f3",
+        "metadata_8_r0_m1_0.alpha": "edb0eed6f1c6c406585659d0e897479ad5132ef7ea4cb9a77acb461e5ccdc3ae",
+        "metadata_8_r0_m1_0.rgba16": "82c84458639e5c67adfa0ece80fb493cbb262b1e3a800767347c300e9dfe8ede",
+        "metadata_8_r0_m1_0.libavif_rgba16": "721f2fa0eb61e71098116eb949cb889f90384e1094b29f7caacc96539a927695",
+        "metadata_8_r0_m1_0.display": "3e96616dd8ec61c1e4e9db1401776f795c489bfceee2e1711be8ab6f0648c995"
+      }
+    },
+    {
+      "name": "metadata_12_r1_m0",
+      "depth": 12,
+      "animated": false,
+      "metadata": {
+        "crop": [
+          12,
+          1,
+          10,
+          1,
+          4294967295,
+          1,
+          1,
+          1
+        ],
+        "rect": [
+          1,
+          4,
+          12,
+          10
+        ],
+        "rotation": 1,
+        "mirror": 0,
+        "aspect": [
+          1,
+          1
+        ]
+      },
+      "frames": [
+        {
+          "libavif_max_difference": 721,
+          "display_size": [
+            10,
+            12
+          ],
+          "timing": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "artifacts": {
+        "metadata_12_r1_m0.avif": "172d0848399104824005c597c328d841c257f337da7d04836d4dbe522d6443a3",
+        "metadata_12_r1_m0.icc": "5faa8eb1723fc802636783a5436dfe0f6493b220aed191a2beb8cb8cde759299",
+        "metadata_12_r1_m0.exif": "dcae79fcf012827589ddda09ee91e663fd19f1427afa212ae25909bbe4763ba1",
+        "metadata_12_r1_m0.xmp": "04f4711a46e75faac7fba997c8ff5bb801cd05ed1170c203b365a150543156d6",
+        "metadata_12_r1_m0_0.yuv": "23ca639d4656a3688af761f916dc7fba0915adbceef7be67901727b6072e949a",
+        "metadata_12_r1_m0_0.alpha": "d5cbac5eee6d383e788b05795f3e3857dc1cd9b703507cde527abd3a5386d284",
+        "metadata_12_r1_m0_0.rgba16": "da712e3dd16fd909877d6836dc0b401a31831ac39b67a3cdec8003a59aa7bf1e",
+        "metadata_12_r1_m0_0.libavif_rgba16": "7e66080a3b647b082182bada4d2e7f89ca76401843a3845066197b3b4d00ad25",
+        "metadata_12_r1_m0_0.display": "483291f86eba007cf2e17813732986841a863f3a4eefb2911da347bb6f9a3017"
+      }
+    },
+    {
+      "name": "metadata_12_r1_m1",
+      "depth": 12,
+      "animated": false,
+      "metadata": {
+        "crop": [
+          12,
+          1,
+          10,
+          1,
+          4294967295,
+          1,
+          1,
+          1
+        ],
+        "rect": [
+          1,
+          4,
+          12,
+          10
+        ],
+        "rotation": 1,
+        "mirror": 1,
+        "aspect": [
+          1,
+          1
+        ]
+      },
+      "frames": [
+        {
+          "libavif_max_difference": 721,
+          "display_size": [
+            10,
+            12
+          ],
+          "timing": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "artifacts": {
+        "metadata_12_r1_m1.avif": "c53d76689898dec6e47c85bcd6fc9979adc5f639837ec049edc348dd98d893fa",
+        "metadata_12_r1_m1.icc": "5faa8eb1723fc802636783a5436dfe0f6493b220aed191a2beb8cb8cde759299",
+        "metadata_12_r1_m1.exif": "dcae79fcf012827589ddda09ee91e663fd19f1427afa212ae25909bbe4763ba1",
+        "metadata_12_r1_m1.xmp": "04f4711a46e75faac7fba997c8ff5bb801cd05ed1170c203b365a150543156d6",
+        "metadata_12_r1_m1_0.yuv": "23ca639d4656a3688af761f916dc7fba0915adbceef7be67901727b6072e949a",
+        "metadata_12_r1_m1_0.alpha": "d5cbac5eee6d383e788b05795f3e3857dc1cd9b703507cde527abd3a5386d284",
+        "metadata_12_r1_m1_0.rgba16": "da712e3dd16fd909877d6836dc0b401a31831ac39b67a3cdec8003a59aa7bf1e",
+        "metadata_12_r1_m1_0.libavif_rgba16": "7e66080a3b647b082182bada4d2e7f89ca76401843a3845066197b3b4d00ad25",
+        "metadata_12_r1_m1_0.display": "7ad2d22a15a7f0795462d7965e9d507668d9076f9cc585255a3cc006a4c78786"
+      }
+    },
+    {
+      "name": "metadata_8_r2_m0",
+      "depth": 8,
+      "animated": false,
+      "metadata": {
+        "crop": [
+          12,
+          1,
+          10,
+          1,
+          4294967295,
+          1,
+          1,
+          1
+        ],
+        "rect": [
+          1,
+          4,
+          12,
+          10
+        ],
+        "rotation": 2,
+        "mirror": 0,
+        "aspect": [
+          1,
+          1
+        ]
+      },
+      "frames": [
+        {
+          "libavif_max_difference": 51,
+          "display_size": [
+            12,
+            10
+          ],
+          "timing": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "artifacts": {
+        "metadata_8_r2_m0.avif": "2a26a4453da1880894e717d424616cc2666dcc7afb22d969269a30a61e437846",
+        "metadata_8_r2_m0.icc": "5faa8eb1723fc802636783a5436dfe0f6493b220aed191a2beb8cb8cde759299",
+        "metadata_8_r2_m0.exif": "dcae79fcf012827589ddda09ee91e663fd19f1427afa212ae25909bbe4763ba1",
+        "metadata_8_r2_m0.xmp": "04f4711a46e75faac7fba997c8ff5bb801cd05ed1170c203b365a150543156d6",
+        "metadata_8_r2_m0_0.yuv": "90d17f425e8691e7ad03340d871953ec3ecb9bd534f3eddc4b5ad9ef1bc097f3",
+        "metadata_8_r2_m0_0.alpha": "edb0eed6f1c6c406585659d0e897479ad5132ef7ea4cb9a77acb461e5ccdc3ae",
+        "metadata_8_r2_m0_0.rgba16": "82c84458639e5c67adfa0ece80fb493cbb262b1e3a800767347c300e9dfe8ede",
+        "metadata_8_r2_m0_0.libavif_rgba16": "721f2fa0eb61e71098116eb949cb889f90384e1094b29f7caacc96539a927695",
+        "metadata_8_r2_m0_0.display": "3e96616dd8ec61c1e4e9db1401776f795c489bfceee2e1711be8ab6f0648c995"
+      }
+    },
+    {
+      "name": "metadata_8_r2_m1",
+      "depth": 8,
+      "animated": false,
+      "metadata": {
+        "crop": [
+          12,
+          1,
+          10,
+          1,
+          4294967295,
+          1,
+          1,
+          1
+        ],
+        "rect": [
+          1,
+          4,
+          12,
+          10
+        ],
+        "rotation": 2,
+        "mirror": 1,
+        "aspect": [
+          1,
+          1
+        ]
+      },
+      "frames": [
+        {
+          "libavif_max_difference": 51,
+          "display_size": [
+            12,
+            10
+          ],
+          "timing": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "artifacts": {
+        "metadata_8_r2_m1.avif": "8a9dbf74eaf8444ba5e47e1237730c319910d5fda56dc656865c99d902a4940e",
+        "metadata_8_r2_m1.icc": "5faa8eb1723fc802636783a5436dfe0f6493b220aed191a2beb8cb8cde759299",
+        "metadata_8_r2_m1.exif": "dcae79fcf012827589ddda09ee91e663fd19f1427afa212ae25909bbe4763ba1",
+        "metadata_8_r2_m1.xmp": "04f4711a46e75faac7fba997c8ff5bb801cd05ed1170c203b365a150543156d6",
+        "metadata_8_r2_m1_0.yuv": "90d17f425e8691e7ad03340d871953ec3ecb9bd534f3eddc4b5ad9ef1bc097f3",
+        "metadata_8_r2_m1_0.alpha": "edb0eed6f1c6c406585659d0e897479ad5132ef7ea4cb9a77acb461e5ccdc3ae",
+        "metadata_8_r2_m1_0.rgba16": "82c84458639e5c67adfa0ece80fb493cbb262b1e3a800767347c300e9dfe8ede",
+        "metadata_8_r2_m1_0.libavif_rgba16": "721f2fa0eb61e71098116eb949cb889f90384e1094b29f7caacc96539a927695",
+        "metadata_8_r2_m1_0.display": "d6e6a94f6d159e7cd4ad3829949e028971906dadcdd7234f95dbfcae6ac686ea"
+      }
+    },
+    {
+      "name": "metadata_12_r3_m0",
+      "depth": 12,
+      "animated": false,
+      "metadata": {
+        "crop": [
+          12,
+          1,
+          10,
+          1,
+          4294967295,
+          1,
+          1,
+          1
+        ],
+        "rect": [
+          1,
+          4,
+          12,
+          10
+        ],
+        "rotation": 3,
+        "mirror": 0,
+        "aspect": [
+          1,
+          1
+        ]
+      },
+      "frames": [
+        {
+          "libavif_max_difference": 721,
+          "display_size": [
+            10,
+            12
+          ],
+          "timing": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "artifacts": {
+        "metadata_12_r3_m0.avif": "ce516c971e23098c5f4ca172f8673d871f9dff45b101100c0dbfac5b2d0edf06",
+        "metadata_12_r3_m0.icc": "5faa8eb1723fc802636783a5436dfe0f6493b220aed191a2beb8cb8cde759299",
+        "metadata_12_r3_m0.exif": "dcae79fcf012827589ddda09ee91e663fd19f1427afa212ae25909bbe4763ba1",
+        "metadata_12_r3_m0.xmp": "04f4711a46e75faac7fba997c8ff5bb801cd05ed1170c203b365a150543156d6",
+        "metadata_12_r3_m0_0.yuv": "23ca639d4656a3688af761f916dc7fba0915adbceef7be67901727b6072e949a",
+        "metadata_12_r3_m0_0.alpha": "d5cbac5eee6d383e788b05795f3e3857dc1cd9b703507cde527abd3a5386d284",
+        "metadata_12_r3_m0_0.rgba16": "da712e3dd16fd909877d6836dc0b401a31831ac39b67a3cdec8003a59aa7bf1e",
+        "metadata_12_r3_m0_0.libavif_rgba16": "7e66080a3b647b082182bada4d2e7f89ca76401843a3845066197b3b4d00ad25",
+        "metadata_12_r3_m0_0.display": "7ad2d22a15a7f0795462d7965e9d507668d9076f9cc585255a3cc006a4c78786"
+      }
+    },
+    {
+      "name": "metadata_12_r3_m1",
+      "depth": 12,
+      "animated": false,
+      "metadata": {
+        "crop": [
+          12,
+          1,
+          10,
+          1,
+          4294967295,
+          1,
+          1,
+          1
+        ],
+        "rect": [
+          1,
+          4,
+          12,
+          10
+        ],
+        "rotation": 3,
+        "mirror": 1,
+        "aspect": [
+          1,
+          1
+        ]
+      },
+      "frames": [
+        {
+          "libavif_max_difference": 721,
+          "display_size": [
+            10,
+            12
+          ],
+          "timing": [
+            0,
+            1,
+            1
+          ]
+        }
+      ],
+      "artifacts": {
+        "metadata_12_r3_m1.avif": "670577d84e503a7b8edc645dda868bc11c9d47ba859f4e725c229422bfbdc609",
+        "metadata_12_r3_m1.icc": "5faa8eb1723fc802636783a5436dfe0f6493b220aed191a2beb8cb8cde759299",
+        "metadata_12_r3_m1.exif": "dcae79fcf012827589ddda09ee91e663fd19f1427afa212ae25909bbe4763ba1",
+        "metadata_12_r3_m1.xmp": "04f4711a46e75faac7fba997c8ff5bb801cd05ed1170c203b365a150543156d6",
+        "metadata_12_r3_m1_0.yuv": "23ca639d4656a3688af761f916dc7fba0915adbceef7be67901727b6072e949a",
+        "metadata_12_r3_m1_0.alpha": "d5cbac5eee6d383e788b05795f3e3857dc1cd9b703507cde527abd3a5386d284",
+        "metadata_12_r3_m1_0.rgba16": "da712e3dd16fd909877d6836dc0b401a31831ac39b67a3cdec8003a59aa7bf1e",
+        "metadata_12_r3_m1_0.libavif_rgba16": "7e66080a3b647b082182bada4d2e7f89ca76401843a3845066197b3b4d00ad25",
+        "metadata_12_r3_m1_0.display": "483291f86eba007cf2e17813732986841a863f3a4eefb2911da347bb6f9a3017"
+      }
+    },
+    {
+      "name": "metadata_10_r3_m1_animation",
+      "depth": 10,
+      "animated": true,
+      "metadata": {
+        "crop": [
+          12,
+          1,
+          10,
+          1,
+          4294967295,
+          1,
+          1,
+          1
+        ],
+        "rect": [
+          1,
+          4,
+          12,
+          10
+        ],
+        "rotation": 3,
+        "mirror": 1,
+        "aspect": [
+          1,
+          1
+        ]
+      },
+      "frames": [
+        {
+          "libavif_max_difference": 303,
+          "display_size": [
+            10,
+            12
+          ],
+          "timing": [
+            0,
+            100,
+            1000
+          ]
+        },
+        {
+          "libavif_max_difference": 303,
+          "display_size": [
+            10,
+            12
+          ],
+          "timing": [
+            100,
+            200,
+            1000
+          ]
+        },
+        {
+          "libavif_max_difference": 87,
+          "display_size": [
+            10,
+            12
+          ],
+          "timing": [
+            300,
+            300,
+            1000
+          ]
+        }
+      ],
+      "artifacts": {
+        "metadata_10_r3_m1_animation.avif": "ce348bf986899f7aafc009853b5fe2e7c6c875f35087648c94555de1267e58e5",
+        "metadata_10_r3_m1_animation.icc": "5faa8eb1723fc802636783a5436dfe0f6493b220aed191a2beb8cb8cde759299",
+        "metadata_10_r3_m1_animation.exif": "dcae79fcf012827589ddda09ee91e663fd19f1427afa212ae25909bbe4763ba1",
+        "metadata_10_r3_m1_animation.xmp": "04f4711a46e75faac7fba997c8ff5bb801cd05ed1170c203b365a150543156d6",
+        "metadata_10_r3_m1_animation_0.yuv": "2c63ece981d23a9b21fd11fd6ec5ac78242e89dbd751a65647cb9e312571a162",
+        "metadata_10_r3_m1_animation_0.alpha": "7942e9b3f5f07d710b3448a447468e66c7edd6a23d16cb6f16ca42136c8c842a",
+        "metadata_10_r3_m1_animation_0.rgba16": "a5c6832c3819ad91926759a72991b81c5c0b4fce52619a7779476e253bce4a59",
+        "metadata_10_r3_m1_animation_0.libavif_rgba16": "fb6f73cae97890eeb38c2fe954d3a2c36ef1d4379e79be255291b057aff309bf",
+        "metadata_10_r3_m1_animation_0.display": "65605d3eea1de48d4538cf9e04cc8ee27cb9bf8f772db0f7e3bed5cb93f16d18",
+        "metadata_10_r3_m1_animation_1.yuv": "da9166aed39a9ce503b475274daa6406c20eebc29e32a9819362b94ea1dcffc3",
+        "metadata_10_r3_m1_animation_1.alpha": "6b5b15970960973b845f0ee1f9e94bb7e62945f5eb9e9605551d56b97c68b952",
+        "metadata_10_r3_m1_animation_1.rgba16": "7e1a7b426f90b155f5c7c764f23cd755db96c72180ee337f21253cfb0f197f52",
+        "metadata_10_r3_m1_animation_1.libavif_rgba16": "f0c27ab379dab01bd32762c4a618b274660b36dc1f2603f16213057d860d14b6",
+        "metadata_10_r3_m1_animation_1.display": "fdee0e9140dcdb52aed9aad2b67770e0a080a8999c72d8a58797fd42497daee6",
+        "metadata_10_r3_m1_animation_2.yuv": "19727cc82e06639184291ea07575501b40ec8441d6eb38cf3cb9b43332d72dba",
+        "metadata_10_r3_m1_animation_2.alpha": "a075d031af83608c34c3d75bec7fee175e303dfbb8e3cf7e5d3059975607e6a5",
+        "metadata_10_r3_m1_animation_2.rgba16": "e65cc294a2078313e2c260525eba118780baf8a1bc79181f499e7f08a91102e7",
+        "metadata_10_r3_m1_animation_2.libavif_rgba16": "9cabebf9b5a9fd85b0d0a4f4c51d88a7068a40ee91ce08f5929f78fd4c6b636b",
+        "metadata_10_r3_m1_animation_2.display": "78c2f9646c556acd13663fc58cc0c11403f0fb1a1344a3fc1e3443f61916d97a"
+      }
+    }
+  ]
+}

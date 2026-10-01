@@ -235,27 +235,7 @@ fn av1_wedge_plane_mask(
     Some(value) => value
     None => return None
   }
-  if sub_x != 1 {
-    return Some(luma)
-  }
-  let out_w = width >> sub_x
-  let out_h = height >> sub_y
-  let out : Array[Int] = Array::make(out_w * out_h, 0)
-  for i in 0..<out_h {
-    for j in 0..<out_w {
-      let base = i * (1 + sub_y) * width + 2 * j
-      let mut sum = luma[base] + luma[base + 1]
-      if sub_y == 1 {
-        sum = sum + luma[base + width] + luma[base + width + 1]
-      }
-      out[i * out_w + j] = if sub_y == 1 {
-        (sum + 2) >> 2
-      } else {
-        (sum + 1) >> 1
-      }
-    }
-  }
-  Some(out)
+  Some(av1_reduce_plane_mask(luma, width, height, sub_x, sub_y))
 }
 
 ///|

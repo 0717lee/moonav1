@@ -7,90 +7,27 @@ priv struct Av1ObuPacket {
   extension : Bool
   temporal_id : Int
   spatial_id : Int
+  offset : Int
+  payload_offset : Int
   payload : Array[Byte]
 }
 
 ///|
-/// leb128 permits up to eight bytes, including redundant leading zero groups.
-/// Bound the value by the input allocation before shifting into signed Int.
-fn av1_obu_size(data : Array[Byte], start : Int) -> (Int, Int)? {
-  let mut value = 0
-  for index in 0..<8 {
-    if start + index >= data.length() {
-      return None
-    }
-    let byte = data[start + index].to_int()
-    let part = byte & 127
-    if index < 4 {
-      value = value | (part << (index * 7))
-    } else if index == 4 {
-      if part > 7 {
-        return None
-      }
-      value = value | (part << 28)
-    } else if part != 0 {
-      return None
-    }
-    if (byte & 128) == 0 {
-      let next = start + index + 1
-      if value > data.length() - next {
-        return None
-      }
-      return Some((value, next))
+fn av1_obu_packets(
+  data : Array[Byte],
+  budget? : DecodeBudget? = None,
+) -> Array[Av1ObuPacket]? {
+  let limit = match budget {
+    Some(value) => value.limits.max_input_bytes
+    None => 0x7FFFFFFF
+  }
+  match av1_obu_packets_checked(data, limit~) {
+    Ok(packets) => Some(packets)
+    Err(error) => {
+      decode_record_error(budget, error)
+      None
     }
   }
-  None
-}
-
-///|
-fn av1_obu_packets(data : Array[Byte]) -> Array[Av1ObuPacket]? {
-  let packets : Array[Av1ObuPacket] = []
-  let mut pos = 0
-  while pos < data.length() {
-    let header = data[pos].to_int()
-    pos = pos + 1
-    if (header & 0x81) != 0 {
-      return None
-    }
-    let extension = (header & 4) != 0
-    let mut temporal_id = 0
-    let mut spatial_id = 0
-    if extension {
-      if pos >= data.length() {
-        return None
-      }
-      let ext = data[pos].to_int()
-      pos = pos + 1
-      if (ext & 7) != 0 {
-        return None
-      }
-      temporal_id = ext >> 5
-      spatial_id = (ext >> 3) & 3
-    }
-    let size = if (header & 2) != 0 {
-      match av1_obu_size(data, pos) {
-        Some((size, next)) => {
-          pos = next
-          size
-        }
-        None => return None
-      }
-    } else {
-      data.length() - pos
-    }
-    if size < 0 || size > data.length() - pos {
-      return None
-    }
-    packets.push({
-      kind: (header >> 3) & 15,
-      extension,
-      temporal_id,
-      spatial_id,
-      payload: Array::makei(size, index => data[pos + index]),
-    })
-    pos = pos + size
-  }
-  Some(packets)
 }
 
 ///|
@@ -281,6 +218,7 @@ fn av1_show_existing_planes(
   packet : Av1ObuPacket,
   sequence : Av1SequenceInfo,
   map : Av1FrameMap,
+  budget? : DecodeBudget? = None,
 ) -> Av1FramePlanes? {
   // OBU_FRAME always includes tile syntax; show-existing is a frame-header OBU.
   if packet.kind != 3 {
@@ -309,6 +247,9 @@ fn av1_show_existing_planes(
   let reference = match av1_frame_map_show(map, slot) {
     Some(value) => value
     None => return None
+  }
+  if !decode_reserve(budget, reference.width, reference.height) {
+    return None
   }
   match envelope.display_frame_id {
     Some(id) => if id != reference.frame_id { return None }
@@ -355,6 +296,7 @@ fn av1_decode_obu_planes(
   allow_monochrome : Bool,
   operating_point? : Int = 0,
   spatial_layer? : Int? = None,
+  budget? : DecodeBudget? = None,
 ) -> (Av1SequenceInfo, Array[Av1FramePlanes])? {
   if operating_point < 0 || operating_point > 31 {
     return None
@@ -370,7 +312,7 @@ fn av1_decode_obu_planes(
       }
     None => ()
   }
-  let packets = match av1_obu_packets(data) {
+  let packets = match av1_obu_packets(data, budget~) {
     Some(value) => value
     None => return None
   }
@@ -381,8 +323,10 @@ fn av1_decode_obu_planes(
   let mut index = 0
   while index < packets.length() {
     let packet = packets[index]
+    decode_context(budget, "obu", Some(packet.offset))
     index = index + 1
     if packet.kind == 1 {
+      decode_context(budget, "sequence_header", Some(packet.payload_offset))
       active = av1_parse_sequence_payload(packet.payload)
       match active {
         Some(seq) =>
@@ -404,23 +348,57 @@ fn av1_decode_obu_planes(
     }
     let seq = match active {
       Some(value) => value
-      None => return None
+      None => {
+        decode_fail(
+          budget,
+          MissingSequence,
+          "A sequence header is required before frame decoding",
+        )
+        return None
+      }
     }
     if !av1_obu_selected(packet, seq, operating_point~) {
       continue
     }
     if packet.kind != 3 && packet.kind != 6 {
       if packet.kind == 4 || packet.kind == 7 || packet.kind == 8 {
+        decode_fail(
+          budget,
+          if packet.kind == 8 {
+            Unsupported
+          } else {
+            InvalidData
+          },
+          "Unexpected tile group, redundant header or tile-list OBU",
+        )
         return None
       }
       continue
     }
     if packet.payload.is_empty() || (seq.monochrome && !allow_monochrome) {
+      decode_fail(
+        budget,
+        if packet.payload.is_empty() {
+          TruncatedInput
+        } else {
+          Unsupported
+        },
+        "Empty frame payload or monochrome was not enabled",
+      )
       return None
     }
+    decode_context(budget, "frame_header", Some(packet.payload_offset))
     if !seq.reduced_still_picture_header &&
       (packet.payload[0].to_int() & 128) != 0 {
-      match av1_show_existing_planes(packet, seq, map) {
+      let slot = (packet.payload[0].to_int() >> 4) & 7
+      if !map.valid[slot] || map.slots[slot] is None {
+        decode_fail(
+          budget,
+          MissingReference,
+          "show-existing names an unavailable reference slot",
+        )
+      }
+      match av1_show_existing_planes(packet, seq, map, budget~) {
         Some(frame) =>
           if packet.spatial_id >= selected_spatial &&
             (spatial_layer is None || spatial_layer == Some(packet.spatial_id)) {
@@ -472,9 +450,22 @@ fn av1_decode_obu_planes(
         spatial_id=packet.spatial_id,
       ) {
       Some(value) => value
-      None => return None
+      None => {
+        if !seq.reduced_still_picture_header &&
+          ((packet.payload[0].to_int() >> 5) & 3) % 2 == 1 &&
+          !map.valid.any(value => value) {
+          decode_fail(
+            budget,
+            MissingReference,
+            "Inter picture has no decoded references",
+          )
+        }
+        return None
+      }
     }
-    let decoded = match av1_decode_parsed_frame_planes(header, seq, map) {
+    decode_context(budget, "reconstruction", Some(packet.payload_offset))
+    let decoded = match
+      av1_decode_parsed_frame_planes(header, seq, map, budget~) {
       Some(value) => value
       None => return None
     }

@@ -297,10 +297,10 @@ fn Av1SymbolDecoder::entropy_signed_refsubexp(
 ///|
 test "av1 msac keeps tile state across symbols" {
   let decoder = av1_msac_new(
-    [b'\x00', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00'],
+    [b'\x60', b'\x00', b'\x00', b'\x00', b'\x00', b'\x00'],
     false,
   )
   let cdf : Array[Int] = [16384, 32768, 0]
   assert_eq(decoder.symbol(cdf), 0)
-  assert_eq(decoder.symbol(cdf), 0)
+  assert_eq(decoder.symbol(cdf), 1)
 }

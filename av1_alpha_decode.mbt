@@ -77,8 +77,19 @@ pub fn av1_decode_alpha_tile(
 ///|
 /// Decode the first displayed monochrome frame through shared AV1 reconstruction.
 /// Alpha represents coverage, so its final conversion always uses full UNORM.
-pub fn av1_decode_alpha(data : Array[Byte]) -> Array[Byte]? {
-  let frame = match av1_decode_frame_planes(data, allow_monochrome=true) {
+fn av1_decode_alpha_limited(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+) -> Array[Byte]? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
+  let frame = match
+    av1_decode_frame_planes(
+      data,
+      allow_monochrome=true,
+      budget=decode_budget(limits),
+    ) {
     Some(value) => value
     None => return None
   }
@@ -91,8 +102,15 @@ pub fn av1_decode_alpha(data : Array[Byte]) -> Array[Byte]? {
 ///|
 /// Decode the validated auxiliary alpha item from a complete AVIF container.
 /// The result is a row-major 8-bit alpha plane, rounded from its native depth.
-pub fn avif_decode_alpha(data : Array[Byte]) -> Array[Byte]? {
-  let frame = match avif_decode_alpha_frame(data) {
+fn avif_decode_alpha_limited(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+) -> Array[Byte]? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
+  let frame = match
+    avif_decode_alpha_frame(data, budget=decode_budget(limits)) {
     Some(value) => value
     None => return None
   }
@@ -109,29 +127,37 @@ fn av1_alpha_full_samples(frame : Av1FramePlanes) -> Array[Int] {
   if frame.full_range {
     return samples
   }
-  let maximum = (1 << frame.bit_depth) - 1
-  let black = 16 << (frame.bit_depth - 8)
-  let span = 219 << (frame.bit_depth - 8)
-  samples.map(fn(value) {
-    let expanded = ((value - black) * maximum + span / 2) / span
-    if expanded < 0 {
-      0
-    } else if expanded > maximum {
-      maximum
-    } else {
-      expanded
-    }
-  })
+  samples.map(value => av1_alpha_expand_limited_sample(value, frame.bit_depth))
 }
 
 ///|
-fn avif_decode_alpha_frame(data : Array[Byte]) -> Av1FramePlanes? {
-  let descriptor = match avif_alpha_item_descriptor(data) {
+/// Expand alpha before output-depth quantization, shared by RGBA8 and RGBA16.
+fn av1_alpha_expand_limited_sample(value : Int, depth : Int) -> Int {
+  let maximum = (1 << depth) - 1
+  let black = 16 << (depth - 8)
+  let span = 219 << (depth - 8)
+  let expanded = ((value - black) * maximum + span / 2) / span
+  if expanded < 0 {
+    0
+  } else if expanded > maximum {
+    maximum
+  } else {
+    expanded
+  }
+}
+
+///|
+fn avif_decode_alpha_frame(
+  data : Array[Byte],
+  budget? : DecodeBudget? = None,
+) -> Av1FramePlanes? {
+  let limits = budget.map(value => value.limits)
+  let descriptor = match avif_alpha_item_descriptor_limited(data, limits~) {
     Some(value) => value
     None => return None
   }
   if avif_grid_descriptor_for_item(data, Some(descriptor.item_id)) is Some(grid) {
-    let frame = match avif_decode_grid_frame(data, grid) {
+    let frame = match avif_decode_grid_frame(data, grid, budget~) {
       Some(value) => value
       None => return None
     }
@@ -143,7 +169,7 @@ fn avif_decode_alpha_frame(data : Array[Byte]) -> Av1FramePlanes? {
     }
     return Some(frame)
   }
-  let payload = match avif_alpha_item_payload(data) {
+  let payload = match avif_alpha_item_payload_limited(data, limits~) {
     Some(value) => value
     None => return None
   }
@@ -170,6 +196,7 @@ fn avif_decode_alpha_frame(data : Array[Byte]) -> Av1FramePlanes? {
       allow_monochrome=true,
       operating_point~,
       spatial_layer~,
+      budget~,
     ) {
     Some(value) => value
     None => return None
@@ -192,25 +219,66 @@ fn avif_decode_alpha_frame(data : Array[Byte]) -> Av1FramePlanes? {
 /// Decode a primary AVIF image and compose its validated auxiliary alpha item.
 /// A valid image without an alpha item keeps the existing opaque result; an
 /// alpha item that cannot be decoded is reported as `None` rather than dropped.
-pub fn avif_decode_rgba(data : Array[Byte]) -> Image? {
-  let alpha_descriptor = avif_alpha_descriptor_checked(data) catch {
+fn avif_decode_rgba_limited(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+) -> Image? {
+  let (frame, alpha, premultiplied) = match
+    avif_decode_image_planes(data, limits~) {
+    Some(value) => value
+    None => return None
+  }
+  match alpha {
+    None => av1_frame_to_rgba(frame)
+    Some(alpha) => av1_frame_with_alpha(frame, alpha, premultiplied)
+  }
+}
+
+///|
+/// Shared native/RGBA container boundary. Validate alpha before exposing
+/// either output so a broken auxiliary item cannot become an opaque image.
+fn avif_decode_image_planes(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+  budget? : DecodeBudget? = None,
+) -> (Av1FramePlanes, Av1FramePlanes?, Bool)? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
+  let budget = match budget {
+    Some(value) => Some(value)
+    None => decode_budget(limits)
+  }
+  decode_context(budget, "alpha_metadata", None)
+  let alpha_descriptor = avif_alpha_descriptor_checked(data, limits~) catch {
+    AuxParseError::Unsupported => {
+      decode_fail(
+        budget,
+        Unsupported,
+        "Unsupported auxiliary-alpha container syntax",
+      )
+      return None
+    }
     _ => return None
   }
-  let frame = match avif_decode_frame(data) {
+  let frame = match avif_decode_frame(data, budget~) {
     Some(value) => value
     None => return None
   }
   match alpha_descriptor {
-    None => av1_frame_to_rgba(frame)
+    None => Some((frame, None, false))
     Some(descriptor) => {
       if descriptor.width != frame.width || descriptor.height != frame.height {
         return None
       }
-      let alpha = match avif_decode_alpha_frame(data) {
+      let alpha = match avif_decode_alpha_frame(data, budget~) {
         Some(value) => value
         None => return None
       }
-      av1_frame_with_alpha(frame, alpha, descriptor.premultiplied)
+      if alpha.bit_depth != frame.bit_depth {
+        return None
+      }
+      Some((frame, Some(alpha), descriptor.premultiplied))
     }
   }
 }

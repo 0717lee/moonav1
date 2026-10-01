@@ -252,9 +252,6 @@ test "warpmv affine fit drops a far sample" {
   let far : Array[Int] = [
     -160, 32, -150, 40, 96, 224, 104, 230, 352, -64, 360, -56, -128, 64, -900, -300,
   ]
-  let base : Array[Int] = [
-    -160, 32, -150, 40, 96, 224, 104, 230, 352, -64, 360, -56,
-  ]
   let matrix : Array[Int] = [0, 0, 0, 0, 0, 0]
   if av1_warp_find_affine_int(far, 4, 8, 8, -16, 24, matrix, 3, 2) {
     fail("warpmv affine fit: sample set reported singular")

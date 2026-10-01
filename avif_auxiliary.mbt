@@ -177,7 +177,11 @@ fn aux_walk(
   to : Int,
   parent : Int,
   out : Array[AuxBox],
+  depth? : Int = 0,
 ) -> Unit raise AuxParseError {
+  if depth > AVIF_MAX_BOX_DEPTH {
+    raise AuxParseError::Invalid
+  }
   let mut p = from
   while p < to {
     if to - p < 8 {
@@ -204,16 +208,16 @@ fn aux_walk(
       if end - payload < 4 {
         raise AuxParseError::Invalid
       }
-      aux_walk(d, payload + 4, end, index, out)
+      aux_walk(d, payload + 4, end, index, out, depth=depth + 1)
     } else if typ == aux_t_iprp || typ == aux_t_ipco {
-      aux_walk(d, payload, end, index, out)
+      aux_walk(d, payload, end, index, out, depth=depth + 1)
     } else if typ == aux_t_iinf {
       let version = aux_u8(d, payload, end)
       let child = if version == 0 { payload + 6 } else { payload + 8 }
       if child > end {
         raise AuxParseError::Invalid
       }
-      aux_walk(d, child, end, index, out)
+      aux_walk(d, child, end, index, out, depth=depth + 1)
     }
     p = end
   }
@@ -538,6 +542,7 @@ fn aux_item_image_info(
   item : AuxItem,
   items : Array[AuxItem],
   props : Array[AuxProp],
+  limits? : DecodeLimits? = None,
 ) -> (Int, Int, Int, Bool) raise AuxParseError {
   if item.typ == aux_t_av01 {
     return aux_image_info(item, props)
@@ -549,7 +554,7 @@ fn aux_item_image_info(
     Some(value) => value
     None => raise AuxParseError::Invalid
   }
-  if !avif_grid_properties_match(data, grid) {
+  if !avif_grid_properties_match(data, grid, limits~) {
     raise AuxParseError::Invalid
   }
   let first = aux_item_index(items, grid.tiles[0].item_id)
@@ -567,7 +572,11 @@ fn aux_item_image_info(
 /// and alpha entry points can call it without recursive parsing.
 fn avif_alpha_descriptor_checked(
   data : Array[Byte],
+  limits? : DecodeLimits? = None,
 ) -> AvifAlphaItemDescriptor? raise AuxParseError {
+  if !decode_input_allowed(data.length(), limits) {
+    raise AuxParseError::Invalid
+  }
   let bs : Array[AuxBox] = []
   aux_walk(data, 0, data.length(), -1, bs)
   let meta = match aux_find(bs, -1, aux_t_meta) {
@@ -671,8 +680,8 @@ fn avif_alpha_descriptor_checked(
     if pi < 0 {
       raise AuxParseError::Invalid
     }
-    let color = aux_item_image_info(data, items[pi], items, props)
-    let auxiliary = aux_item_image_info(data, item, items, props)
+    let color = aux_item_image_info(data, items[pi], items, props, limits~)
+    let auxiliary = aux_item_image_info(data, item, items, props, limits~)
     // AVIF 4.1 requires the same encoded bit depth as the master image.
     // Width and height must each match; equal pixel counts are insufficient.
     if auxiliary.0 != color.0 ||
@@ -731,10 +740,11 @@ fn avif_alpha_descriptor_checked(
 /// Extract the first alpha item associated with the primary image through
 /// auxl and the alpha auxC URN. None also represents malformed input for this
 /// public Option API; composition uses the checked internal query instead.
-pub fn avif_alpha_item_descriptor(
+fn avif_alpha_item_descriptor_limited(
   data : Array[Byte],
+  limits? : DecodeLimits? = None,
 ) -> AvifAlphaItemDescriptor? {
-  avif_alpha_descriptor_checked(data) catch {
+  avif_alpha_descriptor_checked(data, limits~) catch {
     _ => None
   }
 }
@@ -742,13 +752,19 @@ pub fn avif_alpha_item_descriptor(
 ///|
 /// Return the validated raw auxiliary alpha item bytes in extent order.
 /// The bytes are still AV1 payload data and are not interpreted as pixels.
-pub fn avif_alpha_item_payload(data : Array[Byte]) -> Array[Byte]? {
-  let descriptor = match avif_alpha_item_descriptor(data) {
+fn avif_alpha_item_payload_limited(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+) -> Array[Byte]? {
+  let descriptor = match avif_alpha_item_descriptor_limited(data, limits~) {
     Some(value) => value
     None => return None
   }
   let out : Array[Byte] = []
   for extent in descriptor.extents {
+    if !decode_payload_allowed(out.length(), extent.length, limits) {
+      return None
+    }
     if extent.offset < 0 ||
       extent.length < 0 ||
       extent.offset > data.length() - extent.length {

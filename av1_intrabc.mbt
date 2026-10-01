@@ -458,7 +458,11 @@ fn av1_intrabc_residual(
   tx_height : Int,
   roots : Array[Array[Av1TxNode]],
 ) -> Bool {
-  av1_cfl_begin_block(state.cfl, block, false)
+  av1_cfl_begin_block(
+    state.cfl,
+    block,
+    !state.monochrome && !av1_intra_has_chroma(state, block),
+  )
   if (state.sub_x == 0 || block.width >= 8) &&
     (state.sub_y == 0 || block.height >= 8) {
     return av1_inter_residual(

@@ -47,6 +47,8 @@ test "OBU operating point checks both actual layer IDs" {
   let sequence = av1_sequence_info(obu_hidden_inter_show_existing_data).unwrap()
   sequence.operating_point_idc[0] = (1 << 3) | (1 << 10)
   let accepted : Av1ObuPacket = {
+    offset: 0,
+    payload_offset: 0,
     kind: 3,
     extension: true,
     temporal_id: 3,

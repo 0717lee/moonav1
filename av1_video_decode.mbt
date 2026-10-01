@@ -24,13 +24,22 @@ pub fn av1_video_decoder() -> Av1VideoDecoder {
 /// the unit update the reference map. Use av1_video_decode_temporal_unit to
 /// receive one presentation per temporal unit, including show-existing. OP0's
 /// highest spatial layer actually present is selected independently per unit.
-pub fn av1_video_decode_frame(
+fn av1_video_decode_frame_limited(
   decoder : Av1VideoDecoder,
   data : Array[Byte],
   allow_monochrome? : Bool = false,
+  limits? : DecodeLimits? = None,
 ) -> Image? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
   match
-    av1_video_decode_temporal_unit_planes(decoder, data, allow_monochrome~) {
+    av1_video_decode_temporal_unit_planes(
+      decoder,
+      data,
+      allow_monochrome~,
+      budget=decode_budget(limits),
+    ) {
     Some(frames) =>
       if frames.is_empty() {
         None
@@ -47,13 +56,25 @@ pub fn av1_video_decode_frame(
 /// TD-delimited units; an ISOBMFF sample implicitly ends its single unit.
 /// Some([]) denotes a valid unit containing only hidden frames or metadata;
 /// None denotes malformed syntax or a missing reference.
-pub fn av1_video_decode_temporal_unit(
+/// Failure does not roll back reference updates; discard the decoder after
+/// None. Native output is available through av1_video_decode_temporal_unit_native
+/// and can be interleaved with this entry point on the same decoder.
+fn av1_video_decode_temporal_unit_limited(
   decoder : Av1VideoDecoder,
   data : Array[Byte],
   allow_monochrome? : Bool = false,
+  limits? : DecodeLimits? = None,
 ) -> Array[Image]? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
   let frames = match
-    av1_video_decode_temporal_unit_planes(decoder, data, allow_monochrome~) {
+    av1_video_decode_temporal_unit_planes(
+      decoder,
+      data,
+      allow_monochrome~,
+      budget=decode_budget(limits),
+    ) {
     Some(value) => value
     None => return None
   }
@@ -74,9 +95,16 @@ fn av1_video_decode_temporal_unit_planes(
   decoder : Av1VideoDecoder,
   data : Array[Byte],
   allow_monochrome? : Bool = false,
+  budget? : DecodeBudget? = None,
 ) -> Array[Av1FramePlanes]? {
   match
-    av1_decode_obu_planes(data, decoder.map, decoder.sequence, allow_monochrome) {
+    av1_decode_obu_planes(
+      data,
+      decoder.map,
+      decoder.sequence,
+      allow_monochrome,
+      budget~,
+    ) {
     Some((sequence, displayed)) => {
       decoder.sequence = Some(sequence)
       Some(displayed)

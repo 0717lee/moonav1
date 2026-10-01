@@ -2,6 +2,7 @@
 priv suberror AvifError {
   Invalid
   Unsupported
+  Diagnostic(DecodeError)
 }
 
 ///|
@@ -115,7 +116,14 @@ let t_av01 = 0x61763031
 ///|
 fn u8(d : Array[Byte], p : Int, e : Int) -> Int raise AvifError {
   if p < 0 || p >= e || p >= d.length() {
-    raise AvifError::Invalid
+    raise AvifError::Diagnostic(
+      decode_error(
+        TruncatedInput,
+        "container",
+        "Container field extends beyond the available bytes",
+        offset=Some(p),
+      ),
+    )
   }
   d[p].to_int()
 }
@@ -196,11 +204,29 @@ fn walk(
   to : Int,
   parent : Int,
   out : Array[Box],
+  depth? : Int = 0,
 ) -> Unit raise AvifError {
+  if depth > AVIF_MAX_BOX_DEPTH {
+    raise AvifError::Diagnostic(
+      decode_error(
+        LimitExceeded,
+        "container",
+        "Container nesting exceeds 64 levels",
+        offset=Some(from),
+      ),
+    )
+  }
   let mut p = from
   while p < to {
     if to - p < 8 {
-      raise AvifError::Invalid
+      raise AvifError::Diagnostic(
+        decode_error(
+          TruncatedInput,
+          "container",
+          "Incomplete box header",
+          offset=Some(p),
+        ),
+      )
     }
     let s32 = u32(d, p, to)
     let typ = u32(d, p + 4, to)
@@ -212,8 +238,25 @@ fn walk(
     } else if s32 == 0 {
       size = to - p
     }
-    if size < h || size > to - p {
-      raise AvifError::Invalid
+    if size < h {
+      raise AvifError::Diagnostic(
+        decode_error(
+          InvalidData,
+          "container",
+          "Box size is smaller than its header",
+          offset=Some(p),
+        ),
+      )
+    }
+    if size > to - p {
+      raise AvifError::Diagnostic(
+        decode_error(
+          TruncatedInput,
+          "container",
+          "Box payload extends beyond its parent",
+          offset=Some(p),
+        ),
+      )
     }
     let end = p + size
     let payload = p + h
@@ -223,16 +266,16 @@ fn walk(
       if end - payload < 4 {
         raise AvifError::Invalid
       }
-      walk(d, payload + 4, end, bi, out)
+      walk(d, payload + 4, end, bi, out, depth=depth + 1)
     } else if typ == t_iprp || typ == t_ipco {
-      walk(d, payload, end, bi, out)
+      walk(d, payload, end, bi, out, depth=depth + 1)
     } else if typ == t_iinf {
       let version = u8(d, payload, end)
       let child_start = if version == 0 { payload + 6 } else { payload + 8 }
       if child_start > end {
         raise AvifError::Invalid
       }
-      walk(d, child_start, end, bi, out)
+      walk(d, child_start, end, bi, out, depth=depth + 1)
     }
     p = end
   }
@@ -265,7 +308,14 @@ fn parse_av1c(
 }
 
 ///|
-pub fn avif_container_parse(data : Array[Byte]) -> AvifContainer? {
+fn avif_container_parse_limited(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+  diagnostic? : DecodeDiagnostic? = None,
+) -> AvifContainer? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
   try {
     let bs : Array[Box] = []
     walk(data, 0, data.length(), -1, bs)
@@ -369,7 +419,7 @@ pub fn avif_container_parse(data : Array[Byte]) -> AvifContainer? {
         Some(value) => value
         None => raise AvifError::Invalid
       }
-      if !avif_grid_properties_match(data, grid) {
+      if !avif_grid_properties_match(data, grid, limits~) {
         raise AvifError::Invalid
       }
       let first = idx_item(items, grid.tiles[0].item_id)
@@ -406,6 +456,15 @@ pub fn avif_container_parse(data : Array[Byte]) -> AvifContainer? {
         (0, data.length())
       }
       let len = it.lens[i]
+      if !decode_payload_allowed(payload.length(), len, limits) {
+        raise AvifError::Diagnostic(
+          decode_error(
+            LimitExceeded,
+            "container",
+            "Assembled item payload exceeds the byte budget",
+          ),
+        )
+      }
       if len < 0 ||
         it.base < 0 ||
         it.offs[i] < 0 ||
@@ -427,7 +486,7 @@ pub fn avif_container_parse(data : Array[Byte]) -> AvifContainer? {
       subsampling_x: sub_x,
       subsampling_y: sub_y,
       yuv420: sub_x && sub_y,
-      has_alpha: avif_alpha_descriptor_checked(data) is Some(_),
+      has_alpha: avif_alpha_descriptor_checked(data, limits~) is Some(_),
       av1c: av1.unwrap(),
       payload,
       operating_point,
@@ -438,7 +497,32 @@ pub fn avif_container_parse(data : Array[Byte]) -> AvifContainer? {
       nclx_full_range: nr,
     })
   } catch {
-    _ => None
+    AvifError::Diagnostic(error) => {
+      decode_trace_error(diagnostic, error)
+      None
+    }
+    AvifError::Unsupported => {
+      decode_trace_error(
+        diagnostic,
+        decode_error(
+          Unsupported,
+          "container",
+          "Unsupported container field or construction method",
+        ),
+      )
+      None
+    }
+    _ => {
+      decode_trace_error(
+        diagnostic,
+        decode_error(
+          InvalidData,
+          "container",
+          "Invalid AVIF item, property or extent",
+        ),
+      )
+      None
+    }
   }
 }
 
@@ -633,6 +717,7 @@ fn parse_ipma(
   bs : Array[Box],
   iprp : Box?,
   xs : Array[Item],
+  essential? : Array[(Int, Int)]? = None,
 ) -> Unit raise AvifError {
   let rp = match iprp {
     Some(x) => x
@@ -665,6 +750,10 @@ fn parse_ipma(
         let property = if (flags & 1) != 0 { a & 0x7FFF } else { a & 0x7F }
         if property != 0 {
           xs[xi].props.push(property)
+          let mask = if (flags & 1) != 0 { 0x8000 } else { 0x80 }
+          if (a & mask) != 0 && essential is Some(entries) {
+            entries.push((id, property))
+          }
         }
       }
     }

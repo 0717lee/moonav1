@@ -362,7 +362,6 @@ pub fn av1_decode_tile_group(
         reduced_tx_set~,
         enable_filter_intra~,
         enable_intra_edge_filter~,
-        loop_filter~,
       ) {
       Some(value) => value
       None => return None
@@ -464,8 +463,19 @@ pub fn av1_decode_tile_group_with_boundaries(
 ///|
 /// Decode an AV1 OBU stream with fresh reference state and return its first
 /// displayed frame after native-depth filtering and final color conversion.
-pub fn av1_decode(data : Array[Byte]) -> Image? {
-  match av1_decode_frame_planes(data, allow_monochrome=true) {
+fn av1_decode_limited(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+) -> Image? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
+  match
+    av1_decode_frame_planes(
+      data,
+      allow_monochrome=true,
+      budget=decode_budget(limits),
+    ) {
     Some(frame) => av1_frame_to_rgba(frame)
     None => None
   }
@@ -474,8 +484,14 @@ pub fn av1_decode(data : Array[Byte]) -> Image? {
 ///|
 /// Decode the AVIF primary item's selected frame or grid with fresh AV1
 /// reference state. The RGBA entry point additionally composes auxiliary alpha.
-pub fn avif_decode(data : Array[Byte]) -> Image? {
-  match avif_decode_frame(data) {
+fn avif_decode_limited(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+) -> Image? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
+  match avif_decode_frame(data, budget=decode_budget(limits)) {
     Some(frame) => av1_frame_to_rgba(frame)
     None => None
   }
@@ -483,8 +499,17 @@ pub fn avif_decode(data : Array[Byte]) -> Image? {
 
 ///|
 /// Keep primary samples at native precision for auxiliary-alpha composition.
-fn avif_decode_frame(data : Array[Byte]) -> Av1FramePlanes? {
-  let container = match avif_container_parse(data) {
+fn avif_decode_frame(
+  data : Array[Byte],
+  budget? : DecodeBudget? = None,
+) -> Av1FramePlanes? {
+  let limits = budget.map(value => value.limits)
+  let diagnostic = match budget {
+    Some(value) => value.diagnostic
+    None => None
+  }
+  let container = match
+    avif_container_parse_limited(data, limits~, diagnostic~) {
     Some(value) => value
     None => return None
   }
@@ -495,10 +520,10 @@ fn avif_decode_frame(data : Array[Byte]) -> Av1FramePlanes? {
         Some(value) => value
         None => return None
       }
-      if !avif_grid_properties_match(data, grid) {
+      if !avif_grid_properties_match(data, grid, limits~) {
         return None
       }
-      return match avif_decode_grid_frame(data, grid) {
+      return match avif_decode_grid_frame(data, grid, budget~) {
         Some(frame) => Some(avif_frame_apply_color(frame, container))
         None => None
       }
@@ -515,6 +540,7 @@ fn avif_decode_frame(data : Array[Byte]) -> Av1FramePlanes? {
       allow_monochrome=true,
       operating_point=container.operating_point,
       spatial_layer=container.spatial_layer,
+      budget~,
     ) {
     Some(value) => value
     None => return None

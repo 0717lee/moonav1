@@ -305,6 +305,7 @@ priv struct Av1ColorConfig {
   primaries : Int
   transfer : Int
   matrix : Int
+  chroma_sample_position : Int
 }
 
 ///|
@@ -376,6 +377,7 @@ fn av1_parse_color_config(
       primaries,
       transfer,
       matrix,
+      chroma_sample_position: 0,
     })
   }
   let identity = primaries == 1 && transfer == 13 && matrix == 0
@@ -408,8 +410,13 @@ fn av1_parse_color_config(
   } else {
     (true, false)
   }
-  if sx && sy && reader.read(2) is None {
-    return None
+  let chroma_sample_position = if sx && sy {
+    match reader.read(2) {
+      Some(value) => value
+      None => return None
+    }
+  } else {
+    0
   }
   let separate = match reader.read(1) {
     Some(v) => v == 1
@@ -425,6 +432,7 @@ fn av1_parse_color_config(
     primaries,
     transfer,
     matrix,
+    chroma_sample_position,
   })
 }
 
@@ -436,14 +444,15 @@ fn av1_skip32(reader : Av1BitReader) -> Bool {
 }
 
 ///|
-/// Skips `num_ticks_per_picture_minus_1`, coded as uvlc (AV1 §4.11): a run of
-/// one bits counted as `i`, terminated by a zero bit, then `i` value bits.
+/// Skip UVLC (AV1 §4.10.3): leading zero bits, a one terminator, then the
+/// same number of value bits. At least 32 leading zeros encodes the sentinel
+/// without a value suffix, but the terminating one must still be consumed.
 fn av1_skip_uvlc(reader : Av1BitReader) -> Bool {
   let mut i = 0
-  while i < 32 {
+  while reader.bit_pos / 8 < reader.data.length() {
     match reader.read(1) {
-      Some(0) => return av1_skip(reader, i)
-      Some(_) => i = i + 1
+      Some(1) => return i >= 32 || av1_skip(reader, i)
+      Some(_) => if i < 32 { i += 1 }
       None => return false
     }
   }
@@ -455,6 +464,23 @@ fn av1_skip_uvlc(reader : Av1BitReader) -> Bool {
 /// and the general grammar are supported; the timing and operating-point fields
 /// the frame header needs to skip its own optional sections are retained.
 fn av1_parse_sequence_payload(payload : Array[Byte]) -> Av1SequenceInfo? {
+  av1_parse_sequence_payload_details(payload, None)
+}
+
+///|
+/// Container configuration fields which were historically not exposed in
+/// Av1SequenceInfo. Keep that public record and unary parser contract intact.
+priv struct Av1SequenceDetails {
+  mut level : Int
+  mut tier : Int
+  mut chroma_sample_position : Int
+}
+
+///|
+fn av1_parse_sequence_payload_details(
+  payload : Array[Byte],
+  details : Av1SequenceDetails?,
+) -> Av1SequenceInfo? {
   let reader = Av1BitReader::new(payload)
   let profile = match av1_u(reader, 3) {
     Some(v) => v
@@ -481,10 +507,13 @@ fn av1_parse_sequence_payload(payload : Array[Byte]) -> Av1SequenceInfo? {
   let mut operating_points_cnt_minus_1 = 0
   let mut operating_point_idc : Array[Int] = [0]
   let mut decoder_model_present_for_this_op : Array[Bool] = [false]
+  let mut level_0 = 0
+  let mut tier_0 = 0
   if reduced {
-    if !av1_skip(reader, 5) {
-      return None
-    } // seq_level_idx[0]
+    level_0 = match av1_u(reader, 5) {
+      Some(value) => value
+      None => return None
+    }
   } else {
     let timing_info_present = match reader.read(1) {
       Some(v) => v == 1
@@ -539,7 +568,7 @@ fn av1_parse_sequence_payload(payload : Array[Byte]) -> Av1SequenceInfo? {
     }
     let idcs : Array[Int] = []
     let models : Array[Bool] = []
-    for _ in 0..<=operating_points_cnt_minus_1 {
+    for point in 0..<=operating_points_cnt_minus_1 {
       let idc = match av1_u(reader, 12) {
         Some(v) => v
         None => return None
@@ -548,9 +577,18 @@ fn av1_parse_sequence_payload(payload : Array[Byte]) -> Av1SequenceInfo? {
         Some(v) => v
         None => return None
       }
-      if level > 7 && !av1_skip(reader, 1) {
-        return None
-      } // seq_tier
+      let tier = if level > 7 {
+        match av1_u(reader, 1) {
+          Some(value) => value
+          None => return None
+        }
+      } else {
+        0
+      }
+      if point == 0 {
+        level_0 = level
+        tier_0 = tier
+      }
       if decoder_model_info_present {
         let present = match reader.read(1) {
           Some(v) => v == 1
@@ -745,6 +783,11 @@ fn av1_parse_sequence_payload(payload : Array[Byte]) -> Av1SequenceInfo? {
       return None
     }
   }
+  if details is Some(value) {
+    value.level = level_0
+    value.tier = tier_0
+    value.chroma_sample_position = color.chroma_sample_position
+  }
   Some({
     profile,
     width,
@@ -854,7 +897,10 @@ pub fn av1_frame_info(data : Array[Byte]) -> Av1FrameInfo? {
   let sequence = av1_sequence_info(data)
   match sequence {
     None => None
-    Some(_) => {
+    Some(sequence) => {
+      if !sequence.reduced_still_picture_header {
+        return None
+      }
       let frames = av1_obu_payloads(data, 6)
       if frames.length() == 0 {
         None
@@ -877,7 +923,7 @@ pub fn av1_frame_info(data : Array[Byte]) -> Av1FrameInfo? {
 /// pixels; callers in the next milestone consume `tile_payload` with the
 /// intra tile reconstruction pipeline.
 pub fn avif_stage1_input(data : Array[Byte]) -> Av1Stage1Input? {
-  let container = avif_container_parse(data)
+  let container = avif_container_parse_limited(data)
   match container {
     None => None
     Some(c) => {

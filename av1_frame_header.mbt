@@ -95,8 +95,7 @@ pub(all) struct Av1FrameHeaderInfo {
   delta_q_present : Bool
   delta_q_res : Int
   /// `delta_lf_params`: whether each superblock also codes loop-filter deltas.
-  /// A frame that sets it is refused, because the per-superblock loop-filter
-  /// level table is not implemented.
+  /// Per-superblock deltas feed the reconstructed frame's loop-filter levels.
   delta_lf_present : Bool
   /// Parsed segmentation_params; None is impossible once parsed (an absent
   /// segmentation is the empty struct).

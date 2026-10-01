@@ -561,9 +561,6 @@ fn av1_decode_coeffs_leaf_with_decoder(
   // The caller validates legal Tx_Size pairs; this layer handles their
   // adjusted coefficient area and full-transform expansion uniformly.
   let rectangular = actual_height != side
-  if !rectangular && actual_height != side {
-    return None
-  }
   let large = side >= 32 || actual_height >= 32
   let domain_width = if side > 32 { 32 } else { side }
   let domain_height = if actual_height > 32 { 32 } else { actual_height }

@@ -1187,7 +1187,7 @@ fn av1_read_mv_component(
 
 ///|
 /// has_overlappable_candidates( ) (AV1 §7.10.3, `av1spec08.md:1819`): an inter
-/// neighbour above or to the left at an even MI position inside this block's
+/// neighbour above or to the left at an odd MI position inside this block's
 /// extent. Only inter neighbours count, so the very first block of a frame has
 /// none and keeps the simple prediction path.
 fn av1_has_overlappable_candidates(
@@ -1196,7 +1196,7 @@ fn av1_has_overlappable_candidates(
 ) -> Bool {
   if block.avail_u {
     let w4 = block.width4
-    let mut x4 = block.mi_col
+    let mut x4 = block.mi_col + 1
     while x4 < block.mi_col + w4 && x4 < field.cols {
       let pair = av1_neighbour_pair(field, block.mi_row - 1, x4)
       if pair[0] > av1_intra_frame {
@@ -1207,7 +1207,7 @@ fn av1_has_overlappable_candidates(
   }
   if block.avail_l {
     let h4 = block.height4
-    let mut y4 = block.mi_row
+    let mut y4 = block.mi_row + 1
     while y4 < block.mi_row + h4 && y4 < field.rows {
       let pair = av1_neighbour_pair(field, y4, block.mi_col - 1)
       if pair[0] > av1_intra_frame {
@@ -1673,7 +1673,6 @@ fn av1_ii_weight(mode : Int, i : Int, j : Int, scale : Int) -> Int {
 /// interintra and interintra-mode rows are indexed by it minus one.
 fn av1_ymode_size_context(width : Int, height : Int) -> Int {
   let small = if width < height { width } else { height }
-  let big = if width < height { height } else { width }
   if small <= 4 {
     0
   } else if small == 8 {

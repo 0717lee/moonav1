@@ -4,23 +4,19 @@
 /// General (non reduced-still) AV1 headers carrying real inter frames, checked
 /// field-by-field against the FFmpeg `trace_headers` transcripts in
 /// tests/fixtures/av1-inter, plus dav1d's native planes for both frames.
-/// Six of the eight reconstruct their inter frame sample-exactly on all three
+/// All eight reconstruct their inter frame sample-exactly on all three
 /// planes: a whole-frame skip with integer motion, a fractional translation
 /// with a switchable interpolation filter, a sawtooth whose right-hand strips
 /// reach back into the frame, a dense 4x16 tree, `inter_lf_delta_64x64`, whose
 /// hand-spliced loop-filter levels make every edge strength come from the
-/// reference and the mode of the block beside it, and `inter_primary_ref_64x64`,
-/// whose patched header inherits a frame context. `inter_cdf_inherit_64x64`
-/// decodes but is deliberately *not* exact: it inherits distributions this
-/// decoder does not snapshot yet, so its test pins the per-plane sample counts
-/// it gets wrong as the target for that work. `general_inter_64x64` parses
-/// completely and is then refused whole, because it needs tools the block stage
-/// does not have yet (warped motion, temporal motion vectors); a partial
-/// reconstruction would be worse than no picture. `inter_lossless_64x64` and
-/// `inter_obmc_64x64` are the two rungs added after
-/// that split: a coded-lossless pair, and the one stream whose inter frame
-/// actually selects overlapped block motion compensation on a 32x32 block.
-/// The rungs past that are hand-maintained lower in this file: the
+/// reference and the mode of the block beside it, `inter_primary_ref_64x64`,
+/// whose patched header inherits a frame context, `inter_cdf_inherit_64x64`,
+/// whose inherited entropy context is loaded from the named slot, and
+/// `general_inter_64x64`, whose switches are all on.
+///
+/// The rungs past the generated prologue are hand-maintained below it, from
+/// `inter_lossless_64x64` on: the emitter regenerates only this prologue and
+/// preserves everything from that marker onward. They carry the
 /// single-reference compound grammar with its blends, skip mode over three
 /// temporal units, the inter tools that ride on a header or sequence-header
 /// patch, and `inter_globalmv_64x64`, whose injected translation model is the
@@ -7619,12 +7615,8 @@ test "general_inter_64x64: inter frame reconstruction" {
   if av1_decode_frame_planes(key_unit, map~) is None {
     fail("general_inter_64x64: key frame decode rejected")
   }
-  // The encode carries `reference_select` plus both compound masks on, and
-  // the frame gate no longer refuses on the masked-compound switch alone:
-  // `read_compound_type` reads `comp_group_idx` and, when a block asks for
-  // a masked blend, either the wedge or the difference weighting, both of
-  // which the block stage now blends. A block that picks overlapped or
-  // warped motion is still refused by `av1_read_motion_mode`.
+  // every tool the encode signals is implemented: compound, overlapped and warped motion, temporal vectors. A frame that needs a missing tool must be refused whole:
+  // a partial reconstruction would be worse than no picture at all.
   let inter = av1_decode_frame_planes(inter_unit, map~, sequence~)
   assert_eq(inter is Some(_), true)
   if true {
@@ -7634,15 +7626,17 @@ test "general_inter_64x64: inter frame reconstruction" {
     }
     // dav1d's native planes for the inter frame: sample-exact evidence that
     // motion compensation, the residual and the frame filters agree with an
-    // external decoder. Every sample of every plane is counted, so a fixture
-    // that is not exact yet carries its disagreement as an explicit number
-    // rather than as an excluded region.
+    // external decoder. Every sample of every plane is counted explicitly.
     let reference = av1_inter_expand(general_inter_64x64_frame1_reference)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -7658,6 +7652,53 @@ test "general_inter_64x64: inter frame reconstruction" {
     }
     assert_eq(bad, [0, 0, 0])
   }
+}
+
+///|
+/// The animated-AVIF seam: one stateful decoder walks the temporal units of a
+/// sequence, and a later unit may carry neither the sequence header nor a
+/// key frame. The second sample is a different picture, so the presented pixels must differ.
+test "general_inter_64x64: animation entry presents both temporal units" {
+  let whole = general_inter_64x64_obu
+  let key_unit = av1_inter_slice_bytes(whole, 0, 70)
+  let inter_unit = av1_inter_slice_bytes(whole, 70, 101)
+  let samples = avif_decode_animation_samples(1000, [0, 40], [40, 40], [
+    key_unit, inter_unit,
+  ])
+  let sequence = match samples {
+    Some(value) => value
+    None => fail("general_inter_64x64: animation sequence rejected")
+  }
+  assert_eq(sequence.timescale, 1000)
+  assert_eq(sequence.frames.length(), 2)
+  assert_eq(sequence.frames[0].index, 0)
+  assert_eq(sequence.frames[0].timestamp, 0)
+  assert_eq(sequence.frames[1].index, 1)
+  assert_eq(sequence.frames[1].timestamp, 40)
+  assert_eq(sequence.frames[1].duration, 40)
+  assert_eq(sequence.frames[1].timescale, 1000)
+  let first = sequence.frames[0].image
+  let second = sequence.frames[1].image
+  assert_eq(second.width, 64)
+  assert_eq(second.height, 64)
+  let mut changed = 0
+  for fy in 0..<5 {
+    for fx in 0..<5 {
+      let x = fx * (second.width - 1) / 4
+      let y = fy * (second.height - 1) / 4
+      if first.get_pixel(x, y) != second.get_pixel(x, y) {
+        changed = changed + 1
+      }
+    }
+  }
+  assert_eq(changed > 0, true)
+  // The inter unit is not self-contained: it names no sequence header of its
+  // own and predicts from a buffer only the first unit filled. A cold decoder
+  // must refuse it rather than present a picture built from nothing.
+  assert_eq(
+    av1_video_decode_frame(av1_video_decoder(), inter_unit) is None,
+    true,
+  )
 }
 
 ///|
@@ -7788,15 +7829,17 @@ test "inter_minimal_64x64: inter frame reconstruction" {
     }
     // dav1d's native planes for the inter frame: sample-exact evidence that
     // motion compensation, the residual and the frame filters agree with an
-    // external decoder. Every sample of every plane is counted, so a fixture
-    // that is not exact yet carries its disagreement as an explicit number
-    // rather than as an excluded region.
+    // external decoder. Every sample of every plane is counted explicitly.
     let reference = av1_inter_expand(inter_minimal_64x64_frame1_reference)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -7989,15 +8032,17 @@ test "inter_still_64x64: inter frame reconstruction" {
     }
     // dav1d's native planes for the inter frame: sample-exact evidence that
     // motion compensation, the residual and the frame filters agree with an
-    // external decoder. Every sample of every plane is counted, so a fixture
-    // that is not exact yet carries its disagreement as an explicit number
-    // rather than as an excluded region.
+    // external decoder. Every sample of every plane is counted explicitly.
     let reference = av1_inter_expand(inter_still_64x64_frame1_reference)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -8190,15 +8235,17 @@ test "inter_shift_64x64: inter frame reconstruction" {
     }
     // dav1d's native planes for the inter frame: sample-exact evidence that
     // motion compensation, the residual and the frame filters agree with an
-    // external decoder. Every sample of every plane is counted, so a fixture
-    // that is not exact yet carries its disagreement as an explicit number
-    // rather than as an excluded region.
+    // external decoder. Every sample of every plane is counted explicitly.
     let reference = av1_inter_expand(inter_shift_64x64_frame1_reference)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -8391,15 +8438,17 @@ test "inter_edge_64x16: inter frame reconstruction" {
     }
     // dav1d's native planes for the inter frame: sample-exact evidence that
     // motion compensation, the residual and the frame filters agree with an
-    // external decoder. Every sample of every plane is counted, so a fixture
-    // that is not exact yet carries its disagreement as an explicit number
-    // rather than as an excluded region.
+    // external decoder. Every sample of every plane is counted explicitly.
     let reference = av1_inter_expand(inter_edge_64x16_frame1_reference)
     let chroma = 1536 / 6
     let luma_size = 1536 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 16)
+    let expected_lengths = [1024, 256, 256]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -8592,15 +8641,17 @@ test "inter_lf_delta_64x64: inter frame reconstruction" {
     }
     // dav1d's native planes for the inter frame: sample-exact evidence that
     // motion compensation, the residual and the frame filters agree with an
-    // external decoder. Every sample of every plane is counted, so a fixture
-    // that is not exact yet carries its disagreement as an explicit number
-    // rather than as an excluded region.
+    // external decoder. Every sample of every plane is counted explicitly.
     let reference = av1_inter_expand(inter_lf_delta_64x64_frame1_reference)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -8794,15 +8845,17 @@ test "inter_primary_ref_64x64: inter frame reconstruction" {
     }
     // dav1d's native planes for the inter frame: sample-exact evidence that
     // motion compensation, the residual and the frame filters agree with an
-    // external decoder. Every sample of every plane is counted, so a fixture
-    // that is not exact yet carries its disagreement as an explicit number
-    // rather than as an excluded region.
+    // external decoder. Every sample of every plane is counted explicitly.
     let reference = av1_inter_expand(inter_primary_ref_64x64_frame1_reference)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -8985,7 +9038,7 @@ test "inter_cdf_inherit_64x64: inter frame reconstruction" {
   if av1_decode_frame_planes(key_unit, map~) is None {
     fail("inter_cdf_inherit_64x64: key frame decode rejected")
   }
-  // inherited entropy state not implemented yet: these counts are the fence and must fall to 0, 0, 0. A frame that needs a missing tool must be refused whole:
+  // inherited entropy state from the primary reference: every plane is sample-exact. A frame that needs a missing tool must be refused whole:
   // a partial reconstruction would be worse than no picture at all.
   let inter = av1_decode_frame_planes(inter_unit, map~, sequence~)
   assert_eq(inter is Some(_), true)
@@ -8996,15 +9049,17 @@ test "inter_cdf_inherit_64x64: inter frame reconstruction" {
     }
     // dav1d's native planes for the inter frame: sample-exact evidence that
     // motion compensation, the residual and the frame filters agree with an
-    // external decoder. Every sample of every plane is counted, so a fixture
-    // that is not exact yet carries its disagreement as an explicit number
-    // rather than as an excluded region.
+    // external decoder. Every sample of every plane is counted explicitly.
     let reference = av1_inter_expand(inter_cdf_inherit_64x64_frame1_reference)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -9663,7 +9718,6 @@ test "inter_lossless_64x64: lossless frames parse and the key frame matches dav1
   assert_eq(inter.frame_is_intra, false)
   assert_eq(inter.coded_lossless, true)
   assert_eq(av1_inter_frame_supported(inter, seq), true)
-  assert_eq(inter.coded_lossless, true)
   // Parsing alone must not touch the buffer: only reconstruction stores.
   assert_eq(av1_frame_map_show(map, 0) is None, true)
   let decoded = match av1_decode_frame_planes(inter_lossless_64x64_obu, map~) {
@@ -9700,9 +9754,13 @@ test "inter_lossless_64x64: lossless inter frame reconstruction" {
     let reference = av1_inter_expand(inter_lossless_64x64_frame1_reference)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -10236,9 +10294,13 @@ test "inter_obmc_64x64: obmc inter frame reconstruction" {
     let reference = av1_inter_expand(inter_obmc_64x64_frame1_reference)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -10758,9 +10820,13 @@ test "inter_screen_content_64x64: screen-content inter frame reconstructs" {
   let reference = av1_inter_expand(inter_screen_content_64x64_frame1_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -10791,9 +10857,13 @@ test "inter_screen_content_64x64: the refused frame's key frame still matches da
   let reference = av1_inter_expand(inter_screen_content_64x64_frame0_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(decoded.width, 64)
+  assert_eq(decoded.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(decoded, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -12202,9 +12272,13 @@ test "inter_palette_64x64: palette inside an inter frame reconstructs" {
   let reference = av1_inter_expand(inter_palette_64x64_frame1_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -12232,9 +12306,13 @@ test "inter_palette_64x64: the key frame matches dav1d" {
   let reference = av1_inter_expand(inter_palette_64x64_frame0_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(decoded.width, 64)
+  assert_eq(decoded.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(decoded, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -13219,9 +13297,13 @@ test "inter_warped_64x64: warped-motion inter frame reconstructs" {
   let reference = av1_inter_expand(inter_warped_64x64_frame1_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -13249,9 +13331,13 @@ test "inter_warped_64x64: the key frame matches dav1d" {
   let reference = av1_inter_expand(inter_warped_64x64_frame0_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(decoded.width, 64)
+  assert_eq(decoded.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(decoded, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -14241,9 +14327,13 @@ test "inter_temporalmv_64x64: temporal-motion-vector inter frame reconstructs" {
   let reference = av1_inter_expand(inter_temporalmv_64x64_frame1_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -14271,9 +14361,13 @@ test "inter_temporalmv_64x64: the key frame matches dav1d" {
   let reference = av1_inter_expand(inter_temporalmv_64x64_frame0_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(decoded.width, 64)
+  assert_eq(decoded.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(decoded, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -14695,32 +14789,34 @@ test "inter_compound_64x64: compound inter frame reconstructs" {
   // A wedge or distance-weighted block would still refuse the frame whole.
   let inter = av1_decode_frame_planes(inter_unit, map~, sequence~)
   assert_eq(inter is Some(_), true)
-  if true {
-    let frame = match inter {
-      Some(value) => value
-      None => fail("inter_compound_64x64: supported inter frame rejected")
-    }
-    let reference = av1_inter_expand(inter_compound_64x64_frame1_reference)
-    let chroma = 6144 / 6
-    let luma_size = 6144 - chroma * 2
-    let bad = [0, 0, 0]
-    for p in 0..<3 {
-      let got = av1_frame_crop(frame, p)
-      let start = if p == 0 {
-        0
-      } else if p == 1 {
-        luma_size
-      } else {
-        luma_size + chroma
-      }
-      for i in 0..<got.length() {
-        if got[i] != reference[start + i] {
-          bad[p] = bad[p] + 1
-        }
-      }
-    }
-    assert_eq(bad, [0, 0, 0])
+  let frame = match inter {
+    Some(value) => value
+    None => fail("inter_compound_64x64: supported inter frame rejected")
   }
+  let reference = av1_inter_expand(inter_compound_64x64_frame1_reference)
+  let chroma = 6144 / 6
+  let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
+  let bad = [0, 0, 0]
+  for p in 0..<3 {
+    let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
+    let start = if p == 0 {
+      0
+    } else if p == 1 {
+      luma_size
+    } else {
+      luma_size + chroma
+    }
+    for i in 0..<got.length() {
+      if got[i] != reference[start + i] {
+        bad[p] = bad[p] + 1
+      }
+    }
+  }
+  assert_eq(bad, [0, 0, 0])
 }
 
 ///|
@@ -15673,9 +15769,13 @@ test "inter_skipmode_64x64: skip-mode frame headers parse and the key frame matc
     let reference = av1_inter_expand(reference_data)
     let chroma = 6144 / 6
     let luma_size = 6144 - chroma * 2
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
+    let expected_lengths = [4096, 1024, 1024]
     let bad = [0, 0, 0]
     for p in 0..<3 {
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       let start = if p == 0 {
         0
       } else if p == 1 {
@@ -16149,32 +16249,34 @@ test "inter_distcomp_64x64: distance-weighted inter frame reconstructs" {
   // block still refuses the frame whole.
   let inter = av1_decode_frame_planes(inter_unit, map~, sequence~)
   assert_eq(inter is Some(_), true)
-  if true {
-    let frame = match inter {
-      Some(value) => value
-      None => fail("inter_distcomp_64x64: supported inter frame rejected")
-    }
-    let reference = av1_inter_expand(inter_distcomp_64x64_frame1_reference)
-    let chroma = 6144 / 6
-    let luma_size = 6144 - chroma * 2
-    let bad = [0, 0, 0]
-    for p in 0..<3 {
-      let got = av1_frame_crop(frame, p)
-      let start = if p == 0 {
-        0
-      } else if p == 1 {
-        luma_size
-      } else {
-        luma_size + chroma
-      }
-      for i in 0..<got.length() {
-        if got[i] != reference[start + i] {
-          bad[p] = bad[p] + 1
-        }
-      }
-    }
-    assert_eq(bad, [0, 0, 0])
+  let frame = match inter {
+    Some(value) => value
+    None => fail("inter_distcomp_64x64: supported inter frame rejected")
   }
+  let reference = av1_inter_expand(inter_distcomp_64x64_frame1_reference)
+  let chroma = 6144 / 6
+  let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
+  let bad = [0, 0, 0]
+  for p in 0..<3 {
+    let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
+    let start = if p == 0 {
+      0
+    } else if p == 1 {
+      luma_size
+    } else {
+      luma_size + chroma
+    }
+    for i in 0..<got.length() {
+      if got[i] != reference[start + i] {
+        bad[p] = bad[p] + 1
+      }
+    }
+  }
+  assert_eq(bad, [0, 0, 0])
 }
 
 ///|
@@ -16731,9 +16833,13 @@ test "inter_interintra_64x64: interintra blend reconstructs the inter frame" {
   let reference = av1_inter_expand(inter_interintra_64x64_frame1_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -17417,9 +17523,13 @@ test "inter_globalmv_64x64: a translation model parses and the frame reconstruct
   let reference = av1_inter_expand(inter_globalmv_64x64_frame1_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -17439,7 +17549,7 @@ test "inter_globalmv_64x64: a translation model parses and the frame reconstruct
 ///|
 /// The key frame of the same stream, so the model's own frame is pinned too.
 test "inter_globalmv_64x64: key frame headers parse and the key frame matches dav1d" {
-  let (seq, headers, map) = av1_inter_parse(
+  let (_, headers, map) = av1_inter_parse(
     inter_globalmv_64x64_obu, "inter_globalmv_64x64",
   )
   let key = headers[0]
@@ -18140,9 +18250,13 @@ test "inter_globalmv_rotzoom_64x64: a rotate-zoom model parses and the frame rec
   )
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -18162,7 +18276,7 @@ test "inter_globalmv_rotzoom_64x64: a rotate-zoom model parses and the frame rec
 ///|
 /// The key frame of the same stream, so the model's own frame is pinned too.
 test "inter_globalmv_rotzoom_64x64: key frame headers parse and the key frame matches dav1d" {
-  let (seq, headers, map) = av1_inter_parse(
+  let (_, headers, map) = av1_inter_parse(
     inter_globalmv_rotzoom_64x64_obu, "inter_globalmv_rotzoom_64x64",
   )
   let key = headers[0]
@@ -19154,9 +19268,13 @@ test "inter_localwarp_64x64: a local-warp block reconstructs from its estimated 
   let reference = av1_inter_expand(inter_localwarp_64x64_frame1_reference)
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  assert_eq(frame.width, 64)
+  assert_eq(frame.height, 64)
+  let expected_lengths = [4096, 1024, 1024]
   let bad = [0, 0, 0]
   for p in 0..<3 {
     let got = av1_frame_crop(frame, p)
+    assert_eq(got.length(), expected_lengths[p])
     let start = if p == 0 {
       0
     } else if p == 1 {
@@ -19176,7 +19294,7 @@ test "inter_localwarp_64x64: a local-warp block reconstructs from its estimated 
 ///|
 /// The key frame of the same stream, so the model's own frame is pinned too.
 test "inter_localwarp_64x64: key frame headers parse and the key frame matches dav1d" {
-  let (seq, headers, map) = av1_inter_parse(
+  let (_, headers, map) = av1_inter_parse(
     inter_localwarp_64x64_obu, "inter_localwarp_64x64",
   )
   let key = headers[0]
@@ -19217,7 +19335,7 @@ test "inter_localwarp_64x64: key frame headers parse and the key frame matches d
 /// still refuses, so this stream pins exactly what is implemented: per-block
 /// ALT_Q over an encoder-written map, on both a key and an inter frame.
 test "inter_segmentation_64x64: the segmented frames reconstruct from their segment ids" {
-  let (seq, headers, map) = av1_inter_parse(
+  let (_, headers, map) = av1_inter_parse(
     inter_segmentation_64x64_obu, "inter_segmentation_64x64",
   )
   let key = headers[0]
@@ -19270,6 +19388,7 @@ test "inter_segmentation_64x64: the segmented frames reconstruct from their segm
   }
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
+  let expected_lengths = [4096, 1024, 1024]
   let references = [
     (key_planes, av1_inter_expand(inter_segmentation_64x64_frame0_reference)),
     (inter_planes, av1_inter_expand(inter_segmentation_64x64_frame1_reference)),
@@ -19277,6 +19396,8 @@ test "inter_segmentation_64x64: the segmented frames reconstruct from their segm
   for t in 0..<2 {
     let frame = references[t].0
     let reference = references[t].1
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
     let counts = [0, 0, 0]
     for p in 0..<3 {
       let start = if p == 0 {
@@ -19287,6 +19408,7 @@ test "inter_segmentation_64x64: the segmented frames reconstruct from their segm
         luma_size + chroma
       }
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       for i in 0..<got.length() {
         if got[i] != reference[start + i] {
           counts[p] = counts[p] + 1
@@ -20294,7 +20416,7 @@ let inter_segmentation_64x64_frame1_reference : Array[Int] = [
 /// loop-filter half of the same syntax (`delta_lf_present`) is still refused,
 /// which both frames' header values below assert stays unused.
 test "inter_deltaq_64x64: the per-superblock quantizer deltas shift the residual" {
-  let (seq, headers, map) = av1_inter_parse(
+  let (_, headers, map) = av1_inter_parse(
     inter_deltaq_64x64_obu, "inter_deltaq_64x64",
   )
   let key = headers[0]
@@ -20325,9 +20447,8 @@ test "inter_deltaq_64x64: the per-superblock quantizer deltas shift the residual
   }
   let chroma = 6144 / 6
   let luma_size = 6144 - chroma * 2
-  let labels = ["key", "inter"]
   let frames = [key_planes, inter_planes]
-  let bases = [0, 6144]
+  let expected_lengths = [4096, 1024, 1024]
   let references = [
     av1_inter_expand(inter_deltaq_64x64_frame0_reference),
     av1_inter_expand(inter_deltaq_64x64_frame1_reference),
@@ -20335,6 +20456,8 @@ test "inter_deltaq_64x64: the per-superblock quantizer deltas shift the residual
   for t in 0..<2 {
     let frame = frames[t]
     let reference = references[t]
+    assert_eq(frame.width, 64)
+    assert_eq(frame.height, 64)
     let counts = [0, 0, 0]
     for p in 0..<3 {
       let start = if p == 0 {
@@ -20345,6 +20468,7 @@ test "inter_deltaq_64x64: the per-superblock quantizer deltas shift the residual
         luma_size + chroma
       }
       let got = av1_frame_crop(frame, p)
+      assert_eq(got.length(), expected_lengths[p])
       for i in 0..<got.length() {
         if got[i] != reference[start + i] {
           counts[p] = counts[p] + 1

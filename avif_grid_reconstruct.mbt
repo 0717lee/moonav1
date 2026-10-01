@@ -40,16 +40,10 @@ pub fn avif_reconstruct_grid(
   let out = Image::new(output_width, output_height)
   for index in 0..<tiles.length() {
     let tile = tiles[index]
-    if tile.width <= 0 || tile.height <= 0 {
-      return None
-    }
     let row = index / columns
     let col = index % columns
     let ox = col * first.width
     let oy = row * first.height
-    if ox >= output_width || oy >= output_height {
-      return None
-    }
     let copy_w = if output_width - ox < tile.width {
       output_width - ox
     } else {
@@ -74,13 +68,27 @@ pub fn avif_reconstruct_grid(
 /// Decode ordered AV1 grid tile samples and compose them into one image.
 /// The samples must be in row-major grid order; unsupported tile syntax
 /// rejects the whole image instead of returning a partial reconstruction.
-pub fn avif_decode_grid_tiles(
+fn avif_decode_grid_tiles_limited(
   rows : Int,
   columns : Int,
   output_width : Int,
   output_height : Int,
   samples : Array[Array[Byte]],
+  limits? : DecodeLimits? = None,
 ) -> Image? {
+  if !decode_samples_allowed(samples, limits) {
+    return None
+  }
+  let budget = decode_budget(limits)
+  if !decode_reserve(
+      budget,
+      output_width,
+      output_height,
+      picture=false,
+      padded=false,
+    ) {
+    return None
+  }
   if rows <= 0 ||
     columns <= 0 ||
     rows > 256 ||
@@ -90,7 +98,12 @@ pub fn avif_decode_grid_tiles(
   }
   let images : Array[Image] = []
   for sample in samples {
-    let image = match av1_decode(sample) {
+    let frame = match
+      av1_decode_frame_planes(sample, allow_monochrome=true, budget~) {
+      Some(value) => value
+      None => return None
+    }
+    let image = match av1_frame_to_rgba(frame) {
       Some(value) => value
       None => return None
     }
@@ -103,15 +116,19 @@ pub fn avif_decode_grid_tiles(
 /// Decode a grid directly from a BMFF buffer and its parsed descriptor.
 /// Each tile may contain one or more iloc extents; extents are concatenated
 /// before passing the sample to the pure AV1 decoder.
-pub fn avif_decode_grid(
+fn avif_decode_grid_limited(
   data : Array[Byte],
   descriptor : AvifGridDescriptor,
+  limits? : DecodeLimits? = None,
 ) -> Image? {
-  match avif_decode_grid_frame(data, descriptor) {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
+  match avif_decode_grid_frame(data, descriptor, budget=decode_budget(limits)) {
     Some(frame) => {
       let colored = match avif_grid_descriptor(data) {
         Some(primary) if primary.item_id == descriptor.item_id => {
-          let container = match avif_container_parse(data) {
+          let container = match avif_container_parse_limited(data, limits~) {
             Some(value) => value
             None => return None
           }
@@ -130,15 +147,21 @@ pub fn avif_decode_grid(
 /// entrypoint performs descriptor extraction and pixel reconstruction as one
 /// operation, so callers cannot accidentally skip the `dimg` ordering or
 /// extent validation step.
-pub fn avif_decode_grid_auto(data : Array[Byte]) -> Image? {
+fn avif_decode_grid_auto_limited(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+) -> Image? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
   let descriptor = match avif_grid_descriptor(data) {
     Some(value) => value
     None => return None
   }
-  if !avif_grid_properties_match(data, descriptor) {
+  if !avif_grid_properties_match(data, descriptor, limits~) {
     return None
   }
-  avif_decode_grid(data, descriptor)
+  avif_decode_grid_limited(data, descriptor, limits~)
 }
 
 ///|
@@ -199,7 +222,7 @@ test "grid decoder concatenates split construction-method extents" {
       },
     ],
   }
-  let image = avif_decode_grid(data, descriptor).unwrap()
+  let image = avif_decode_grid_limited(data, descriptor).unwrap()
   assert_eq((image.width, image.height), (64, 64))
   assert_eq(image.get_pixel(0, 0).3, b'\xFF')
 }
@@ -212,7 +235,7 @@ test "grid tile decoder composes ordered AV1 samples" {
     b'\x0A', b'\x05', b'\x79', b'\x52', b'\x6E', b'\x43', b'\xD9', b'\x3A', b'\x46',
     b'\x02', b'\x28',
   ]
-  let image = avif_decode_grid_tiles(1, 2, 128, 64, [sample, sample]).unwrap()
+  let image = avif_decode_grid_tiles_limited(1, 2, 128, 64, [sample, sample]).unwrap()
   assert_eq(image.width, 128)
   assert_eq(image.height, 64)
   assert_eq(image.get_pixel(0, 0).3, b'\xFF')

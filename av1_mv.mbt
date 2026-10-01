@@ -444,9 +444,10 @@ fn av1_setup_global_mv(
   }
   let params = frame.gm_params[name]
   if typ == av1_gm_translation {
-    return (
+    return av1_lower_mv_precision(
       params[0] >> (av1_warped_model_prec_bits - 3),
       params[1] >> (av1_warped_model_prec_bits - 3),
+      frame,
     )
   }
   // Rotate-zoom and affine are evaluated at the block centre, then lowered to
@@ -519,6 +520,7 @@ fn av1_search_stack(
 fn av1_compound_search_stack(
   field : Av1MotionField,
   stack : Av1MvStack,
+  block : Av1MvBlock,
   frame : Av1MvFrame,
   mv_row : Int,
   mv_col : Int,
@@ -526,14 +528,32 @@ fn av1_compound_search_stack(
 ) -> Unit {
   let unit = av1_field_unit(field, mv_row, mv_col)
   let mode = field.y_modes[unit]
+  // Affine/rotzoom global motion varies with block centre. As in the single
+  // reference search, replace the neighbour's stored vector for each list
+  // before lowering precision and merging candidate pairs (AV1 7.10.2.5).
+  let global = mode == av1_mode_global_global_mv &&
+    field.width4[unit] >= 2 &&
+    field.height4[unit] >= 2
+  let first_candidate = if global &&
+    frame.gm_type[block.refs[0]] > av1_gm_translation {
+    (stack.global_rows[0], stack.global_cols[0])
+  } else {
+    (field.mv_rows[unit * 2], field.mv_cols[unit * 2])
+  }
+  let second_candidate = if global &&
+    frame.gm_type[block.refs[1]] > av1_gm_translation {
+    (stack.global_rows[1], stack.global_cols[1])
+  } else {
+    (field.mv_rows[unit * 2 + 1], field.mv_cols[unit * 2 + 1])
+  }
   let first = av1_lower_mv_precision(
-    field.mv_rows[unit * 2],
-    field.mv_cols[unit * 2],
+    first_candidate.0,
+    first_candidate.1,
     frame,
   )
   let second = av1_lower_mv_precision(
-    field.mv_rows[unit * 2 + 1],
-    field.mv_cols[unit * 2 + 1],
+    second_candidate.0,
+    second_candidate.1,
     frame,
   )
   stack.found_match = 1
@@ -585,7 +605,9 @@ fn av1_add_ref_mv_candidate(
     }
   } else if field.refs[unit * 2] == block.refs[0] &&
     field.refs[unit * 2 + 1] == block.refs[1] {
-    av1_compound_search_stack(field, stack, frame, mv_row, mv_col, weight)
+    av1_compound_search_stack(
+      field, stack, block, frame, mv_row, mv_col, weight,
+    )
   }
 }
 
@@ -732,7 +754,7 @@ fn av1_extra_search(
   block : Av1MvBlock,
   frame : Av1MvFrame,
   is_compound : Bool,
-) -> Bool? {
+) -> Unit {
   let mut w4 = block.width4
   if w4 > 16 {
     w4 = 16
@@ -774,10 +796,10 @@ fn av1_extra_search(
         stack.global_cols[0],
       )
     }
-    return Some(true)
+    return
   }
   if stack.count >= 2 {
-    return Some(true)
+    return
   }
   // The compound extended search (§7.10.2.12). Four scratch slots per list:
   // slots 0 and 1 take the candidates that share this block's references, the
@@ -824,13 +846,13 @@ fn av1_extra_search(
     if diff != 0 {
       // The different-reference candidates live in scratch slots 2 and 3; the
       // list picks which field of them is read, so one slot covers both lists.
-      av1_ext_move(ext_rows, ext_cols, m, list, 2, list, ext_rows, ext_cols)
+      av1_ext_move(ext_rows, ext_cols, m, list, 2, list)
       m = m + 1
       if m == 2 {
         continue
       }
       if diff == 2 {
-        av1_ext_move(ext_rows, ext_cols, m, list, 3, list, ext_rows, ext_cols)
+        av1_ext_move(ext_rows, ext_cols, m, list, 3, list)
         continue
       }
     }
@@ -872,7 +894,6 @@ fn av1_extra_search(
     av1_stack_set_mv(stack, 1, 1, ext_rows[1 * 2 + 1], ext_cols[1 * 2 + 1])
   }
   stack.count = 2
-  Some(true)
 }
 
 ///|
@@ -1021,8 +1042,6 @@ fn av1_ext_move(
   to_list : Int,
   from_slot : Int,
   from_list : Int,
-  _rows : Array[Int],
-  _cols : Array[Int],
 ) -> Unit {
   ext_rows[to_slot * 2 + to_list] = ext_rows[from_slot * 2 + from_list]
   ext_cols[to_slot * 2 + to_list] = ext_cols[from_slot * 2 + from_list]
@@ -1257,10 +1276,7 @@ pub fn av1_find_mv_stack(
   av1_sort_mv_stack(stack, 0, num_nearest, is_compound)
   av1_sort_mv_stack(stack, num_nearest, stack.count, is_compound)
   if stack.count < 2 {
-    match av1_extra_search(field, stack, block, frame, is_compound) {
-      None => return None
-      Some(_) => ()
-    }
+    av1_extra_search(field, stack, block, frame, is_compound)
   }
   av1_stack_contexts(field, stack, block, is_compound, num_new)
   Some(stack)

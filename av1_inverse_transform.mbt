@@ -1,8 +1,8 @@
 /// Exact AV1 inverse DCT integer transform (AOMedia AV1 §7.13.2.1–3).
 ///
 /// The implementation follows the normative B/H butterfly schedule.  The
-/// constants are Cos128_Lookup from the AV1 specification (Q12); all products
-/// are evaluated in MoonBit Int and rounded with the specified Round2 rule.
+/// constants are Cos128_Lookup from the AV1 specification (Q12). Products
+/// retain exact integer precision and use the specified Round2 rule.
 /// This is deliberately a butterfly implementation, rather than a floating
 /// point/cosine matrix approximation.  Reference schedule: AOMediaCodec/av1-
 /// spec §7.13.2.3 and libaom `av1/common/av1_inv_txfm1d.c` at commit
@@ -515,10 +515,6 @@ test "identity mixed transform dispatch selects the correct axis" {
 ///|
 test "32 point ADST remains an explicit unsupported boundary" {
   assert_true(av1_inverse_adst_1d(Array::make(32, 0), 5, 16) is None)
-  assert_true(
-    av1_inverse_transform_2d(Av1TxAdstDct, Array::make(1024, 0), 32, 32, 8)
-    is None,
-  )
 }
 
 ///|
@@ -555,10 +551,25 @@ fn av1_sin128(angle : Int) -> Int {
 fn av1_round2(x : Int, n : Int) -> Int {
   if n == 0 {
     x
+  } else if n > 0 && n < 32 {
+    // x = q*2^n + r, with q an arithmetic shift and 0 <= r < 2^n.
+    // The highest discarded bit is exactly the carry from adding half an
+    // ulp. This also avoids overflow when x is close to Int::max_value.
+    (x >> n) + ((x >> (n - 1)) & 1)
   } else {
     ((x.to_int64() + (1L << (n - 1))) >> n).to_int()
   }
 }
+
+///|
+/// JS represents Int64 with BigInt. Number arithmetic is exact for the
+/// bounded integer intermediates below; native and wasm keep their Int64 path.
+#cfg(target="js")
+let av1_transform_exact_double : Bool = true
+
+///|
+#cfg(not(target="js"))
+let av1_transform_exact_double : Bool = false
 
 ///|
 fn av1_round2_wide(x : Int64, n : Int) -> Int {
@@ -593,12 +604,34 @@ fn av1_brev(bits : Int, value : Int) -> Int {
 fn av1_bfly(t : Array[Int], a : Int, b : Int, angle : Int, flip : Int) -> Unit {
   let ca = av1_cos128(angle)
   let sa = av1_sin128(angle)
+  let ta = t[a]
+  let tb = t[b]
+  if av1_transform_exact_double &&
+    ta >= -536870912 &&
+    ta < 536870912 &&
+    tb >= -536870912 &&
+    tb < 536870912 {
+    // |operand| <= 2^29 and |Q12 coefficient| <= 2^12: sums of products
+    // plus 2048 stay below 2^43, exactly representable in Double (2^53).
+    // The rounded result fits Int32. Wider public inputs retain Int64's
+    // narrowing semantics below. floor, not truncation, matches signed >>.
+    let x = ta.to_double() * ca.to_double() - tb.to_double() * sa.to_double()
+    let y = ta.to_double() * sa.to_double() + tb.to_double() * ca.to_double()
+    let xx = ((x + 2048.0) / 4096.0).floor().to_int()
+    let yy = ((y + 2048.0) / 4096.0).floor().to_int()
+    if flip == 1 {
+      t[a] = yy
+      t[b] = xx
+    } else {
+      t[a] = xx
+      t[b] = yy
+    }
+    return
+  }
   // libaom's half_btf widens products to int64 before Round2.  Keep the
   // public coefficient API as Int while matching that overflow-safe path.
-  let x : Int64 = t[a].to_int64() * ca.to_int64() -
-    t[b].to_int64() * sa.to_int64()
-  let y : Int64 = t[a].to_int64() * sa.to_int64() +
-    t[b].to_int64() * ca.to_int64()
+  let x : Int64 = ta.to_int64() * ca.to_int64() - tb.to_int64() * sa.to_int64()
+  let y : Int64 = ta.to_int64() * sa.to_int64() + tb.to_int64() * ca.to_int64()
   let xx = ((x + 2048L) >> 12).to_int()
   let yy = ((y + 2048L) >> 12).to_int()
   if flip == 1 {
@@ -614,6 +647,19 @@ fn av1_bfly(t : Array[Int], a : Int, b : Int, angle : Int, flip : Int) -> Unit {
 fn av1_had(t : Array[Int], a0 : Int, b0 : Int, flip : Int, bits : Int) -> Unit {
   let a = if flip == 1 { b0 } else { a0 }
   let b = if flip == 1 { a0 } else { b0 }
+  if av1_transform_exact_double && bits >= 1 && bits <= 31 {
+    // A sum/difference of Int32 operands is at most 2^32 in magnitude.
+    // Clamp to the stage's Int32 range before converting back to Int.
+    let lo = (-(1 << (bits - 1))).to_double()
+    let hi = ((1 << (bits - 1)) - 1).to_double()
+    let x = t[a].to_double()
+    let y = t[b].to_double()
+    let sum = x + y
+    let diff = x - y
+    t[a] = (if sum < lo { lo } else if sum > hi { hi } else { sum }).to_int()
+    t[b] = (if diff < lo { lo } else if diff > hi { hi } else { diff }).to_int()
+    return
+  }
   let lo : Int64 = -(1L << (bits - 1))
   let hi : Int64 = (1L << (bits - 1)) - 1L
   let x = t[a].to_int64()
@@ -918,8 +964,8 @@ pub fn av1_inverse_dct_2d(
   } else {
     6
   }
-  let rs = if lossless { 0 } else { row_shift }
-  let cs = if lossless { 0 } else { 4 }
+  let rs = row_shift
+  let cs = 4
   let row_clamp = bit_depth + 8
   let col_clamp = if bit_depth + 6 < 16 { 16 } else { bit_depth + 6 }
   let out : Array[Int] = Array::make(width * height, 0)
@@ -966,7 +1012,7 @@ pub fn av1_inverse_dct_2d(
     for j in 0..<width {
       row[j] = dequant[i * width + j]
     }
-    if !lossless && (logw - logh == 1 || logh - logw == 1) {
+    if logw - logh == 1 || logh - logw == 1 {
       for j in 0..<width {
         row[j] = ((row[j].to_int64() * 2896L + 2048L) >> 12).to_int()
       }

@@ -50,7 +50,17 @@ pub fn av1_decode_alpha_tile(Int, Int, Array[Byte], Int, use_128x128_superblock?
 
 pub fn av1_decode_dc_tile(Int, Int, Array[Byte], Int, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int, use_128x128_superblock? : Bool, bit_depth? : Int, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : Av1CdefConfig?, loop_filter? : Av1LoopFilterConfig?, restoration? : Av1RestorationConfig?, upscaled_width? : Int, superres_denom? : Int) -> Image?
 
+pub fn av1_decode_native(Array[Byte]) -> Av1NativeFrame?
+
+pub fn av1_decode_native_result(Array[Byte], limits? : DecodeLimits) -> Result[Av1NativeFrame, DecodeError]
+
 pub fn av1_decode_partition_leaves(Array[Byte], Int, Int, disable_cdf_update? : Bool, use_128x128_superblock? : Bool) -> Array[Av1SbBlock]?
+
+pub fn av1_decode_result(Array[Byte], limits? : DecodeLimits) -> Result[Image, DecodeError]
+
+pub fn av1_decode_rgba16(Array[Byte]) -> Image16?
+
+pub fn av1_decode_rgba16_result(Array[Byte], limits? : DecodeLimits) -> Result[Image16, DecodeError]
 
 pub fn av1_decode_show_existing_frame(Array[Byte], Av1ReferenceState, Av1ShowExistingFrameConfig) -> Image?
 
@@ -190,6 +200,10 @@ pub fn av1_video_decode_frame(Av1VideoDecoder, Array[Byte], allow_monochrome? : 
 
 pub fn av1_video_decode_temporal_unit(Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool) -> Array[Image]?
 
+pub fn av1_video_decode_temporal_unit_native(Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool) -> Array[Av1NativeFrame]?
+
+pub fn av1_video_decode_temporal_unit_native_result(Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool, limits? : DecodeLimits) -> Result[Array[Av1NativeFrame], DecodeError]
+
 pub fn av1_video_decoder() -> Av1VideoDecoder
 
 pub fn av1_warp_from_global_motion(Array[Int]) -> Av1WarpModel?
@@ -222,6 +236,8 @@ pub fn avif_animation_sample_payloads(Array[Byte]) -> (AvifAnimationDescriptor, 
 
 pub fn avif_container_parse(Array[Byte]) -> AvifContainer?
 
+pub fn avif_container_parse_result(Array[Byte], limits? : DecodeLimits) -> Result[AvifContainer, DecodeError]
+
 pub fn avif_decode(Array[Byte]) -> Image?
 
 pub fn avif_decode_alpha(Array[Byte]) -> Array[Byte]?
@@ -232,6 +248,8 @@ pub fn avif_decode_animation_frame(Array[Byte], Int) -> Image?
 
 pub fn avif_decode_animation_frames(AvifAnimationDescriptor, Array[Array[Byte]]) -> AvifAnimationPixels?
 
+pub fn avif_decode_animation_native(Array[Byte]) -> AvifNativeAnimation?
+
 pub fn avif_decode_animation_samples(Int, Array[Int], Array[Int], Array[Array[Byte]]) -> AvifAnimationPixels?
 
 pub fn avif_decode_grid(Array[Byte], AvifGridDescriptor) -> Image?
@@ -240,9 +258,21 @@ pub fn avif_decode_grid_auto(Array[Byte]) -> Image?
 
 pub fn avif_decode_grid_tiles(Int, Int, Int, Int, Array[Array[Byte]]) -> Image?
 
+pub fn avif_decode_native(Array[Byte]) -> AvifNativeImage?
+
+pub fn avif_decode_native_result(Array[Byte], limits? : DecodeLimits) -> Result[AvifNativeImage, DecodeError]
+
 pub fn avif_decode_rgba(Array[Byte]) -> Image?
 
+pub fn avif_decode_rgba16(Array[Byte]) -> Image16?
+
+pub fn avif_decode_rgba16_result(Array[Byte], limits? : DecodeLimits) -> Result[Image16, DecodeError]
+
+pub fn avif_decode_rgba_result(Array[Byte], limits? : DecodeLimits) -> Result[Image, DecodeError]
+
 pub fn avif_grid_descriptor(Array[Byte]) -> AvifGridDescriptor?
+
+pub fn avif_metadata(Array[Byte], limits? : DecodeLimits) -> Result[AvifMetadata, DecodeError]
 
 pub fn avif_reconstruct_grid(Int, Int, Int, Int, Array[Image]) -> Image?
 
@@ -563,6 +593,28 @@ pub(all) struct Av1MvStack {
   global_cols : Array[Int]
 }
 
+pub struct Av1NativeFrame {
+  width : Int
+  height : Int
+  bit_depth : Int
+  subsampling_x : Bool
+  subsampling_y : Bool
+  full_range : Bool
+  matrix_coefficients : Int
+  color_primaries : Int
+  transfer_characteristics : Int
+  planes : FixedArray[Av1PixelPlane]
+}
+pub fn Av1NativeFrame::copy_plane_into(Self, Int, FixedArray[Byte], Int, PixelPacking, offset? : Int) -> Result[Unit, DecodeError]
+pub fn Av1NativeFrame::to_rgba16(Self) -> Image16?
+pub fn Av1NativeFrame::to_rgba16_into(Self, FixedArray[UInt16], Int, offset? : Int) -> Result[Unit, DecodeError]
+
+pub struct Av1PixelPlane {
+  width : Int
+  height : Int
+  data : FixedArray[Int]
+}
+
 pub(all) struct Av1QuantDeltas {
   y_dc : Int
   u_dc : Int
@@ -817,6 +869,27 @@ pub(all) struct Av1Stage1Input {
   quant_deltas : Av1QuantDeltas
 }
 
+pub struct Av1StreamBatch {
+  frames : Array[Av1NativeFrame]
+  status : Av1StreamStatus
+}
+
+pub struct Av1StreamDecoder {
+  // private fields
+}
+pub fn Av1StreamDecoder::end_temporal_unit(Self) -> Result[Av1StreamBatch, DecodeError]
+pub fn Av1StreamDecoder::feed(Self, Array[Byte]) -> Result[Av1StreamBatch, DecodeError]
+pub fn Av1StreamDecoder::finish(Self) -> Result[Av1StreamBatch, DecodeError]
+pub fn Av1StreamDecoder::new(limits? : DecodeLimits, allow_monochrome? : Bool) -> Result[Self, DecodeError]
+pub fn Av1StreamDecoder::pending_bytes(Self) -> Int
+pub fn Av1StreamDecoder::reset(Self) -> Unit
+
+pub(all) enum Av1StreamStatus {
+  NeedMoreInput
+  FramesReady
+  Finished
+} derive(Eq, @debug.Debug)
+
 pub(all) struct Av1TilePayload {
   index : Int
   row : Int
@@ -906,6 +979,20 @@ pub struct AvifAlphaItemDescriptor {
   extents : Array[AvifAlphaExtent]
 }
 
+pub struct AvifAnimationDecoder {
+  // private fields
+}
+pub fn AvifAnimationDecoder::frame_count(Self) -> Int
+pub fn AvifAnimationDecoder::frame_timing(Self, Int) -> Result[AvifAnimationFrame, DecodeError]
+pub fn AvifAnimationDecoder::is_keyframe(Self, Int) -> Result[Bool, DecodeError]
+pub fn AvifAnimationDecoder::metadata(Self) -> AvifMetadata
+pub fn AvifAnimationDecoder::nearest_keyframe(Self, Int) -> Result[Int?, DecodeError]
+pub fn AvifAnimationDecoder::new(Array[Byte], limits? : DecodeLimits) -> Result[Self, DecodeError]
+pub fn AvifAnimationDecoder::next_frame(Self) -> Result[AvifNativeAnimationFrame?, DecodeError]
+pub fn AvifAnimationDecoder::position(Self) -> Int
+pub fn AvifAnimationDecoder::reset(Self) -> Unit
+pub fn AvifAnimationDecoder::seek_frame(Self, Int) -> Result[AvifNativeAnimationFrame, DecodeError]
+
 pub struct AvifAnimationDescriptor {
   timescale : Int
   frames : Array[AvifAnimationFrame]
@@ -933,6 +1020,17 @@ pub struct AvifAnimationPixels {
   frames : Array[AvifAnimationPixelFrame]
 }
 
+pub(all) struct AvifCleanAperture {
+  width_n : Int64
+  width_d : Int64
+  height_n : Int64
+  height_d : Int64
+  horizontal_n : Int64
+  horizontal_d : Int64
+  vertical_n : Int64
+  vertical_d : Int64
+} derive(Eq, @debug.Debug)
+
 pub struct AvifContainer {
   width : Int
   height : Int
@@ -951,6 +1049,12 @@ pub struct AvifContainer {
   nclx_matrix : Int?
   nclx_full_range : Bool?
 }
+
+pub(all) enum AvifDisplayTransform {
+  Crop(AvifCleanAperture)
+  Rotate(Int)
+  Mirror(Int)
+} derive(Eq, @debug.Debug)
 
 pub struct AvifGridDescriptor {
   item_id : Int
@@ -972,6 +1076,92 @@ pub struct AvifGridTile {
   extents : Array[AvifGridExtent]
 }
 
+pub struct AvifMetadata {
+  primary_item_id : Int?
+  track_id : Int?
+  icc : FixedArray[Byte]?
+  exif : FixedArray[Byte]?
+  exif_tiff_offset : Int?
+  xmp : FixedArray[Byte]?
+  pixel_aspect_ratio : (Int64, Int64)?
+  transforms : FixedArray[AvifDisplayTransform]
+}
+pub fn AvifMetadata::apply_rgba16(Self, Image16) -> Result[Image16, DecodeError]
+pub fn AvifMetadata::apply_rgba8(Self, Image) -> Result[Image, DecodeError]
+pub fn AvifMetadata::display_size(Self, Int, Int) -> Result[(Int, Int), DecodeError]
+
+pub struct AvifNativeAnimation {
+  timescale : Int
+  frames : FixedArray[AvifNativeAnimationFrame]
+}
+pub fn AvifNativeAnimation::frame_at(Self, Int) -> AvifNativeAnimationFrame?
+
+pub struct AvifNativeAnimationFrame {
+  index : Int
+  timestamp : Int
+  duration : Int
+  timescale : Int
+  image : AvifNativeImage
+}
+
+pub struct AvifNativeImage {
+  color : Av1NativeFrame
+  alpha : Av1NativeFrame?
+  premultiplied : Bool
+}
+pub fn AvifNativeImage::to_rgba16(Self) -> Image16?
+pub fn AvifNativeImage::to_rgba16_into(Self, FixedArray[UInt16], Int, offset? : Int) -> Result[Unit, DecodeError]
+
+pub struct DecodeError {
+  kind : DecodeErrorKind
+  byte_offset : Int64?
+  context : String
+  message : String
+} derive(Eq, @debug.Debug)
+
+pub(all) enum DecodeErrorKind {
+  InvalidData
+  TruncatedInput
+  Unsupported
+  MissingSequence
+  MissingReference
+  LimitExceeded
+  InvalidState
+  InvalidBuffer
+  NoPresentation
+} derive(Eq, @debug.Debug)
+
+pub(all) struct DecodeLimits {
+  max_input_bytes : Int
+  max_frame_pixels : Int
+  max_total_pixels : Int
+  max_frames : Int
+}
+pub fn DecodeLimits::av1_decode(Self, Array[Byte]) -> Image?
+pub fn DecodeLimits::av1_decode_alpha(Self, Array[Byte]) -> Array[Byte]?
+pub fn DecodeLimits::av1_decode_native(Self, Array[Byte]) -> Av1NativeFrame?
+pub fn DecodeLimits::av1_decode_rgba16(Self, Array[Byte]) -> Image16?
+pub fn DecodeLimits::av1_video_decode_frame(Self, Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool) -> Image?
+pub fn DecodeLimits::av1_video_decode_temporal_unit(Self, Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool) -> Array[Image]?
+pub fn DecodeLimits::av1_video_decode_temporal_unit_native(Self, Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool) -> Array[Av1NativeFrame]?
+pub fn DecodeLimits::avif_alpha_item_descriptor(Self, Array[Byte]) -> AvifAlphaItemDescriptor?
+pub fn DecodeLimits::avif_alpha_item_payload(Self, Array[Byte]) -> Array[Byte]?
+pub fn DecodeLimits::avif_container_parse(Self, Array[Byte]) -> AvifContainer?
+pub fn DecodeLimits::avif_decode(Self, Array[Byte]) -> Image?
+pub fn DecodeLimits::avif_decode_alpha(Self, Array[Byte]) -> Array[Byte]?
+pub fn DecodeLimits::avif_decode_animation(Self, Array[Byte]) -> AvifAnimationPixels?
+pub fn DecodeLimits::avif_decode_animation_frame(Self, Array[Byte], Int) -> Image?
+pub fn DecodeLimits::avif_decode_animation_frames(Self, AvifAnimationDescriptor, Array[Array[Byte]]) -> AvifAnimationPixels?
+pub fn DecodeLimits::avif_decode_animation_native(Self, Array[Byte]) -> AvifNativeAnimation?
+pub fn DecodeLimits::avif_decode_animation_samples(Self, Int, Array[Int], Array[Int], Array[Array[Byte]]) -> AvifAnimationPixels?
+pub fn DecodeLimits::avif_decode_grid(Self, Array[Byte], AvifGridDescriptor) -> Image?
+pub fn DecodeLimits::avif_decode_grid_auto(Self, Array[Byte]) -> Image?
+pub fn DecodeLimits::avif_decode_grid_tiles(Self, Int, Int, Int, Int, Array[Array[Byte]]) -> Image?
+pub fn DecodeLimits::avif_decode_native(Self, Array[Byte]) -> AvifNativeImage?
+pub fn DecodeLimits::avif_decode_rgba(Self, Array[Byte]) -> Image?
+pub fn DecodeLimits::avif_decode_rgba16(Self, Array[Byte]) -> Image16?
+pub fn DecodeLimits::default() -> Self
+
 pub(all) struct Image {
   width : Int
   height : Int
@@ -983,6 +1173,21 @@ pub fn Image::get_pixel(Self, Int, Int) -> (Byte, Byte, Byte, Byte)
 pub fn Image::new(Int, Int) -> Self
 pub fn Image::pixel_count(Self) -> Int
 pub fn Image::set_pixel(Self, Int, Int, Byte, Byte, Byte, Byte) -> Unit
+
+pub struct Image16 {
+  width : Int
+  height : Int
+  data : FixedArray[UInt16]
+}
+pub fn Image16::copy_bytes_into(Self, FixedArray[Byte], Int, big_endian? : Bool, offset? : Int) -> Result[Unit, DecodeError]
+
+pub(all) enum PixelPacking {
+  U8
+  U16LE
+  U16BE
+  High16LE
+  High16BE
+} derive(Eq, @debug.Debug)
 
 // Type aliases
 

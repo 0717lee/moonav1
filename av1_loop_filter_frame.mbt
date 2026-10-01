@@ -38,6 +38,46 @@ fn av1_loop_filter_block_state(
 }
 
 ///|
+/// AV1 §7.14.2: a skipped inter prediction only filters its coding-block
+/// boundaries, even when maximum TX dimensions subdivide that prediction.
+/// The current (right/bottom) block alone determines skip and block extent.
+fn av1_loop_filter_skip_internal(
+  field : Av1MotionField?,
+  plane : Int,
+  direction : Int,
+  x : Int,
+  y : Int,
+  sub_x : Int,
+  sub_y : Int,
+) -> Bool {
+  match field {
+    None => false
+    Some(motion) => {
+      let (row, col) = av1_loop_filter_luma_mi(plane, x, y, sub_x, sub_y)
+      if row >= motion.rows || col >= motion.cols {
+        return false
+      }
+      let unit = row * motion.cols + col
+      if !motion.is_inter[unit] || motion.skips[unit] == 0 {
+        return false
+      }
+      let (width, height) = av1_plane_residual_size(
+        motion.width4[unit] * 4,
+        motion.height4[unit] * 4,
+        plane,
+        sub_x,
+        sub_y,
+      )
+      if direction == 0 {
+        x % width != 0
+      } else {
+        y % height != 0
+      }
+    }
+  }
+}
+
+///|
 /// Filter one four-sample edge segment. The scalar kernel receives only the
 /// selected filter's footprint: a four-tap edge must not inspect p2/q2.
 fn av1_loop_filter_frame_segment(
@@ -91,8 +131,9 @@ fn av1_loop_filter_frame_segment(
 ///
 /// The pinned libaom set_lpf_parameters uses the current transform's normal
 /// dimension mask to locate a TU edge, then the smaller normal dimension of
-/// its two transforms to choose Y 4/8/14 or UV 4/6. Intra skip flags never
-/// suppress these edges. Tile boundaries participate like other TU edges.
+/// its two transforms to choose Y 4/8/14 or UV 4/6. Skipped inter blocks omit
+/// internal TX edges; intra skip flags never suppress edges. Tile boundaries
+/// participate like other TU edges.
 ///
 /// `field` is the frame's motion field: an inter frame selects each edge's
 /// strength from the reference and mode of the block beside it, so passing None
@@ -214,7 +255,10 @@ fn av1_loop_filter_frame(
           } else {
             current >> 8
           }
-          if (normal & (dimension - 1)) == 0 {
+          if (normal & (dimension - 1)) == 0 &&
+            !av1_loop_filter_skip_internal(
+              field, plane, direction, x, y, sub_x, sub_y,
+            ) {
             let mut edge_level = match
               av1_loop_filter_block_level(
                 config, field, block_map, plane, direction, x, y, sub_x, sub_y,

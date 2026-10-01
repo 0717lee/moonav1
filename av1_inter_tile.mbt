@@ -563,12 +563,30 @@ fn av1_inter_predict(
       sub_x,
       sub_y,
     )
-    let pred_w = block.block_width >> sub_x
-    let pred_h = block.block_height >> sub_y
+    let mut pred_w = block.block_width >> sub_x
+    let mut pred_h = block.block_height >> sub_y
     let base_x = (block.mi_col >> sub_x) * 4
     let base_y = (block.mi_row >> sub_y) * 4
     let cand_row = block.mi_row >> sub_y << sub_y
     let cand_col = block.mi_col >> sub_x << sub_x
+    // Sub-8 chroma uses neighbouring vectors only when every participating
+    // luma block is inter. An intra neighbour makes the whole shared footprint
+    // use the owner's vector/filter (dav1d recon_tmpl.c sub8x8 derivation).
+    let mut own_chroma = false
+    if plane > 0 && (pred_w < 4 || pred_h < 4) {
+      for row in 0..<(residual_h / pred_h) {
+        for col in 0..<(residual_w / pred_w) {
+          let unit = (cand_row + row) * field.cols + cand_col + col
+          if field.refs[unit * 2] <= av1_intra_frame {
+            own_chroma = true
+          }
+        }
+      }
+      if own_chroma {
+        pred_w = residual_w
+        pred_h = residual_h
+      }
+    }
     let target = state.planes[plane]
     // A LOCALWARP block with a representable model skips the whole
     // motion-compensation path: each 8x8 chunk of the plane is filtered
@@ -662,14 +680,18 @@ fn av1_inter_predict(
       let mut c = 0
       let mut x = 0
       while x < residual_w / 4 * 4 {
-        let unit = ((cand_row + r) * field.cols + cand_col + c) * 2
+        let unit = if own_chroma {
+          (block.mi_row * field.cols + block.mi_col) * 2
+        } else {
+          ((cand_row + r) * field.cols + cand_col + c) * 2
+        }
         if unit + 1 >= field.refs.length() {
           return false
         }
         let name = field.refs[unit]
         if name <= av1_intra_frame {
-          // An intra neighbour cannot be interpolated from; only the inter-intra
-          // blend reaches here, and the frame gate refuses that tool.
+          // The current owner is always inter; an absent reference here is
+          // invalid state rather than a legal mixed shared-chroma group.
           return false
         }
         let reference = match av1_inter_reference(info, name) {
@@ -690,12 +712,8 @@ fn av1_inter_predict(
           height: pred_h,
           mv_row: field.mv_rows[unit],
           mv_col: field.mv_cols[unit],
-          filter_vertical: field.interp_v[(cand_row + r) * field.cols +
-          cand_col +
-          c],
-          filter_horizontal: field.interp_h[(cand_row + r) * field.cols +
-          cand_col +
-          c],
+          filter_vertical: field.interp_v[unit / 2],
+          filter_horizontal: field.interp_h[unit / 2],
           compound: false,
         }
         let prediction = if block.interintra != 0 {
@@ -1233,9 +1251,10 @@ fn av1_inter_residual(
 ) -> Bool {
   let has_chroma = av1_intra_has_chroma(state, tile_block)
   let plane_count = if has_chroma { 3 } else { 1 }
-  // Motion compensation, not intra prediction, fills an inter block, so the
-  // colour-from-luma state is explicitly off for the whole block.
-  av1_cfl_begin_block(state.cfl, tile_block, false)
+  // Sub-eight-pixel inter blocks can share chroma with a later intra CfL
+  // owner. Preserve their reconstructed luma, including skipped residuals,
+  // so that owner sees the whole subsampled footprint rather than stale data.
+  av1_cfl_begin_block(state.cfl, tile_block, !state.monochrome && !has_chroma)
   let chunks_x = if block.block_width > 64 { block.block_width / 64 } else { 1 }
   let chunks_y = if block.block_height > 64 {
     block.block_height / 64
@@ -1295,8 +1314,19 @@ fn av1_inter_residual(
             state,
             block,
             plane,
-            origin_x >> sub_x,
-            origin_y >> sub_y,
+            // A sub-eight-pixel owner codes the complete shared chroma TX,
+            // rooted at the enclosing eight-pixel luma group, just like the
+            // motion-compensated prediction and intra residual paths.
+            if sub_x == 1 {
+              origin_x / 8 * 4
+            } else {
+              origin_x
+            },
+            if sub_y == 1 {
+              origin_y / 8 * 4
+            } else {
+              origin_y
+            },
             residual_w,
             residual_h,
             tx_width,

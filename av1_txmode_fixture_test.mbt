@@ -13,6 +13,8 @@ fn hex_bytes(hex : String) -> Array[Byte] {
     fn nibble(c : Char) -> Int {
       if c >= '0' && c <= '9' {
         c.to_int() - '0'.to_int()
+      } else if c >= 'A' && c <= 'F' {
+        c.to_int() - 'A'.to_int() + 10
       } else {
         c.to_int() - 'a'.to_int() + 10
       }
@@ -55,31 +57,22 @@ test "crafted tx-mode depth1_64 decodes" {
 
 ///|
 test "crafted tx-mode depth2_16x16 transform fixture has valid sequence" {
-  // The full tx_type/AC pixel assertion remains pending until the generic
-  // multi-leaf entropy path is complete. Keep the fixture in CI by checking
-  // its independently parseable sequence header instead of asserting a
-  // fabricated pixel reference.
+  // Keep this multi-leaf fixture in CI with a stream-level sequence-header
+  // check; this test does not claim a fabricated pixel reference.
   let stream = hex_bytes("12000A0618157FFC0008320B178000002012294FEF2DC0")
   assert_eq(stream[0], b'\x12')
   assert_true(stream.length() > 20)
-  let sequence : Array[Byte] = [
-    b'\x0A', b'\x06', b'\x18', b'\x15', b'\x7F', b'\xFC', b'\x00', b'\x08',
-  ]
-  let info = av1_sequence_info(sequence).unwrap()
+  let info = av1_sequence_info(stream).unwrap()
   assert_eq((info.width, info.height, info.bit_depth), (64, 64, 8))
 }
 
 ///|
 test "crafted tx-mode 32x32 one-dimensional scan fixture has valid sequence" {
-  // Pixel-level validation is intentionally deferred; this ensures the
-  // 32x32 stream remains present and its sequence header stays well formed.
+  // Keep the stream present and validate its sequence header independently.
   let stream = hex_bytes("12000A0618113FF00020320C17800000200A03AE0565217C")
   assert_eq(stream[0], b'\x12')
   assert_true(stream.length() > 20)
-  let sequence : Array[Byte] = [
-    b'\x0A', b'\x06', b'\x18', b'\x11', b'\x3F', b'\xF0', b'\x00', b'\x20',
-  ]
-  let info = av1_sequence_info(sequence).unwrap()
+  let info = av1_sequence_info(stream).unwrap()
   assert_eq((info.width, info.height, info.bit_depth), (32, 32, 8))
 }
 

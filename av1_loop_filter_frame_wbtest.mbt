@@ -302,3 +302,188 @@ test "loop filter frame validates all map geometry before changing pixels" {
     assert_eq(pixels, before)
   }
 }
+
+///|
+/// A skipped 128x128 inter prediction has no residual at its internal maximum
+/// TX boundaries (64 luma, 32 chroma). These sample steps must remain intact.
+test "loop filter preserves internal edges of skipped inter blocks" {
+  for depth in [8, 10, 12] {
+    for sampling in [(1, 1), (1, 0), (0, 0)] {
+      for direction in 0..<2 {
+        let (sx, sy) = sampling
+        let field = av1_motion_field(32, 32)
+        av1_motion_field_store(
+          field,
+          0,
+          0,
+          32,
+          32,
+          av1_mode_nearest_mv,
+          [1, -1],
+          [0, 0],
+          [0, 0],
+          skip=1,
+        )
+        let planes = Array::makei(3, plane => {
+          let width = 128 >> (if plane == 0 { 0 } else { sx })
+          let height = 128 >> (if plane == 0 { 0 } else { sy })
+          let edge = if plane == 0 { 64 } else { 32 }
+          Array::makei(width * height, i => {
+            let normal = if direction == 0 { i % width } else { i / width }
+            (100 + (if normal >= edge { 8 } else { 0 })) << (depth - 8)
+          })
+        })
+        let before = planes.map(p => p.copy())
+        let maps = Array::makei(3, plane => {
+          let width = 128 >> (if plane == 0 { 0 } else { sx })
+          let height = 128 >> (if plane == 0 { 0 } else { sy })
+          let tx = if plane == 0 { 64 } else { 32 }
+          Array::make(width / 4 * (height / 4), tx | (tx << 8))
+        })
+        assert_true(
+          av1_loop_filter_frame(
+            av1_loop_filter_frame_test_config([32, 32, 32, 32]),
+            128,
+            128,
+            128,
+            128,
+            depth,
+            planes,
+            maps,
+            sub_x=sx,
+            sub_y=sy,
+            field=Some(field),
+          ),
+        )
+        assert_eq(planes, before)
+      }
+    }
+  }
+}
+
+///|
+/// Equal motion/reference/skip state on two adjacent 64x64 predictions must
+/// not erase their coding boundary. Only internal chroma TX edges are skipped.
+test "loop filter retains boundaries between identical skipped inter blocks" {
+  for direction in 0..<2 {
+    let width = if direction == 0 { 128 } else { 64 }
+    let height = if direction == 0 { 64 } else { 128 }
+    let field = av1_motion_field(width / 4, height / 4)
+    for block in 0..<2 {
+      av1_motion_field_store(
+        field,
+        if direction == 0 {
+          0
+        } else {
+          block * 16
+        },
+        if direction == 0 {
+          block * 16
+        } else {
+          0
+        },
+        16,
+        16,
+        av1_mode_nearest_mv,
+        [1, -1],
+        [0, 0],
+        [0, 0],
+        skip=1,
+      )
+    }
+    let uv = Array::makei(width * height, i => {
+      let normal = if direction == 0 { i % width } else { i / width }
+      100 + normal / 32 * 4
+    })
+    let before = uv.copy()
+    let planes = [Array::make(width * height, 128), uv, uv.copy()]
+    assert_true(
+      av1_loop_filter_frame(
+        av1_loop_filter_frame_test_config([32, 32, 32, 32]),
+        width,
+        height,
+        width,
+        height,
+        8,
+        planes,
+        [
+          Array::make(width * height / 16, 64 | (64 << 8)),
+          Array::make(width * height / 16, 32 | (32 << 8)),
+          Array::make(width * height / 16, 32 | (32 << 8)),
+        ],
+        sub_x=0,
+        sub_y=0,
+        field=Some(field),
+      ),
+    )
+    for i in 0..<uv.length() {
+      let normal = if direction == 0 { i % width } else { i / width }
+      if normal < 61 || normal > 66 {
+        assert_eq(uv[i], before[i])
+      }
+      if normal == 63 {
+        assert_true(uv[i] > before[i])
+      }
+      if normal == 64 {
+        assert_true(uv[i] < before[i])
+      }
+    }
+  }
+}
+
+///|
+test "loop filter keeps internal edges for intra skip and inter residuals" {
+  for intra in [true, false] {
+    for direction in 0..<2 {
+      let field = av1_motion_field(16, 16)
+      av1_motion_field_store(
+        field,
+        0,
+        0,
+        16,
+        16,
+        if intra {
+          AV1_INTRA_DC
+        } else {
+          av1_mode_nearest_mv
+        },
+        [if intra { 0 } else { 1 }, -1],
+        [0, 0],
+        [0, 0],
+        skip=if intra { 1 } else { 0 },
+      )
+      let uv = Array::makei(64 * 64, i => {
+        let normal = if direction == 0 { i % 64 } else { i / 64 }
+        if normal < 32 {
+          100
+        } else {
+          108
+        }
+      })
+      let before = uv.copy()
+      assert_true(
+        av1_loop_filter_frame(
+          av1_loop_filter_frame_test_config([32, 32, 32, 32]),
+          64,
+          64,
+          64,
+          64,
+          8,
+          [Array::make(64 * 64, 128), uv, uv.copy()],
+          [
+            Array::make(256, 64 | (64 << 8)),
+            Array::make(256, 32 | (32 << 8)),
+            Array::make(256, 32 | (32 << 8)),
+          ],
+          sub_x=0,
+          sub_y=0,
+          field=Some(field),
+        ),
+      )
+      let left = if direction == 0 { 31 } else { 31 * 64 }
+      let right = if direction == 0 { 32 } else { 32 * 64 }
+      assert_true(uv[left] > before[left])
+      assert_true(uv[right] < before[right])
+    }
+  }
+}

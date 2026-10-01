@@ -3,7 +3,7 @@
 /// cannot be labelled RGB. Decode the declared transfer, convert linear XYZ
 /// to BT.709 D65 RGB, and encode sRGB. Values retain the source normalization;
 /// there is no chromatic adaptation or HDR tone mapping. The caller performs
-/// final gamut clipping to the Image type's 8-bit channels.
+/// final gamut clipping and rounding to the requested output precision.
 fn av1_color_xyz_to_srgb(
   x : Double,
   y : Double,

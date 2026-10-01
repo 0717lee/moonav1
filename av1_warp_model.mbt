@@ -719,10 +719,6 @@ fn av1_warp_derive(
   )
   let pts : Array[Int] = Array::make(8 * 4, 0)
   let mut count = 0
-  let widths : Array[Int] = Array::make(8, 0)
-  let heights : Array[Int] = Array::make(8, 0)
-  let rows : Array[Int] = Array::make(8, 0)
-  let cols : Array[Int] = Array::make(8, 0)
   // The order matches libdav1d's `add_sample(dx, dy, sx, sy, rp)`: the column
   // offset and step first, then the row ones, then the neighbour's 4x4 unit.
   let add = fn(
@@ -751,10 +747,6 @@ fn av1_warp_derive(
     pts[count * 4 + 1] = in_y
     pts[count * 4 + 2] = in_x + field.mv_cols[unit * 2]
     pts[count * 4 + 3] = in_y + field.mv_rows[unit * 2]
-    rows[count] = row
-    cols[count] = col
-    widths[count] = bw
-    heights[count] = bh
     count = count + 1
   }
   if (top_mask & 0xFFFFFFFFL) == 1L && left_mask >> 32 == 0L {

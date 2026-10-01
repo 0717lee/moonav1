@@ -96,17 +96,15 @@ test "read_sb decodes all-None units on a zeroed tile stream" {
   )
   let state = av1_restoration_tile_state_new(3)
   let decoder = av1_msac_new(Array::make(32, b'\x00'), false)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state.units.length(), 1)
   assert_eq(state.units[0].plane, 0)
@@ -128,17 +126,15 @@ test "read_sb adapts the mode CDF after a None symbol" {
   )
   let state = av1_restoration_tile_state_new(3)
   let decoder = av1_msac_new(Array::make(32, b'\x00'), true)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   // The decoded None symbol pulls the first entry towards 32768 and
   // bumps the adaptation counter.
@@ -163,17 +159,15 @@ test "read_sb decodes Wiener taps with per-unit reference continuity" {
   )
   let state = av1_restoration_tile_state_new(3)
   let decoder = av1_msac_new(Array::make(64, b'\xFF'), false)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state.units.length(), 6)
   let y_tap0 : Array[Int] = []
@@ -234,17 +228,15 @@ test "read_sb decodes SGR inferred projections on all-ones" {
   )
   let state = av1_restoration_tile_state_new(3)
   let decoder = av1_msac_new(Array::make(32, b'\xFF'), false)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state.units.length(), 3)
   for record in state.units {
@@ -278,17 +270,15 @@ test "read_sb decodes SGR both-radius projections with reference updates" {
     [b'\xAD', b'\x93', b'\x88', b'\x36', b'\x6B', b'\x9F', b'\x40', b'\xD4'],
     false,
   )
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state.units.length(), 2)
   match state.units[0].unit {
@@ -324,17 +314,15 @@ test "read_sb decodes SGR inferred projection on the r0=0 branch" {
     [b'\xE7', b'\x13', b'\x1A', b'\xFC', b'\xC8', b'\xE3', b'\x48', b'\xC7'],
     false,
   )
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state.units.length(), 1)
   match state.units[0].unit {
@@ -359,17 +347,15 @@ test "read_sb resolves switchable units to the last row symbol" {
   )
   let state = av1_restoration_tile_state_new(3)
   let decoder = av1_msac_new(Array::make(32, b'\xFF'), false)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state.units.length(), 1)
   match state.units[0].unit {
@@ -392,17 +378,15 @@ test "read_sb skips frame-None planes without consuming symbols" {
   )
   let state = av1_restoration_tile_state_new(3)
   let decoder = av1_msac_new(Array::make(32, b'\xFF'), false)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state.units.length(), 1)
   assert_eq(state.units[0].plane, 0)
@@ -420,17 +404,15 @@ test "read_sb covers several units from one superblock" {
   )
   let state = av1_restoration_tile_state_new(3)
   let decoder = av1_msac_new(Array::make(64, b'\xFF'), false)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state.units.length(), 4)
   assert_eq(state.units[0].unit_row, 0)
@@ -456,17 +438,15 @@ test "read_sb maps superres corners with the rational denominator" {
   )
   let state_coded = av1_restoration_tile_state_new(3)
   let decoder_coded = av1_msac_new(Array::make(32, b'\x00'), false)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder_coded,
-      state_coded,
-      coded,
-      0,
-      0,
-      64,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder_coded,
+    state_coded,
+    coded,
+    0,
+    0,
+    64,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state_coded.units.length(), 1)
   assert_eq(state_coded.units[0].unit_col, 0)
@@ -480,17 +460,15 @@ test "read_sb maps superres corners with the rational denominator" {
   assert_eq(scaled.unit_cols[0], 2)
   let state_scaled = av1_restoration_tile_state_new(3)
   let decoder_scaled = av1_msac_new(Array::make(32, b'\x00'), false)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder_scaled,
-      state_scaled,
-      scaled,
-      0,
-      0,
-      64,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder_scaled,
+    state_scaled,
+    scaled,
+    0,
+    0,
+    64,
+    subsampling_x=true,
+    subsampling_y=true,
   )
   assert_eq(state_scaled.units.length(), 2)
   assert_eq(state_scaled.units[0].unit_col, 0)
@@ -510,16 +488,14 @@ test "read_sb completes coefficient reads from padding zero bits" {
   )
   let state = av1_restoration_tile_state_new(3)
   let decoder = av1_msac_new(Array::make(3, b'\xFF'), true)
-  assert_true(
-    av1_restoration_read_sb(
-      decoder,
-      state,
-      layout,
-      0,
-      0,
-      128,
-      subsampling_x=true,
-      subsampling_y=true,
-    ),
+  av1_restoration_read_sb(
+    decoder,
+    state,
+    layout,
+    0,
+    0,
+    128,
+    subsampling_x=true,
+    subsampling_y=true,
   )
 }

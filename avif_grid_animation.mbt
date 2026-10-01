@@ -64,10 +64,15 @@ pub struct AvifAnimationPixels {
 /// Decode an ordered set of AV1 animation samples using the native decoder.
 /// A malformed or unsupported sample rejects the whole sequence so callers do
 /// not accidentally present a partial animation.
-pub fn avif_decode_animation_frames(
+fn avif_decode_animation_frames_limited(
   descriptor : AvifAnimationDescriptor,
   samples : Array[Array[Byte]],
+  limits? : DecodeLimits? = None,
 ) -> AvifAnimationPixels? {
+  if !decode_samples_allowed(samples, limits) {
+    return None
+  }
+  let budget = decode_budget(limits)
   if descriptor.timescale <= 0 ||
     descriptor.frames.length() == 0 ||
     descriptor.frames.length() != samples.length() {
@@ -89,7 +94,12 @@ pub fn avif_decode_animation_frames(
       return None
     }
     let displayed = match
-      av1_video_decode_temporal_unit(video, samples[i], allow_monochrome=true) {
+      av1_video_decode_temporal_unit_planes(
+        video,
+        samples[i],
+        allow_monochrome=true,
+        budget~,
+      ) {
       Some(value) => value
       None => return None
     }
@@ -98,7 +108,10 @@ pub fn avif_decode_animation_frames(
     if displayed.length() != 1 {
       return None
     }
-    let image = displayed[0]
+    let image = match av1_frame_to_rgba(displayed[0]) {
+      Some(value) => value
+      None => return None
+    }
     frames.push({
       index: timing.index,
       timestamp: timing.timestamp,
@@ -121,11 +134,12 @@ pub fn avif_decode_animation_frames(
 ///|
 /// Convenience entrypoint for callers that already extracted sample timing
 /// tables. The arrays must match the sample order and length.
-pub fn avif_decode_animation_samples(
+fn avif_decode_animation_samples_limited(
   timescale : Int,
   timestamps : Array[Int],
   durations : Array[Int],
   samples : Array[Array[Byte]],
+  limits? : DecodeLimits? = None,
 ) -> AvifAnimationPixels? {
   if timescale <= 0 ||
     timestamps.length() != samples.length() ||
@@ -144,7 +158,7 @@ pub fn avif_decode_animation_samples(
       timescale,
     })
   }
-  avif_decode_animation_frames({ timescale, frames, }, samples)
+  avif_decode_animation_frames_limited({ timescale, frames, }, samples, limits~)
 }
 
 ///|
@@ -174,17 +188,67 @@ pub fn avif_animation_sample_payloads(
 
 ///|
 /// Parse and decode all animation samples from a self-contained BMFF buffer.
-pub fn avif_decode_animation(data : Array[Byte]) -> AvifAnimationPixels? {
+fn avif_decode_animation_limited(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+) -> AvifAnimationPixels? {
+  let decoded = match avif_decode_animation_planes(data, limits~) {
+    Some(value) => value
+    None => return None
+  }
+  let frames : Array[AvifAnimationPixelFrame] = []
+  for i in 0..<decoded.color.length() {
+    let converted = match decoded.alpha {
+      None => av1_frame_to_rgba(decoded.color[i])
+      Some(alpha) =>
+        av1_frame_with_alpha(decoded.color[i], alpha[i], decoded.premultiplied)
+    }
+    let image = match converted {
+      Some(value) => value
+      None => return None
+    }
+    let timing = decoded.descriptor.frames[i]
+    frames.push({
+      index: i,
+      timestamp: timing.timestamp,
+      duration: timing.duration,
+      timescale: timing.timescale,
+      image,
+    })
+  }
+  Some({ timescale: decoded.descriptor.timescale, frames, })
+}
+
+///|
+/// Fully validated, synchronized track samples before output conversion.
+priv struct AvifAnimationPlanes {
+  descriptor : AvifAnimationDescriptor
+  color : Array[Av1FramePlanes]
+  alpha : Array[Av1FramePlanes]?
+  premultiplied : Bool
+}
+
+///|
+/// The native and RGBA APIs share track selection, stateful reconstruction,
+/// exact time alignment, color metadata and alpha geometry validation.
+fn avif_decode_animation_planes(
+  data : Array[Byte],
+  limits? : DecodeLimits? = None,
+) -> AvifAnimationPlanes? {
+  if !decode_input_allowed(data.length(), limits) {
+    return None
+  }
+  let budget = decode_budget(limits)
   let (color, alpha) = match ga_animation_tracks(data) {
     Some(value) => value
     None => return None
   }
-  let color_planes = match ga_animation_decode_track(data, color) {
+  let color_planes = match ga_animation_decode_track(data, color, budget~) {
     Some(value) => value
     None => return None
   }
   let alpha_planes = match alpha {
-    None => []
+    None => None
     Some(track) => {
       if track.descriptor.frames.length() != color.descriptor.frames.length() {
         return None
@@ -200,13 +264,13 @@ pub fn avif_decode_animation(data : Array[Byte]) -> AvifAnimationPixels? {
           return None
         }
       }
-      match ga_animation_decode_track(data, track) {
-        Some(value) => value
+      match ga_animation_decode_track(data, track, budget~) {
+        Some(value) => Some(value)
         None => return None
       }
     }
   }
-  let frames : Array[AvifAnimationPixelFrame] = []
+  let frames : Array[Av1FramePlanes] = []
   for i in 0..<color_planes.length() {
     let native = color_planes[i]
     let colored = av1_frame_apply_nclx(
@@ -216,40 +280,38 @@ pub fn avif_decode_animation(data : Array[Byte]) -> AvifAnimationPixels? {
       color.nclx_matrix,
       color.nclx_full_range,
     )
-    let converted = match alpha {
-      None => av1_frame_to_rgba(colored)
-      Some(track) =>
-        av1_frame_with_alpha(
-          colored,
-          alpha_planes[i],
-          color.premultiplied_by.contains(track.id),
-        )
+    if alpha_planes is Some(planes) {
+      let auxiliary = planes[i]
+      if auxiliary.width != colored.width ||
+        auxiliary.height != colored.height ||
+        auxiliary.bit_depth != colored.bit_depth ||
+        auxiliary.planes.length() != 1 {
+        return None
+      }
     }
-    let image = match converted {
-      Some(value) => value
-      None => return None
-    }
-    let timing = color.descriptor.frames[i]
-    frames.push({
-      index: i,
-      timestamp: timing.timestamp,
-      duration: timing.duration,
-      timescale: timing.timescale,
-      image,
-    })
+    frames.push(colored)
   }
-  Some({ timescale: color.descriptor.timescale, frames, })
+  Some({
+    descriptor: color.descriptor,
+    color: frames,
+    alpha: alpha_planes,
+    premultiplied: match alpha {
+      Some(track) => color.premultiplied_by.contains(track.id)
+      None => false
+    },
+  })
 }
 
 ///|
 /// Decode an AVIF sequence and select the image visible at `timestamp` in
 /// track timescale units.  The full sequence is validated before selection;
 /// malformed timing or pixel samples therefore cannot produce a partial frame.
-pub fn avif_decode_animation_frame(
+fn avif_decode_animation_frame_limited(
   data : Array[Byte],
   timestamp : Int,
+  limits? : DecodeLimits? = None,
 ) -> Image? {
-  let animation = match avif_decode_animation(data) {
+  let animation = match avif_decode_animation_limited(data, limits~) {
     Some(value) => value
     None => return None
   }
@@ -325,7 +387,7 @@ test "animation decoder rejects noncontiguous timing tables" {
     ],
   }
   assert_true(
-    avif_decode_animation_frames(descriptor, [sample, sample]) is None,
+    avif_decode_animation_frames_limited(descriptor, [sample, sample]) is None,
   )
 }
 
@@ -412,6 +474,8 @@ priv struct GaItem {
 
 ///|
 priv struct GaAnimationTrack {
+  box_start : Int
+  properties : Array[GaBox]
   id : Int
   enabled : Bool
   descriptor : AvifAnimationDescriptor
@@ -511,6 +575,7 @@ fn ga_animation_track(
   let mut nclx_matrix : Int? = None
   let mut nclx_full_range : Bool? = None
   let config_obus : Array[Byte] = []
+  let mut stored_properties : Array[GaBox] = []
   let mut is_alpha = false
   match ga_find(bs, ga_idx(bs, stbl.start), 0x73747364) { // stsd
     None => if !legacy { raise GridAnimError::Invalid }
@@ -535,6 +600,7 @@ fn ga_animation_track(
       }
       let properties : Array[GaBox] = []
       ga_walk(data, entry.payload + 78, entry.end, -1, properties)
+      stored_properties = properties
       for property in properties {
         if property.typ == 0x636F6C72 &&
           ga_u32(data, property.payload, property.end) == 0x6E636C78 {
@@ -628,6 +694,8 @@ fn ga_animation_track(
   Some({
     id,
     enabled,
+    box_start: trak.start,
+    properties: stored_properties,
     descriptor,
     config_obus,
     config_depth,
@@ -649,6 +717,7 @@ fn ga_animation_track(
 /// If several enabled primary picture tracks exist, the lowest track ID wins.
 fn ga_animation_tracks(
   data : Array[Byte],
+  diagnostic? : DecodeDiagnostic? = None,
 ) -> (GaAnimationTrack, GaAnimationTrack?)? {
   try {
     let bs : Array[GaBox] = []
@@ -697,7 +766,28 @@ fn ga_animation_tracks(
     }
     Some((color, alpha))
   } catch {
-    _ => None
+    GridAnimError::Unsupported => {
+      decode_trace_error(
+        diagnostic,
+        decode_error(
+          Unsupported,
+          "animation.container",
+          "Unsupported animation container syntax",
+        ),
+      )
+      None
+    }
+    _ => {
+      decode_trace_error(
+        diagnostic,
+        decode_error(
+          InvalidData,
+          "animation.container",
+          "Invalid animation track, timing or sample table",
+        ),
+      )
+      None
+    }
   }
 }
 
@@ -716,65 +806,23 @@ pub fn avif_animation_descriptor(
 fn ga_animation_decode_track(
   data : Array[Byte],
   track : GaAnimationTrack,
+  budget? : DecodeBudget? = None,
 ) -> Array[Av1FramePlanes]? {
-  let decoder = av1_video_decoder()
+  let cursor = ga_track_decoder(track)
   let frames : Array[Av1FramePlanes] = []
   let mut expected_timestamp = 0
-  let mut sequence_payload : Array[Byte]? = None
   for i in 0..<track.descriptor.frames.length() {
     let timing = track.descriptor.frames[i]
-    if timing.index != i ||
-      timing.timescale != track.descriptor.timescale ||
-      timing.timestamp != expected_timestamp ||
-      timing.duration <= 0 {
+    if timing.timestamp != expected_timestamp ||
+      timing.duration <= 0 ||
+      timing.duration > 0x7FFFFFFF - expected_timestamp {
       return None
     }
-    let sample = if i == 0 { track.config_obus.copy() } else { [] }
-    for p in timing.offset..<(timing.offset + timing.length) {
-      sample.push(data[p])
-    }
-    for payload in av1_obu_payloads(sample, 1) {
-      match sequence_payload {
-        None => sequence_payload = Some(payload)
-        Some(previous) => if previous != payload { return None }
-      }
-    }
-    let displayed = match
-      av1_video_decode_temporal_unit_planes(
-        decoder,
-        sample,
-        allow_monochrome=true,
-      ) {
-      Some(value) => value
+    match ga_track_decode_one(cursor, data, i, budget) {
+      Some(frame) => frames.push(frame)
       None => return None
     }
-    if displayed.length() != 1 {
-      return None
-    }
-    let frame = displayed[0]
-    if track.config_width != 0 {
-      let sequence = match decoder.sequence {
-        Some(value) => value
-        None => return None
-      }
-      if sequence.width != track.config_width ||
-        sequence.height != track.config_height {
-        return None
-      }
-    }
-    if track.config_depth != 0 &&
-      (
-        frame.bit_depth != track.config_depth ||
-        (frame.planes.length() == 1) != track.config_monochrome
-      ) {
-      return None
-    }
-    frames.push(frame)
-    let next = expected_timestamp + timing.duration
-    if next < expected_timestamp {
-      return None
-    }
-    expected_timestamp = next
+    expected_timestamp += timing.duration
   }
   Some(frames)
 }
@@ -900,7 +948,11 @@ fn ga_walk(
   to : Int,
   parent : Int,
   out : Array[GaBox],
+  depth? : Int = 0,
 ) -> Unit raise GridAnimError {
+  if depth > AVIF_MAX_BOX_DEPTH {
+    raise GridAnimError::Invalid
+  }
   let mut p = from
   while p < to {
     if to - p < 8 {
@@ -928,21 +980,21 @@ fn ga_walk(
       if end - payload < 4 {
         raise GridAnimError::Invalid
       }
-      ga_walk(d, payload + 4, end, bi, out)
+      ga_walk(d, payload + 4, end, bi, out, depth=depth + 1)
     } else if typ == ga_iinf {
       let v = ga_u8(d, payload, end)
       let q = if v == 0 { payload + 6 } else { payload + 8 }
       if q > end {
         raise GridAnimError::Invalid
       }
-      ga_walk(d, q, end, bi, out)
+      ga_walk(d, q, end, bi, out, depth=depth + 1)
     } else if typ == ga_moov ||
       typ == ga_trak ||
       typ == ga_mdia ||
       typ == ga_minf ||
       typ == ga_stbl ||
       typ == 0x74726566 {
-      ga_walk(d, payload, end, bi, out)
+      ga_walk(d, payload, end, bi, out, depth=depth + 1)
     }
     p = end
   }

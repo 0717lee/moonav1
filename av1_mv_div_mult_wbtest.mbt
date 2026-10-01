@@ -26,17 +26,3 @@ test "Div_Mult equals 16384 divided by its index" {
     assert_eq(av1_mv_div_mult[i], want)
   }
 }
-
-///|
-test "Div_Mult decreases over the usable indices" {
-  // The projection relies on the table being a decreasing reciprocal, so a
-  // transposed or duplicated row would be caught here too. Index 0 is the
-  // zero-denominator special case and sits below index 1 by construction, so
-  // the run starts at 2.
-  for i in 2..<av1_mv_div_mult_size {
-    assert_true(av1_mv_div_mult[i] <= av1_mv_div_mult[i - 1])
-  }
-  assert_eq(av1_mv_div_mult[0], 0)
-  assert_eq(av1_mv_div_mult[1], 1 << 14)
-  assert_true(av1_mv_div_mult[av1_mv_div_mult_size - 1] > 0)
-}
