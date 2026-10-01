@@ -722,6 +722,7 @@ pub struct Av1NativeFrame {
 pub fn Av1NativeFrame::copy_plane_into(Self, Int, FixedArray[Byte], Int, PixelPacking, offset? : Int) -> Result[Unit, DecodeError]
 pub fn Av1NativeFrame::to_rgba16(Self) -> Image16?
 pub fn Av1NativeFrame::to_rgba16_into(Self, FixedArray[UInt16], Int, offset? : Int) -> Result[Unit, DecodeError]
+pub fn Av1NativeFrame::to_sdr_rgba16(Self, options? : HdrToneMapOptions) -> Result[Image16, DecodeError]
 
 pub struct Av1Packet {
   data : Array[Byte]
@@ -1238,6 +1239,8 @@ pub struct AvifMetadata {
 pub fn AvifMetadata::apply_rgba16(Self, Image16) -> Result[Image16, DecodeError]
 pub fn AvifMetadata::apply_rgba8(Self, Image) -> Result[Image, DecodeError]
 pub fn AvifMetadata::display_size(Self, Int, Int) -> Result[(Int, Int), DecodeError]
+pub fn AvifMetadata::resample_rgba16(Self, Image16, Int, Int) -> Result[Image16, DecodeError]
+pub fn AvifMetadata::resample_rgba8(Self, Image, Int, Int) -> Result[Image, DecodeError]
 
 pub struct AvifNativeAnimation {
   timescale : Int
@@ -1260,6 +1263,7 @@ pub struct AvifNativeImage {
 }
 pub fn AvifNativeImage::to_rgba16(Self) -> Image16?
 pub fn AvifNativeImage::to_rgba16_into(Self, FixedArray[UInt16], Int, offset? : Int) -> Result[Unit, DecodeError]
+pub fn AvifNativeImage::to_sdr_rgba16(Self, options? : HdrToneMapOptions) -> Result[Image16, DecodeError]
 
 pub struct DecodeError {
   kind : DecodeErrorKind
@@ -1310,6 +1314,36 @@ pub fn DecodeLimits::avif_decode_native(Self, Array[Byte]) -> AvifNativeImage?
 pub fn DecodeLimits::avif_decode_rgba(Self, Array[Byte]) -> Image?
 pub fn DecodeLimits::avif_decode_rgba16(Self, Array[Byte]) -> Image16?
 pub fn DecodeLimits::default() -> Self
+
+pub(all) struct HdrToneMapOptions {
+  peak_luminance_nits : Double
+  reference_white_nits : Double
+  exposure_stops : Double
+}
+pub fn HdrToneMapOptions::default() -> Self
+
+pub struct IccProfile {
+  // private fields
+}
+pub fn IccProfile::apply_rgba16(Self, Image16) -> Result[Image16, DecodeError]
+pub fn IccProfile::apply_rgba16_with_options(Self, Image16, IccTransformOptions) -> Result[Image16, DecodeError]
+pub fn IccProfile::apply_rgba8(Self, Image) -> Result[Image, DecodeError]
+pub fn IccProfile::apply_rgba8_with_options(Self, Image, IccTransformOptions) -> Result[Image, DecodeError]
+pub fn IccProfile::parse(Array[Byte]) -> Result[Self, DecodeError]
+
+pub(all) enum IccRenderingIntent {
+  Perceptual
+  RelativeColorimetric
+  Saturation
+  AbsoluteColorimetric
+}
+
+pub struct IccTransformOptions {
+  intent : IccRenderingIntent
+  black_point_compensation : Bool
+}
+pub fn IccTransformOptions::new(IccRenderingIntent, Bool) -> Self
+pub fn IccTransformOptions::relative_colorimetric() -> Self
 
 pub(all) struct Image {
   width : Int

@@ -11,6 +11,7 @@
 - 输出原生 8/10/12-bit 像素平面、straight RGBA8 或 RGBA16，包含静态图和动画的高位深 alpha。
 - 提供分块 AV1 输入、惰性 AVIF 动画、错误诊断、解码限额、显示变换和可复用输出缓冲区。
 - 支持 IVF、MP4/fMP4、WebM/Matroska 的 AV1 轨道读取、分块容器输入和时间定位。
+- 提供 ICC 输入色彩转换、PQ/HLG 转 SDR，以及带透明度处理的分数裁剪和重采样。
 - 库仅负责解码，不包含 AV1/AVIF 编码、图像滤镜、浏览器 UI 或文件系统。
 
 RGBA 使用源 primaries/transfer、最近邻色度上采样及最终裁剪/舍入；未指定矩阵采用 BT.601。XYZ 转为 BT.709/sRGB。这里不进行 HDR 色调映射或显示器色域适配。PQ 参考中的四个通道严格匹配独立高精度 H.273 金值，并限定与 zimg 的差值不超过 1；不能将这一特例描述成与 zimg 全部字节相同。见 [颜色参考](https://github.com/0717lee/moonav1/blob/main/tests/fixtures/av1-color/README.md)。
@@ -49,6 +50,8 @@ moon run examples/decode --target js
 
 `moon run examples/containers --target js` 演示 IVF 整文件及分块解码，并按时间戳取帧；同样支持 native 和 wasm-gc。
 
+`moon run examples/color_video --target js` 演示 ICC、HDR、分数裁剪以及三种视频容器；同样支持 native 和 wasm-gc。
+
 ## 库接口
 
 消费端导入后可通过 `@moonav1` 调用：
@@ -72,12 +75,16 @@ fn decode_image(bytes : Array[Byte]) -> @moonav1.Image? {
 | 流式与惰性解码 | `Av1StreamDecoder`、`AvifAnimationDecoder` |
 | 诊断与资源限额 | `av1_decode_native_result`、`avif_decode_native_result`、`DecodeLimits` |
 | 容器解码与定位 | `Av1ContainerDecoder`、`Av1ContainerStreamDecoder`、`Av1PresentationTimeline` |
+| 色彩管理与 HDR | `IccProfile`、`IccTransformOptions`、`Av1NativeFrame::to_sdr_rgba16` |
+| 分数裁剪与重采样 | `AvifMetadata::resample_rgba8`、`resample_rgba16` |
 
 解码接口通过 `None` 拒绝无效或不支持的输入。状态化接口的 `Some([])` 表示合法但无显示帧的单元；隐藏帧仍更新参考状态。完整接口以 [pkg.generated.mbti](pkg.generated.mbti) 为准。
 
 新增 `Result` 接口返回错误类别、上下文和可定位的字节偏移。像素布局、精度、所有权、流式边界和限额计数分别见 [原生像素](docs/NATIVE_PIXELS.md)、[RGBA16](docs/RGBA16.md)、[调用者接口](docs/EXTENSIONS.md)和[解码限额](docs/DECODE_LIMITS.md)。
 
 容器支持范围见 [IVF/MP4/WebM](docs/VIDEO_CONTAINERS.md)，分块状态与 MP4 索引回放见[容器流式接口](docs/CONTAINER_STREAMING.md)，时间单位与 edit-list 映射见[时间定位](docs/CONTAINER_TIMELINE.md)。
+
+[ICC](docs/ICC.md)、[HDR](docs/HDR.md)和[重采样](docs/RESAMPLING.md)均通过显式接口调用，保留基础解码的既有颜色和像素语义。
 
 ## 本地构建与验证
 

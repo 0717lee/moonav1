@@ -11,6 +11,7 @@ A pure MoonBit AV1/AVIF decoder for native, JavaScript and wasm-gc. The decoding
 - Output includes native 8/10/12-bit planes, straight RGBA8 and RGBA16, including high-depth alpha and animation.
 - Chunked AV1 input, lazy AVIF animation, structured errors, decode limits, display transforms and reusable output buffers.
 - AV1 tracks in IVF, MP4/fMP4 and WebM/Matroska, including incremental container input and timestamp seeking.
+- Explicit ICC input transforms, PQ/HLG-to-SDR conversion and alpha-aware fractional crop/resampling.
 - No encoding, image filters, UI or filesystem dependency.
 
 RGBA preserves source primaries/transfer, uses nearest-neighbor chroma replication and rounds/clips at final conversion. Unspecified matrices use BT.601; XYZ is converted to BT.709/sRGB. There is no HDR tone mapping or display-gamut adaptation. Four PQ reference channels match independent high-precision H.273 results with at most one unit of difference from zimg; see the [color contract](https://github.com/0717lee/moonav1/blob/main/tests/fixtures/av1-color/README.md).
@@ -49,6 +50,8 @@ Run `moon run examples/native_pixels --target js` for native planes, RGBA16 and 
 
 `moon run examples/containers --target js` demonstrates whole-file IVF decoding, timestamp seeking and incremental decoding. It also supports native and wasm-gc.
 
+`moon run examples/color_video --target js` demonstrates ICC, HDR, fractional cropping and the three container formats, also on native and wasm-gc.
+
 ## Library API
 
 After importing the package, consumers can use the `@moonav1` alias:
@@ -64,6 +67,8 @@ Use `av1_decode` for raw AV1, `avif_decode_rgba` for AVIF with alpha/grid compos
 `av1_decode_native`, `avif_decode_native` and `avif_decode_animation_native` retain native precision. RGBA16 convenience APIs and conversions preserve it through final quantization. `Av1StreamDecoder` and `AvifAnimationDecoder` provide incremental and lazy decoding; `Result` entry points expose classified errors with context and offsets. See [native pixels](docs/NATIVE_PIXELS.md), [RGBA16](docs/RGBA16.md), [caller APIs](docs/EXTENSIONS.md) and [decode limits](docs/DECODE_LIMITS.md).
 
 `Av1ContainerDecoder`, `Av1ContainerStreamDecoder` and `Av1PresentationTimeline` handle [containers](docs/VIDEO_CONTAINERS.md), [chunked input](docs/CONTAINER_STREAMING.md), and [timestamp seeking and movie edits](docs/CONTAINER_TIMELINE.md).
+
+[ICC transforms](docs/ICC.md), [HDR conversion](docs/HDR.md) and [fractional resampling](docs/RESAMPLING.md) are explicit operations that preserve the existing base-decoder color and pixel contracts.
 
 ## Build
 

@@ -1,0 +1,1721 @@
+{
+  "oracle": {
+    "icc": "LittleCMS 2.x cmsCreateTransform/cmsDoTransform, copy-alpha flag, native UInt16",
+    "littlecms": "2.19 on Windows reference host",
+    "target": "LittleCMS-created sRGB profile",
+    "rendering_intent": "relative colorimetric (1), no black-point compensation",
+    "flags": "cmsFLAGS_COPY_ALPHA"
+  },
+  "profiles": [
+    {
+      "name": "matrix_rgb_v2",
+      "file": "matrix_rgb_v2.icc",
+      "sha256": "024c24492946dccd7a628ff96e3d78d4488d1ad4672380ab64a92cea1e756dcf",
+      "bytes": 8796,
+      "icc_version": "2.1.0",
+      "source": "LittleCMS cmsCreate_sRGBProfile serialized as ICC v2.1",
+      "input_kind": "matrix_rgb",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        65535,
+        65535,
+        32768,
+        0,
+        49152,
+        4096,
+        16384,
+        65535,
+        32768
+      ],
+      "output_rgba16": [
+        18,
+        65535,
+        32768,
+        65535,
+        65534,
+        32769,
+        0,
+        49152,
+        4110,
+        16382,
+        65535,
+        32768
+      ],
+      "perceptual_rgba16": [
+        18,
+        65535,
+        32768,
+        65535,
+        65534,
+        32769,
+        0,
+        49152,
+        4110,
+        16382,
+        65535,
+        32768
+      ],
+      "output_sha256": "642ce8a10512a4615eae15d18673eb1532071ac4730a7f016b0976b6c22bb651",
+      "library_expected": "Accepted"
+    },
+    {
+      "name": "matrix_rgb_v4",
+      "file": "matrix_rgb_v4.icc",
+      "sha256": "5bf4b48c422853da31f79d72736cb64705fb59991df8d083c7747b00245faaa4",
+      "bytes": 588,
+      "icc_version": "4.4.0",
+      "source": "LittleCMS cmsCreate_sRGBProfile serialized as ICC v4.4",
+      "input_kind": "matrix_rgb",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        65535,
+        65535,
+        32768,
+        0,
+        49152,
+        4096,
+        16384,
+        65535,
+        32768
+      ],
+      "output_rgba16": [
+        18,
+        65535,
+        32768,
+        65535,
+        65534,
+        32769,
+        0,
+        49152,
+        4110,
+        16383,
+        65535,
+        32768
+      ],
+      "perceptual_rgba16": [
+        18,
+        65535,
+        32768,
+        65535,
+        65534,
+        32769,
+        0,
+        49152,
+        4110,
+        16383,
+        65535,
+        32768
+      ],
+      "output_sha256": "96ab7d5adbfad5e08c04b6a91fad152b4ea29a32f89e9df256caad7b9b2d6c6b",
+      "library_expected": "Accepted"
+    },
+    {
+      "name": "gray_d65_trc_v2",
+      "file": "gray_d65_trc_v2.icc",
+      "sha256": "94fab0378fb1bf7ab41227d8b168541cf26a2da559ac4c353c8e33b7ae50a9e0",
+      "bytes": 384,
+      "icc_version": "2.1.0",
+      "source": "LittleCMS cmsCreateGrayProfile(D65, gamma=2.2), ICC v2 header",
+      "input_kind": "gray",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        49152,
+        65535,
+        12345
+      ],
+      "output_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        33031,
+        33031,
+        33031,
+        49152,
+        65535,
+        65535,
+        65535,
+        12345
+      ],
+      "perceptual_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        33031,
+        33031,
+        33031,
+        49152,
+        65535,
+        65535,
+        65535,
+        12345
+      ],
+      "output_sha256": "c9c754509b311872712c9bebcd9c992447a88ac71ffc66f88e97b686a310879a",
+      "library_expected": "Accepted"
+    },
+    {
+      "name": "gray_d50_trc_v2",
+      "file": "gray_d50_trc_v2.icc",
+      "sha256": "00763ed2b714c47bf58e2979c8f4ccdbd09e642b7ef49622909ad5f05a32f379",
+      "bytes": 384,
+      "icc_version": "2.1.0",
+      "source": "LittleCMS cmsCreateGrayProfile(D50, gamma=2.2), ICC v2 header",
+      "input_kind": "gray",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        49152,
+        65535,
+        12345
+      ],
+      "output_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        33031,
+        33031,
+        33031,
+        49152,
+        65535,
+        65535,
+        65535,
+        12345
+      ],
+      "perceptual_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        33031,
+        33031,
+        33031,
+        49152,
+        65535,
+        65535,
+        65535,
+        12345
+      ],
+      "output_sha256": "c9c754509b311872712c9bebcd9c992447a88ac71ffc66f88e97b686a310879a",
+      "library_expected": "Accepted"
+    },
+    {
+      "name": "gray_d65_trc_v4",
+      "file": "gray_d65_trc_v4.icc",
+      "sha256": "f14f3bf84d6deba7ee61fbe1c52ecf11b2cf719d55378bae71387e7f1780f256",
+      "bytes": 348,
+      "icc_version": "4.4.0",
+      "source": "LittleCMS cmsCreateGrayProfile(D65, gamma=2.2), ICC v4 header",
+      "input_kind": "gray",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        49152,
+        65535,
+        12345
+      ],
+      "output_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        33022,
+        33022,
+        33022,
+        49152,
+        65535,
+        65535,
+        65535,
+        12345
+      ],
+      "perceptual_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        33022,
+        33022,
+        33022,
+        49152,
+        65535,
+        65535,
+        65535,
+        12345
+      ],
+      "output_sha256": "0b73f2df05a49534ef2ebb6f043adbe0dc3d71e682bc4c93e27b7da285e8181a",
+      "library_expected": "Accepted"
+    },
+    {
+      "name": "gray_d50_trc_v4",
+      "file": "gray_d50_trc_v4.icc",
+      "sha256": "562c783d31d3761f2330f156bf360a23ec75cf24726c032f1b5bb399e6e7994a",
+      "bytes": 348,
+      "icc_version": "4.4.0",
+      "source": "LittleCMS cmsCreateGrayProfile(D50, gamma=2.2), ICC v4 header",
+      "input_kind": "gray",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        49152,
+        65535,
+        12345
+      ],
+      "output_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        33022,
+        33022,
+        33022,
+        49152,
+        65535,
+        65535,
+        65535,
+        12345
+      ],
+      "perceptual_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        33022,
+        33022,
+        33022,
+        49152,
+        65535,
+        65535,
+        65535,
+        12345
+      ],
+      "output_sha256": "0b73f2df05a49534ef2ebb6f043adbe0dc3d71e682bc4c93e27b7da285e8181a",
+      "library_expected": "Accepted"
+    },
+    {
+      "name": "lab_v2",
+      "file": "lab_v2.icc",
+      "sha256": "7decf61b558305793563a0f25d89679b59a3f080b829b46dbcb1bdb97ca4dee0",
+      "bytes": 572,
+      "icc_version": "2.1.0",
+      "source": "LittleCMS cmsCreateLab2Profile(D50), TYPE_LabV2_16",
+      "input_kind": "lab_v2",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        32768,
+        32768,
+        32768,
+        40000,
+        24000,
+        65535,
+        65535,
+        0
+      ],
+      "output_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        37002,
+        26376,
+        45990,
+        65535,
+        65535,
+        29987,
+        65535,
+        65535
+      ],
+      "perceptual_rgba16": [
+        0,
+        0,
+        0,
+        65535,
+        37002,
+        26376,
+        45990,
+        65535,
+        65535,
+        29987,
+        65535,
+        65535
+      ],
+      "output_sha256": "93f2d05849385bbbb7fa2bab34c1ac37d8b6398fcc847202a6427fe4573135d0",
+      "library_expected": "Unsupported"
+    },
+    {
+      "name": "lab_v4",
+      "file": "lab_v4.icc",
+      "sha256": "ede188ba0166dfd356f4f4caf4b465044b830e773f3e99f64734d04e44391c83",
+      "bytes": 428,
+      "icc_version": "4.4.0",
+      "source": "LittleCMS cmsCreateLab4Profile(D50), TYPE_Lab_16",
+      "input_kind": "lab_v4",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        32768,
+        32768,
+        32768,
+        40000,
+        24000,
+        65535,
+        65535,
+        0
+      ],
+      "output_rgba16": [
+        0,
+        110,
+        306,
+        65535,
+        36580,
+        26378,
+        45898,
+        65535,
+        65535,
+        29987,
+        65535,
+        65535
+      ],
+      "perceptual_rgba16": [
+        0,
+        110,
+        306,
+        65535,
+        36580,
+        26378,
+        45898,
+        65535,
+        65535,
+        29987,
+        65535,
+        65535
+      ],
+      "output_sha256": "708f743aedd056f0a8c85b0a37ed6099b37064e36ecd6686b924d0861c94e789",
+      "library_expected": "Unsupported"
+    },
+    {
+      "name": "lut_cmyk_v2",
+      "file": "lut_cmyk_v2.icc",
+      "sha256": "9033cd3a8d5cea3cea61d71056becf6c07ee9a7b8e16e5f3d45cf3116c038b32",
+      "bytes": 552,
+      "icc_version": "2.1.0",
+      "source": "LittleCMS synthetic CMYK linearization profile, ICC v2 header; unsupported color-space boundary",
+      "input_kind": "lut_cmyk",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        0,
+        0,
+        0,
+        65535,
+        65535,
+        0,
+        0,
+        0,
+        32768,
+        65535,
+        32768,
+        65535,
+        32768,
+        65535
+      ],
+      "output_rgba16": [],
+      "perceptual_rgba16": [],
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "library_expected": "Unsupported"
+    },
+    {
+      "name": "lut_cmyk_v4",
+      "file": "lut_cmyk_v4.icc",
+      "sha256": "d234c67a27d4fc515908e8a4cb0ecfbcad68dcd4dbc824db1b5d7f8c348707f6",
+      "bytes": 552,
+      "icc_version": "4.4.0",
+      "source": "LittleCMS synthetic CMYK linearization profile, ICC v4 header; unsupported color-space boundary",
+      "input_kind": "lut_cmyk",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        0,
+        0,
+        0,
+        65535,
+        65535,
+        0,
+        0,
+        0,
+        32768,
+        65535,
+        32768,
+        65535,
+        32768,
+        65535
+      ],
+      "output_rgba16": [],
+      "perceptual_rgba16": [],
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "library_expected": "Unsupported"
+    },
+    {
+      "name": "lut_rgb_v2",
+      "file": "lut_rgb_v2.icc",
+      "sha256": "a0d4ba410bae4b55b5d66e84b8659fc18e04d77e75e21c5f9db3b82379c57af9",
+      "bytes": 29924,
+      "icc_version": "2.1.0",
+      "source": "LittleCMS cmsCreateBCHSWabstractProfile CLUT, normalized to RGB monitor, ICC v2 header",
+      "input_kind": "lut_rgb",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        65535,
+        65535,
+        32768,
+        0,
+        49152,
+        4096,
+        16384,
+        65535,
+        32768
+      ],
+      "output_rgba16": [
+        31517,
+        0,
+        4844,
+        65535,
+        0,
+        65535,
+        65535,
+        49152,
+        0,
+        10557,
+        0,
+        32768
+      ],
+      "perceptual_rgba16": [
+        55004,
+        0,
+        0,
+        65535,
+        0,
+        65535,
+        65535,
+        49152,
+        48373,
+        0,
+        0,
+        32768
+      ],
+      "output_sha256": "7f708e789c49ae1fec3f7bc8056f2cbb1c82ad6874bfa85b3f92b0a3adaa3f8d",
+      "library_expected": "Accepted"
+    },
+    {
+      "name": "lut_rgb_v4",
+      "file": "lut_rgb_v4.icc",
+      "sha256": "1c289c89b2e823dd519b46bc7c6102d49dea930f532d7aca9aa5f3da6e2e55b7",
+      "bytes": 29924,
+      "icc_version": "4.4.0",
+      "source": "LittleCMS cmsCreateBCHSWabstractProfile CLUT, normalized to RGB monitor, ICC v4 header",
+      "input_kind": "lut_rgb",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        65535,
+        65535,
+        32768,
+        0,
+        49152,
+        4096,
+        16384,
+        65535,
+        32768
+      ],
+      "output_rgba16": [
+        31517,
+        0,
+        4844,
+        65535,
+        0,
+        65535,
+        65535,
+        49152,
+        0,
+        10557,
+        0,
+        32768
+      ],
+      "perceptual_rgba16": [
+        31306,
+        0,
+        2516,
+        65535,
+        0,
+        65535,
+        65535,
+        49152,
+        0,
+        9612,
+        0,
+        32768
+      ],
+      "output_sha256": "7f708e789c49ae1fec3f7bc8056f2cbb1c82ad6874bfa85b3f92b0a3adaa3f8d",
+      "library_expected": "Accepted"
+    },
+    {
+      "name": "mab_rgb_v4",
+      "file": "mab_rgb_v4.icc",
+      "sha256": "dc6ab5d889875beacedd66dda29cbcedc02018ef4070c50292739753f1982f53",
+      "bytes": 29996,
+      "icc_version": "4.4.0",
+      "source": "LittleCMS A2B0 pipeline serialized as ICC v4 mAB using cmsWriteTag",
+      "input_kind": "lut_rgb",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        65535,
+        65535,
+        32768,
+        0,
+        49152,
+        4096,
+        16384,
+        65535,
+        32768
+      ],
+      "output_rgba16": [
+        31284,
+        0,
+        5003,
+        65535,
+        0,
+        65535,
+        65535,
+        49152,
+        0,
+        10568,
+        0,
+        32768
+      ],
+      "perceptual_rgba16": [
+        31070,
+        0,
+        2763,
+        65535,
+        0,
+        65535,
+        65535,
+        49152,
+        0,
+        9625,
+        0,
+        32768
+      ],
+      "output_sha256": "03f627b2fb7d014aab8730da0ede928bbaf5978b98c442f0e41da421d9cf052e",
+      "library_expected": "Accepted"
+    },
+    {
+      "name": "mft1_rgb_v4",
+      "file": "mft1_rgb_v4.icc",
+      "sha256": "1ea09f612149f34b5d4596fb3c48aea27b5543bd8db1d24fff7fe7e93c938cd0",
+      "bytes": 1752,
+      "icc_version": "4.4.0",
+      "source": "Project-owned ICC lut8Type Lab lattice evaluated by LittleCMS",
+      "input_kind": "lut_rgb",
+      "rendering_intent_code": 1,
+      "input_samples": [
+        0,
+        65535,
+        32768,
+        65535,
+        65535,
+        32768,
+        0,
+        49152,
+        4096,
+        16384,
+        65535,
+        32768
+      ],
+      "output_rgba16": [
+        21062,
+        12881,
+        15455,
+        65535,
+        27721,
+        30877,
+        37660,
+        49152,
+        14752,
+        17030,
+        9735,
+        32768
+      ],
+      "perceptual_rgba16": [
+        20664,
+        12137,
+        14859,
+        65535,
+        27458,
+        30661,
+        37512,
+        49152,
+        14114,
+        16506,
+        8690,
+        32768
+      ],
+      "output_sha256": "bf3b81d3bb590e172468cd4e1841cf80b87dbeebc9f228a601291ca423641750",
+      "library_expected": "Accepted"
+    }
+  ],
+  "hdr": {
+    "precision_digits": 100,
+    "peak_nits": 1000,
+    "reference_white_nits": 100,
+    "exposure_stops": 0,
+    "pq_absolute_peak_nits": 10000,
+    "cases": [
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          0,
+          0,
+          0
+        ],
+        "rgba16": [
+          0,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          1,
+          1,
+          1
+        ],
+        "rgba16": [
+          0,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          63,
+          63,
+          63
+        ],
+        "rgba16": [
+          822,
+          822,
+          822,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "rgba16": [
+          16000,
+          16000,
+          16000,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          511,
+          511,
+          511
+        ],
+        "rgba16": [
+          47451,
+          47451,
+          47451,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          512,
+          512,
+          512
+        ],
+        "rgba16": [
+          47561,
+          47561,
+          47561,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          767,
+          767,
+          767
+        ],
+        "rgba16": [
+          65436,
+          65436,
+          65436,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          1022,
+          1022,
+          1022
+        ],
+        "rgba16": [
+          65535,
+          65535,
+          65535,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          1023,
+          1023,
+          1023
+        ],
+        "rgba16": [
+          65535,
+          65535,
+          65535,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          767,
+          511,
+          255
+        ],
+        "rgba16": [
+          65535,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 16,
+        "rgb": [
+          255,
+          767,
+          511
+        ],
+        "rgba16": [
+          0,
+          65535,
+          4253,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          0,
+          0,
+          0
+        ],
+        "rgba16": [
+          0,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          1,
+          1,
+          1
+        ],
+        "rgba16": [
+          0,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          63,
+          63,
+          63
+        ],
+        "rgba16": [
+          2803,
+          2803,
+          2803,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "rgba16": [
+          21410,
+          21410,
+          21410,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          511,
+          511,
+          511
+        ],
+        "rgba16": [
+          40372,
+          40372,
+          40372,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          512,
+          512,
+          512
+        ],
+        "rgba16": [
+          40430,
+          40430,
+          40430,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          767,
+          767,
+          767
+        ],
+        "rgba16": [
+          55394,
+          55394,
+          55394,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          1022,
+          1022,
+          1022
+        ],
+        "rgba16": [
+          65501,
+          65501,
+          65501,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          1023,
+          1023,
+          1023
+        ],
+        "rgba16": [
+          65535,
+          65535,
+          65535,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          767,
+          511,
+          255
+        ],
+        "rgba16": [
+          65535,
+          33287,
+          13752,
+          65535
+        ]
+      },
+      {
+        "depth": 10,
+        "transfer": 18,
+        "rgb": [
+          255,
+          767,
+          511
+        ],
+        "rgba16": [
+          0,
+          62960,
+          32000,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          0,
+          0,
+          0
+        ],
+        "rgba16": [
+          0,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          1,
+          1,
+          1
+        ],
+        "rgba16": [
+          0,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "rgba16": [
+          844,
+          844,
+          844,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          1023,
+          1023,
+          1023
+        ],
+        "rgba16": [
+          16060,
+          16060,
+          16060,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          2047,
+          2047,
+          2047
+        ],
+        "rgba16": [
+          47492,
+          47492,
+          47492,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          2048,
+          2048,
+          2048
+        ],
+        "rgba16": [
+          47520,
+          47520,
+          47520,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          3071,
+          3071,
+          3071
+        ],
+        "rgba16": [
+          65444,
+          65444,
+          65444,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          4094,
+          4094,
+          4094
+        ],
+        "rgba16": [
+          65535,
+          65535,
+          65535,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          4095,
+          4095,
+          4095
+        ],
+        "rgba16": [
+          65535,
+          65535,
+          65535,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          3071,
+          2047,
+          1023
+        ],
+        "rgba16": [
+          65535,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 16,
+        "rgb": [
+          1023,
+          3071,
+          2047
+        ],
+        "rgba16": [
+          0,
+          65535,
+          4423,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          0,
+          0,
+          0
+        ],
+        "rgba16": [
+          0,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          1,
+          1,
+          1
+        ],
+        "rgba16": [
+          0,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          255,
+          255,
+          255
+        ],
+        "rgba16": [
+          2875,
+          2875,
+          2875,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          1023,
+          1023,
+          1023
+        ],
+        "rgba16": [
+          21460,
+          21460,
+          21460,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          2047,
+          2047,
+          2047
+        ],
+        "rgba16": [
+          40394,
+          40394,
+          40394,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          2048,
+          2048,
+          2048
+        ],
+        "rgba16": [
+          40408,
+          40408,
+          40408,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          3071,
+          3071,
+          3071
+        ],
+        "rgba16": [
+          55403,
+          55403,
+          55403,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          4094,
+          4094,
+          4094
+        ],
+        "rgba16": [
+          65527,
+          65527,
+          65527,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          4095,
+          4095,
+          4095
+        ],
+        "rgba16": [
+          65535,
+          65535,
+          65535,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          3071,
+          2047,
+          1023
+        ],
+        "rgba16": [
+          65535,
+          33308,
+          13811,
+          65535
+        ]
+      },
+      {
+        "depth": 12,
+        "transfer": 18,
+        "rgb": [
+          1023,
+          3071,
+          2047
+        ],
+        "rgba16": [
+          0,
+          62971,
+          32017,
+          65535
+        ]
+      }
+    ]
+  },
+  "resample": {
+    "source_rgba16": [
+      [
+        65535,
+        0,
+        0,
+        65535
+      ],
+      [
+        0,
+        65535,
+        0,
+        32768
+      ],
+      [
+        0,
+        0,
+        65535,
+        0
+      ]
+    ],
+    "cases": [
+      {
+        "origin_num": -1,
+        "origin_den": 2,
+        "position_num": 0,
+        "position_den": 1,
+        "rgba16": [
+          65535,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "origin_num": -1,
+        "origin_den": 2,
+        "position_num": 1,
+        "position_den": 2,
+        "rgba16": [
+          65535,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "origin_num": -1,
+        "origin_den": 2,
+        "position_num": 1,
+        "position_den": 1,
+        "rgba16": [
+          43690,
+          21845,
+          0,
+          49152
+        ]
+      },
+      {
+        "origin_num": -1,
+        "origin_den": 2,
+        "position_num": 3,
+        "position_den": 2,
+        "rgba16": [
+          0,
+          65535,
+          0,
+          32768
+        ]
+      },
+      {
+        "origin_num": 0,
+        "origin_den": 1,
+        "position_num": 0,
+        "position_den": 1,
+        "rgba16": [
+          65535,
+          0,
+          0,
+          65535
+        ]
+      },
+      {
+        "origin_num": 0,
+        "origin_den": 1,
+        "position_num": 1,
+        "position_den": 2,
+        "rgba16": [
+          43690,
+          21845,
+          0,
+          49152
+        ]
+      },
+      {
+        "origin_num": 0,
+        "origin_den": 1,
+        "position_num": 1,
+        "position_den": 1,
+        "rgba16": [
+          0,
+          65535,
+          0,
+          32768
+        ]
+      },
+      {
+        "origin_num": 0,
+        "origin_den": 1,
+        "position_num": 3,
+        "position_den": 2,
+        "rgba16": [
+          0,
+          65535,
+          0,
+          16384
+        ]
+      },
+      {
+        "origin_num": 1,
+        "origin_den": 2,
+        "position_num": 0,
+        "position_den": 1,
+        "rgba16": [
+          43690,
+          21845,
+          0,
+          49152
+        ]
+      },
+      {
+        "origin_num": 1,
+        "origin_den": 2,
+        "position_num": 1,
+        "position_den": 2,
+        "rgba16": [
+          0,
+          65535,
+          0,
+          32768
+        ]
+      },
+      {
+        "origin_num": 1,
+        "origin_den": 2,
+        "position_num": 1,
+        "position_den": 1,
+        "rgba16": [
+          0,
+          65535,
+          0,
+          16384
+        ]
+      },
+      {
+        "origin_num": 1,
+        "origin_den": 2,
+        "position_num": 3,
+        "position_den": 2,
+        "rgba16": [
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      {
+        "origin_num": 3,
+        "origin_den": 4,
+        "position_num": 0,
+        "position_den": 1,
+        "rgba16": [
+          26214,
+          39321,
+          0,
+          40960
+        ]
+      },
+      {
+        "origin_num": 3,
+        "origin_den": 4,
+        "position_num": 1,
+        "position_den": 2,
+        "rgba16": [
+          0,
+          65535,
+          0,
+          24576
+        ]
+      },
+      {
+        "origin_num": 3,
+        "origin_den": 4,
+        "position_num": 1,
+        "position_den": 1,
+        "rgba16": [
+          0,
+          65535,
+          0,
+          8192
+        ]
+      },
+      {
+        "origin_num": 3,
+        "origin_den": 4,
+        "position_num": 3,
+        "position_den": 2,
+        "rgba16": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "grid_source_rgba16": [
+      [
+        [
+          65535,
+          0,
+          0,
+          65535
+        ],
+        [
+          0,
+          65535,
+          0,
+          32768
+        ]
+      ],
+      [
+        [
+          0,
+          0,
+          65535,
+          16384
+        ],
+        [
+          65535,
+          65535,
+          65535,
+          0
+        ]
+      ]
+    ],
+    "grid_cases": [
+      {
+        "x_num": 1,
+        "x_den": 2,
+        "y_num": 1,
+        "y_den": 2,
+        "rgba16": [
+          37448,
+          18724,
+          9362,
+          28672
+        ]
+      },
+      {
+        "x_num": 1,
+        "x_den": 2,
+        "y_num": 2,
+        "y_den": 3,
+        "rgba16": [
+          32767,
+          16384,
+          16384,
+          21845
+        ]
+      },
+      {
+        "x_num": 1,
+        "x_den": 2,
+        "y_num": 1,
+        "y_den": 4,
+        "rgba16": [
+          41390,
+          20695,
+          3449,
+          38912
+        ]
+      },
+      {
+        "x_num": 1,
+        "x_den": 3,
+        "y_num": 1,
+        "y_den": 2,
+        "rgba16": [
+          43690,
+          10923,
+          10923,
+          32768
+        ]
+      },
+      {
+        "x_num": 1,
+        "x_den": 3,
+        "y_num": 2,
+        "y_den": 3,
+        "rgba16": [
+          37448,
+          9362,
+          18724,
+          25486
+        ]
+      },
+      {
+        "x_num": 1,
+        "x_den": 3,
+        "y_num": 1,
+        "y_den": 4,
+        "rgba16": [
+          49151,
+          12288,
+          4096,
+          43690
+        ]
+      },
+      {
+        "x_num": 3,
+        "x_den": 4,
+        "y_num": 1,
+        "y_den": 2,
+        "rgba16": [
+          23831,
+          35747,
+          5958,
+          22528
+        ]
+      },
+      {
+        "x_num": 3,
+        "x_den": 4,
+        "y_num": 2,
+        "y_den": 3,
+        "rgba16": [
+          21845,
+          32768,
+          10923,
+          16384
+        ]
+      },
+      {
+        "x_num": 3,
+        "x_den": 4,
+        "y_num": 1,
+        "y_den": 4,
+        "rgba16": [
+          25368,
+          38053,
+          2114,
+          31744
+        ]
+      }
+    ]
+  },
+  "references": [
+    "https://www.color.org/specification/ICC1V43_2010-12.pdf",
+    "https://www.itu.int/rec/R-REC-BT.2100",
+    "https://www.itu.int/rec/R-REC-BT.1886"
+  ]
+}
