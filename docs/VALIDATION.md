@@ -1,6 +1,6 @@
 # Validation and optional media corpora
 
-Use the pinned `moonc 0.10.14+7d59c7ec9` toolchain. The ordinary test suite
+Use the pinned `moonc 0.10.16+b1a0e846e` toolchain. The ordinary test suite
 embeds independent references and needs no codec installation or media download:
 
 ```sh

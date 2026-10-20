@@ -6,55 +6,55 @@ import {
 }
 
 // Values
-pub const AV1_INTRA_DC : Int = 0
+pub const AV1_INTRA_DC : Int32 = 0
 
-pub const AV1_INTRA_H : Int = 2
+pub const AV1_INTRA_H : Int32 = 2
 
-pub const AV1_INTRA_PAETH : Int = 12
+pub const AV1_INTRA_PAETH : Int32 = 12
 
-pub const AV1_INTRA_SMOOTH : Int = 9
+pub const AV1_INTRA_SMOOTH : Int32 = 9
 
-pub const AV1_INTRA_SMOOTH_H : Int = 11
+pub const AV1_INTRA_SMOOTH_H : Int32 = 11
 
-pub const AV1_INTRA_SMOOTH_V : Int = 10
+pub const AV1_INTRA_SMOOTH_V : Int32 = 10
 
-pub const AV1_INTRA_V : Int = 1
+pub const AV1_INTRA_V : Int32 = 1
 
 pub fn av1_apply_alpha(Image, Array[Byte]) -> Image?
 
-pub fn av1_apply_film_grain_planes(Array[Array[Int]], Int, Int, Int, Bool, Bool, Bool, Int, Av1FilmGrainParams) -> Unit?
+pub fn av1_apply_film_grain_planes(Array[Array[Int32]], Int32, Int32, Int32, Bool, Bool, Bool, Int32, Av1FilmGrainParams) -> Unit?
 
-pub fn av1_cdef_filter_plane(Int, Int, Array[Int], Array[Av1CdefParams], bit_depth? : Int) -> Array[Int]?
+pub fn av1_cdef_filter_plane(Int32, Int32, Array[Int32], Array[Av1CdefParams], bit_depth? : Int32) -> Array[Int32]?
 
-pub fn av1_cdef_filter_yuv420(Int, Int, Array[Int], Array[Int], Array[Int], Array[Av1CdefParams], Array[Av1CdefParams], bit_depth? : Int) -> (Array[Int], Array[Int], Array[Int])?
+pub fn av1_cdef_filter_yuv420(Int32, Int32, Array[Int32], Array[Int32], Array[Int32], Array[Av1CdefParams], Array[Av1CdefParams], bit_depth? : Int32) -> (Array[Int32], Array[Int32], Array[Int32])?
 
-pub fn av1_coeff_base_default(Int, Int, Int, Int) -> Array[Int]
+pub fn av1_coeff_base_default(Int32, Int32, Int32, Int32) -> Array[Int32]
 
-pub fn av1_coeff_base_eob_default(Int, Int, Int, Int) -> Array[Int]
+pub fn av1_coeff_base_eob_default(Int32, Int32, Int32, Int32) -> Array[Int32]
 
-pub fn av1_coeff_br_default(Int, Int, Int, Int) -> Array[Int]
+pub fn av1_coeff_br_default(Int32, Int32, Int32, Int32) -> Array[Int32]
 
-pub fn av1_coeff_dc_sign_default(Int, Int, Int) -> Array[Int]
+pub fn av1_coeff_dc_sign_default(Int32, Int32, Int32) -> Array[Int32]
 
-pub fn av1_coeff_eob1024_default(Int, Int) -> Array[Int]
+pub fn av1_coeff_eob1024_default(Int32, Int32) -> Array[Int32]
 
-pub fn av1_coeff_eob_extra_default(Int, Int, Int, Int) -> Array[Int]
+pub fn av1_coeff_eob_extra_default(Int32, Int32, Int32, Int32) -> Array[Int32]
 
-pub fn av1_coeff_eob_small_default(Int, Int, Int, Int) -> Array[Int]
+pub fn av1_coeff_eob_small_default(Int32, Int32, Int32, Int32) -> Array[Int32]
 
 pub fn av1_decode(Array[Byte]) -> Image?
 
 pub fn av1_decode_alpha(Array[Byte]) -> Array[Byte]?
 
-pub fn av1_decode_alpha_tile(Int, Int, Array[Byte], Int, use_128x128_superblock? : Bool, allow_screen_content_tools? : Bool, bit_depth? : Int, disable_cdf_update? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : Av1CdefConfig?, loop_filter? : Av1LoopFilterConfig?, restoration? : Av1RestorationConfig?, upscaled_width? : Int, quant_deltas? : Av1QuantDeltas) -> Array[Byte]?
+pub fn av1_decode_alpha_tile(Int32, Int32, Array[Byte], Int32, use_128x128_superblock? : Bool, allow_screen_content_tools? : Bool, bit_depth? : Int32, disable_cdf_update? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : Av1CdefConfig?, loop_filter? : Av1LoopFilterConfig?, restoration? : Av1RestorationConfig?, upscaled_width? : Int32, quant_deltas? : Av1QuantDeltas) -> Array[Byte]?
 
-pub fn av1_decode_dc_tile(Int, Int, Array[Byte], Int, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int, use_128x128_superblock? : Bool, bit_depth? : Int, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : Av1CdefConfig?, loop_filter? : Av1LoopFilterConfig?, restoration? : Av1RestorationConfig?, upscaled_width? : Int, superres_denom? : Int) -> Image?
+pub fn av1_decode_dc_tile(Int32, Int32, Array[Byte], Int32, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int32, use_128x128_superblock? : Bool, bit_depth? : Int32, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : Av1CdefConfig?, loop_filter? : Av1LoopFilterConfig?, restoration? : Av1RestorationConfig?, upscaled_width? : Int32, superres_denom? : Int32) -> Image?
 
 pub fn av1_decode_native(Array[Byte]) -> Av1NativeFrame?
 
 pub fn av1_decode_native_result(Array[Byte], limits? : DecodeLimits) -> Result[Av1NativeFrame, DecodeError]
 
-pub fn av1_decode_partition_leaves(Array[Byte], Int, Int, disable_cdf_update? : Bool, use_128x128_superblock? : Bool) -> Array[Av1SbBlock]?
+pub fn av1_decode_partition_leaves(Array[Byte], Int32, Int32, disable_cdf_update? : Bool, use_128x128_superblock? : Bool) -> Array[Av1SbBlock]?
 
 pub fn av1_decode_result(Array[Byte], limits? : DecodeLimits) -> Result[Image, DecodeError]
 
@@ -64,13 +64,13 @@ pub fn av1_decode_rgba16_result(Array[Byte], limits? : DecodeLimits) -> Result[I
 
 pub fn av1_decode_show_existing_frame(Array[Byte], Av1ReferenceState, Av1ShowExistingFrameConfig) -> Image?
 
-pub fn av1_decode_split_tile_64x64(Array[Byte], Int, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int, use_128x128_superblock? : Bool, allow_screen_content_tools? : Bool) -> Image?
+pub fn av1_decode_split_tile_64x64(Array[Byte], Int32, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int32, use_128x128_superblock? : Bool, allow_screen_content_tools? : Bool) -> Image?
 
-pub fn av1_decode_tile_group(Int, Int, Int, Int, Array[Byte], Int, Int, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int, use_128x128_superblock? : Bool, bit_depth? : Int, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : Av1CdefConfig?, loop_filter? : Av1LoopFilterConfig?, restoration? : Av1RestorationConfig?, upscaled_width? : Int, superres_denom? : Int) -> Image?
+pub fn av1_decode_tile_group(Int32, Int32, Int32, Int32, Array[Byte], Int32, Int32, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int32, use_128x128_superblock? : Bool, bit_depth? : Int32, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : Av1CdefConfig?, loop_filter? : Av1LoopFilterConfig?, restoration? : Av1RestorationConfig?, upscaled_width? : Int32, superres_denom? : Int32) -> Image?
 
-pub fn av1_decode_tile_group_with_boundaries(Int, Int, Array[Int], Array[Int], Int, Array[Byte], Int, Int, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int, use_128x128_superblock? : Bool, bit_depth? : Int, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : Av1CdefConfig?, loop_filter? : Av1LoopFilterConfig?, restoration? : Av1RestorationConfig?, upscaled_width? : Int, monochrome? : Bool, superres_denom? : Int) -> Image?
+pub fn av1_decode_tile_group_with_boundaries(Int32, Int32, Array[Int32], Array[Int32], Int32, Array[Byte], Int32, Int32, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int32, use_128x128_superblock? : Bool, bit_depth? : Int32, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : Av1CdefConfig?, loop_filter? : Av1LoopFilterConfig?, restoration? : Av1RestorationConfig?, upscaled_width? : Int32, monochrome? : Bool, superres_denom? : Int32) -> Image?
 
-pub fn av1_decode_tx_partition_tree_payload(Array[Byte], Av1TxNode, Int, disable_cdf_update? : Bool) -> Array[Av1TxLeaf]?
+pub fn av1_decode_tx_partition_tree_payload(Array[Byte], Av1TxNode, Int32, disable_cdf_update? : Bool) -> Array[Av1TxLeaf]?
 
 pub fn av1_demux(Array[Byte], format? : Av1ContainerFormat?, track_id? : Int64?, limits? : DecodeLimits) -> Result[Av1DemuxedTrack, DecodeError]
 
@@ -80,7 +80,7 @@ pub fn av1_demux_mp4(Array[Byte], track_id? : Int64?, limits? : DecodeLimits) ->
 
 pub fn av1_demux_webm(Array[Byte], track_id? : Int64?, limits? : DecodeLimits) -> Result[Av1DemuxedTrack, DecodeError]
 
-pub fn av1_extract_tile_payloads(Array[Byte], Int, Int, Int) -> Array[Av1TilePayload]?
+pub fn av1_extract_tile_payloads(Array[Byte], Int32, Int32, Int32) -> Array[Av1TilePayload]?
 
 pub fn av1_find_mv_stack(Av1MotionField, Av1MvBlock, Av1MvFrame, Bool) -> Av1MvStack?
 
@@ -88,7 +88,7 @@ pub fn av1_frame_info(Array[Byte]) -> Av1FrameInfo?
 
 pub fn av1_frame_map() -> Av1FrameMap
 
-pub fn av1_frame_map_show(Av1FrameMap, Int) -> Av1RefFrame?
+pub fn av1_frame_map_show(Av1FrameMap, Int32) -> Av1RefFrame?
 
 pub fn av1_frame_tile_payloads(Av1FrameHeaderInfo) -> Array[Av1TilePayload]?
 
@@ -96,113 +96,113 @@ pub fn av1_inter_frame_of(Av1FrameHeaderInfo, Av1SequenceInfo, Av1FrameMap) -> A
 
 pub fn av1_inter_frame_supported(Av1FrameHeaderInfo, Av1SequenceInfo) -> Bool
 
-pub fn av1_intra_predict(Int, Int, Int, Array[Int], Array[Int], Int, Int, have_above? : Bool, have_left? : Bool) -> Array[Int]?
+pub fn av1_intra_predict(Int32, Int32, Int32, Array[Int32], Array[Int32], Int32, Int32, have_above? : Bool, have_left? : Bool) -> Array[Int32]?
 
-pub fn av1_inverse_dct(Array[Int], Int, Int) -> Array[Int]?
+pub fn av1_inverse_dct(Array[Int32], Int32, Int32) -> Array[Int32]?
 
-pub fn av1_inverse_dct_2d(Array[Int], Int, Int, Int, lossless? : Bool) -> Array[Int]?
+pub fn av1_inverse_dct_2d(Array[Int32], Int32, Int32, Int32, lossless? : Bool) -> Array[Int32]?
 
-pub fn av1_inverse_dct_dc(Int, Int, Int) -> Array[Int]?
+pub fn av1_inverse_dct_dc(Int32, Int32, Int32) -> Array[Int32]?
 
-pub fn av1_inverse_transform_2d(Av1TxType, Array[Int], Int, Int, Int, lossless? : Bool) -> Array[Int]?
+pub fn av1_inverse_transform_2d(Av1TxType, Array[Int32], Int32, Int32, Int32, lossless? : Bool) -> Array[Int32]?
 
-pub fn av1_motion_field(Int, Int) -> Av1MotionField
+pub fn av1_motion_field(Int32, Int32) -> Av1MotionField
 
-pub fn av1_motion_field_estimation(Av1SequenceInfo, Int, Array[Int], Array[Av1RefFrame?], Int, Int) -> Av1MotionFieldGrid
+pub fn av1_motion_field_estimation(Av1SequenceInfo, Int32, Array[Int32], Array[Av1RefFrame?], Int32, Int32) -> Av1MotionFieldGrid
 
-pub fn av1_motion_field_store(Av1MotionField, Int, Int, Int, Int, Int, Array[Int], Array[Int], Array[Int], skip? : Int, skip_mode? : Int, interp? : Array[Int], compound_idx? : Int, comp_group_idx? : Int) -> Unit
+pub fn av1_motion_field_store(Av1MotionField, Int32, Int32, Int32, Int32, Int32, Array[Int32], Array[Int32], Array[Int32], skip? : Int32, skip_mode? : Int32, interp? : Array[Int32], compound_idx? : Int32, comp_group_idx? : Int32) -> Unit
 
-pub fn av1_msac_decode_first(Array[Byte], Array[Int]) -> Int?
+pub fn av1_msac_decode_first(Array[Byte], Array[Int32]) -> Int32?
 
-pub fn av1_msac_read_first(Array[Byte], Int) -> Int?
+pub fn av1_msac_read_first(Array[Byte], Int32) -> Int32?
 
-pub fn av1_mv_block_position(Int, Int, Int, Int, Int, Int, Int) -> (Int, Int, Bool)
+pub fn av1_mv_block_position(Int32, Int32, Int32, Int32, Int32, Int32, Int32) -> (Int32, Int32, Bool)
 
-pub let av1_mv_div_mult_size : Int
+pub let av1_mv_div_mult_size : Int32
 
 pub fn av1_mv_frame_of(Av1FrameHeaderInfo, temporal? : Av1MotionFieldGrid?) -> Av1MvFrame
 
-pub let av1_mv_invalid : Int
+pub let av1_mv_invalid : Int32
 
-pub let av1_mv_max_frame_distance : Int
+pub let av1_mv_max_frame_distance : Int32
 
-pub let av1_mv_max_offset_height : Int
+pub let av1_mv_max_offset_height : Int32
 
-pub let av1_mv_max_offset_width : Int
+pub let av1_mv_max_offset_width : Int32
 
-pub fn av1_mv_projection(Int, Int, Int, Int) -> (Int, Int)
+pub fn av1_mv_projection(Int32, Int32, Int32, Int32) -> (Int32, Int32)
 
-pub fn av1_mv_projection_component(Int, Int, Int) -> Int
+pub fn av1_mv_projection_component(Int32, Int32, Int32) -> Int32
 
-pub let av1_mv_refmvs_limit : Int
+pub let av1_mv_refmvs_limit : Int32
 
-pub let av1_mv_stack_stamp : Int
+pub let av1_mv_stack_stamp : Int32
 
 pub fn av1_parse_show_existing_frame(Array[Byte], Av1ShowExistingFrameConfig) -> Av1ShowExistingFrameEnvelope?
 
 pub fn av1_parse_show_existing_frame_envelope(Array[Byte], Av1ShowExistingFrameConfig) -> Av1ShowExistingFrameEnvelope?
 
-pub fn av1_parse_stage1_frame(Array[Byte], Av1SequenceInfo, allow_monochrome? : Bool, allow_highbd? : Bool, map? : Av1FrameMap, frame_header_obu? : Bool, tile_groups? : Array[Array[Byte]], temporal_id? : Int, spatial_id? : Int) -> Av1FrameHeaderInfo?
+pub fn av1_parse_stage1_frame(Array[Byte], Av1SequenceInfo, allow_monochrome? : Bool, allow_highbd? : Bool, map? : Av1FrameMap, frame_header_obu? : Bool, tile_groups? : Array[Array[Byte]], temporal_id? : Int32, spatial_id? : Int32) -> Av1FrameHeaderInfo?
 
 pub fn av1_partition_children(Av1SbPartitionNode, Av1SbPartition) -> Array[Av1SbBlock]
 
-pub fn av1_partition_context(Int, Int?, Int?) -> Int
+pub fn av1_partition_context(Int32, Int32?, Int32?) -> Int32
 
 pub fn av1_partition_leaves(Av1SbPartitionNode, Array[Av1SbPartition]) -> Array[Av1SbBlock]?
 
-pub fn av1_partition_node(Int, Int, Int, Int, Int) -> Av1SbPartitionNode
+pub fn av1_partition_node(Int32, Int32, Int32, Int32, Int32) -> Av1SbPartitionNode
 
-pub fn av1_reconstruct_split_64x64(Array[Array[Int]], Array[Array[Int]], Array[Array[Int]], Array[Int], Array[Int], Array[Int], full_range? : Bool, matrix_coefficients? : Int) -> Image?
+pub fn av1_reconstruct_split_64x64(Array[Array[Int32]], Array[Array[Int32]], Array[Array[Int32]], Array[Int32], Array[Int32], Array[Int32], full_range? : Bool, matrix_coefficients? : Int32) -> Image?
 
-pub fn av1_reconstruct_split_yuv420(Array[Array[Int]], Array[Array[Int]], Array[Array[Int]], Array[Int], Array[Int], Array[Int]) -> (Array[Byte], Array[Byte], Array[Byte])?
+pub fn av1_reconstruct_split_yuv420(Array[Array[Int32]], Array[Array[Int32]], Array[Array[Int32]], Array[Int32], Array[Int32], Array[Int32]) -> (Array[Byte], Array[Byte], Array[Byte])?
 
-pub fn av1_reconstruct_split_yuv420_with_types(Array[Array[Int]], Array[Array[Int]], Array[Array[Int]], Array[Int], Array[Int], Array[Int], Array[Av1TxType], Array[Av1TxType], Array[Av1TxType]) -> (Array[Byte], Array[Byte], Array[Byte])?
+pub fn av1_reconstruct_split_yuv420_with_types(Array[Array[Int32]], Array[Array[Int32]], Array[Array[Int32]], Array[Int32], Array[Int32], Array[Int32], Array[Av1TxType], Array[Av1TxType], Array[Av1TxType]) -> (Array[Byte], Array[Byte], Array[Byte])?
 
-pub fn av1_reconstruct_tx_chroma(Array[Av1TxLeaf], Array[Array[Int]], Int, Array[Av1TxType], size? : Int, bit_depth? : Int) -> Array[Int]?
+pub fn av1_reconstruct_tx_chroma(Array[Av1TxLeaf], Array[Array[Int32]], Int32, Array[Av1TxType], size? : Int32, bit_depth? : Int32) -> Array[Int32]?
 
-pub fn av1_reconstruct_tx_luma(Int, Int, Array[Av1TxLeaf], Array[Array[Int]], Int, Array[Av1TxType], bit_depth? : Int) -> Array[Int]?
+pub fn av1_reconstruct_tx_luma(Int32, Int32, Array[Av1TxLeaf], Array[Array[Int32]], Int32, Array[Av1TxType], bit_depth? : Int32) -> Array[Int32]?
 
-pub fn av1_reconstruct_tx_rgba(Int, Int, Array[Av1TxLeaf], Array[Array[Int]], Array[Av1TxLeaf], Array[Array[Int]], Array[Av1TxLeaf], Array[Array[Int]], Int, Int, Array[Av1TxType], Array[Av1TxType], Array[Av1TxType], Int, full_range? : Bool, matrix_coefficients? : Int) -> Image?
+pub fn av1_reconstruct_tx_rgba(Int32, Int32, Array[Av1TxLeaf], Array[Array[Int32]], Array[Av1TxLeaf], Array[Array[Int32]], Array[Av1TxLeaf], Array[Array[Int32]], Int32, Int32, Array[Av1TxType], Array[Av1TxType], Array[Av1TxType], Int32, full_range? : Bool, matrix_coefficients? : Int32) -> Image?
 
 pub fn av1_reference_show_existing(Av1ReferenceState, Av1ShowExistingFrameEnvelope) -> Image?
 
 pub fn av1_reference_state() -> Av1ReferenceState
 
-pub fn av1_reference_store(Av1ReferenceState, Int, Image, Int) -> Bool
+pub fn av1_reference_store(Av1ReferenceState, Int32, Image, Int32) -> Bool
 
-pub fn av1_relative_dist(Av1SequenceInfo, Int, Int) -> Int
+pub fn av1_relative_dist(Av1SequenceInfo, Int32, Int32) -> Int32
 
 pub fn av1_restoration_active(Av1RestorationConfig) -> Bool
 
-pub let av1_seg_level_alt_q : Int
+pub let av1_seg_level_alt_q : Int32
 
-pub let av1_seg_level_ref_frame : Int
+pub let av1_seg_level_ref_frame : Int32
 
-pub let av1_segment_levels : Int
+pub let av1_segment_levels : Int32
 
 pub fn av1_segmentation_features_supported(Av1SegmentationParams) -> Bool
 
 pub fn av1_segmentation_supported(Av1SegmentationParams) -> Bool
 
-pub let av1_segments : Int
+pub let av1_segments : Int32
 
 pub fn av1_sequence_info(Array[Byte]) -> Av1SequenceInfo?
 
 pub fn av1_tx_children(Av1TxNode, Av1TxPartition) -> Array[Av1TxNode]
 
-pub fn av1_tx_depth_context_for_node(Av1TxTraversalState, Av1TxNode) -> Int
+pub fn av1_tx_depth_context_for_node(Av1TxTraversalState, Av1TxNode) -> Int32
 
-pub fn av1_tx_depth_context_from_neighbors(Int, Int) -> Int
+pub fn av1_tx_depth_context_from_neighbors(Int32, Int32) -> Int32
 
-pub fn av1_tx_depth_context_from_sizes(Int, Int, Int, Int) -> Int
+pub fn av1_tx_depth_context_from_sizes(Int32, Int32, Int32, Int32) -> Int32
 
 pub fn av1_tx_leaves(Av1TxNode, Array[Av1TxPartition]) -> Array[Av1TxNode]?
 
-pub fn av1_tx_rect_supported(Int, Int) -> Bool
+pub fn av1_tx_rect_supported(Int32, Int32) -> Bool
 
 pub fn av1_tx_traversal_record(Av1TxTraversalState, Av1TxNode) -> Unit
 
-pub fn av1_tx_traversal_state(Int, Int) -> Av1TxTraversalState
+pub fn av1_tx_traversal_state(Int32, Int32) -> Av1TxTraversalState
 
 pub fn av1_video_decode_frame(Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool) -> Image?
 
@@ -214,23 +214,23 @@ pub fn av1_video_decode_temporal_unit_native_result(Av1VideoDecoder, Array[Byte]
 
 pub fn av1_video_decoder() -> Av1VideoDecoder
 
-pub fn av1_warp_from_global_motion(Array[Int]) -> Av1WarpModel?
+pub fn av1_warp_from_global_motion(Array[Int32]) -> Av1WarpModel?
 
-pub let av1_warp_samples_scan_limit : Int
+pub let av1_warp_samples_scan_limit : Int32
 
-pub fn av1_wedge_mask(Int, Int, Int, Int) -> Array[Int]?
+pub fn av1_wedge_mask(Int32, Int32, Int32, Int32) -> Array[Int32]?
 
-pub fn av1_wedge_shape_ok(Int, Int) -> Bool
+pub fn av1_wedge_shape_ok(Int32, Int32) -> Bool
 
-pub fn av1_yuv420_highbd_to_rgba(Int, Int, Array[Int], Array[Int], Array[Int], Int, full_range? : Bool, matrix_coefficients? : Int, color_primaries? : Int, transfer_characteristics? : Int) -> Image?
+pub fn av1_yuv420_highbd_to_rgba(Int32, Int32, Array[Int32], Array[Int32], Array[Int32], Int32, full_range? : Bool, matrix_coefficients? : Int32, color_primaries? : Int32, transfer_characteristics? : Int32) -> Image?
 
-pub fn av1_yuv420_to_rgba(Int, Int, Array[Byte], Array[Byte], Array[Byte]) -> Image?
+pub fn av1_yuv420_to_rgba(Int32, Int32, Array[Byte], Array[Byte], Array[Byte]) -> Image?
 
-pub fn av1_yuv420_to_rgba_color(Int, Int, Array[Byte], Array[Byte], Array[Byte], full_range? : Bool, matrix_coefficients? : Int, color_primaries? : Int, transfer_characteristics? : Int) -> Image?
+pub fn av1_yuv420_to_rgba_color(Int32, Int32, Array[Byte], Array[Byte], Array[Byte], full_range? : Bool, matrix_coefficients? : Int32, color_primaries? : Int32, transfer_characteristics? : Int32) -> Image?
 
-pub fn av1_yuv420_to_rgba_range(Int, Int, Array[Byte], Array[Byte], Array[Byte], full_range? : Bool) -> Image?
+pub fn av1_yuv420_to_rgba_range(Int32, Int32, Array[Byte], Array[Byte], Array[Byte], full_range? : Bool) -> Image?
 
-pub fn av1_yuv_highbd_to_rgba(Int, Int, Array[Int], Array[Int], Array[Int], Int, subsampling_x? : Bool, subsampling_y? : Bool, full_range? : Bool, matrix_coefficients? : Int, color_primaries? : Int, transfer_characteristics? : Int) -> Image?
+pub fn av1_yuv_highbd_to_rgba(Int32, Int32, Array[Int32], Array[Int32], Array[Int32], Int32, subsampling_x? : Bool, subsampling_y? : Bool, full_range? : Bool, matrix_coefficients? : Int32, color_primaries? : Int32, transfer_characteristics? : Int32) -> Image?
 
 pub fn avif_alpha_item_descriptor(Array[Byte]) -> AvifAlphaItemDescriptor?
 
@@ -238,7 +238,7 @@ pub fn avif_alpha_item_payload(Array[Byte]) -> Array[Byte]?
 
 pub fn avif_animation_descriptor(Array[Byte]) -> AvifAnimationDescriptor?
 
-pub fn avif_animation_frame_at(AvifAnimationPixels, Int) -> Image?
+pub fn avif_animation_frame_at(AvifAnimationPixels, Int32) -> Image?
 
 pub fn avif_animation_sample_payloads(Array[Byte]) -> (AvifAnimationDescriptor, Array[Array[Byte]])?
 
@@ -252,19 +252,19 @@ pub fn avif_decode_alpha(Array[Byte]) -> Array[Byte]?
 
 pub fn avif_decode_animation(Array[Byte]) -> AvifAnimationPixels?
 
-pub fn avif_decode_animation_frame(Array[Byte], Int) -> Image?
+pub fn avif_decode_animation_frame(Array[Byte], Int32) -> Image?
 
 pub fn avif_decode_animation_frames(AvifAnimationDescriptor, Array[Array[Byte]]) -> AvifAnimationPixels?
 
 pub fn avif_decode_animation_native(Array[Byte]) -> AvifNativeAnimation?
 
-pub fn avif_decode_animation_samples(Int, Array[Int], Array[Int], Array[Array[Byte]]) -> AvifAnimationPixels?
+pub fn avif_decode_animation_samples(Int32, Array[Int32], Array[Int32], Array[Array[Byte]]) -> AvifAnimationPixels?
 
 pub fn avif_decode_grid(Array[Byte], AvifGridDescriptor) -> Image?
 
 pub fn avif_decode_grid_auto(Array[Byte]) -> Image?
 
-pub fn avif_decode_grid_tiles(Int, Int, Int, Int, Array[Array[Byte]]) -> Image?
+pub fn avif_decode_grid_tiles(Int32, Int32, Int32, Int32, Array[Array[Byte]]) -> Image?
 
 pub fn avif_decode_native(Array[Byte]) -> AvifNativeImage?
 
@@ -282,29 +282,29 @@ pub fn avif_grid_descriptor(Array[Byte]) -> AvifGridDescriptor?
 
 pub fn avif_metadata(Array[Byte], limits? : DecodeLimits) -> Result[AvifMetadata, DecodeError]
 
-pub fn avif_reconstruct_grid(Int, Int, Int, Int, Array[Image]) -> Image?
+pub fn avif_reconstruct_grid(Int32, Int32, Int32, Int32, Array[Image]) -> Image?
 
 pub fn avif_stage1_input(Array[Byte]) -> Av1Stage1Input?
 
-pub fn clamp_byte(Int) -> Byte
+pub fn clamp_byte(Int32) -> Byte
 
 // Errors
 
 // Types and methods
 pub(all) struct Av1CdefConfig {
-  bits : Int
-  damping : Int
-  y_primary : Array[Int]
-  y_secondary : Array[Int]
-  uv_primary : Array[Int]
-  uv_secondary : Array[Int]
+  bits : Int32
+  damping : Int32
+  y_primary : Array[Int32]
+  y_secondary : Array[Int32]
+  uv_primary : Array[Int32]
+  uv_secondary : Array[Int32]
 }
 
 pub(all) struct Av1CdefParams {
-  primary_strength : Int
-  secondary_strength : Int
-  damping : Int
-  direction : Int
+  primary_strength : Int32
+  secondary_strength : Int32
+  damping : Int32
+  direction : Int32
 }
 
 pub struct Av1ContainerDecoder {
@@ -313,8 +313,8 @@ pub struct Av1ContainerDecoder {
 pub fn Av1ContainerDecoder::format(Self) -> Av1ContainerFormat
 pub fn Av1ContainerDecoder::new(Array[Byte], format? : Av1ContainerFormat?, track_id? : Int64?, limits? : DecodeLimits) -> Result[Self, DecodeError]
 pub fn Av1ContainerDecoder::next_frame(Self) -> Result[Av1ContainerFrame?, DecodeError]
-pub fn Av1ContainerDecoder::packet_count(Self) -> Int
-pub fn Av1ContainerDecoder::position(Self) -> Int
+pub fn Av1ContainerDecoder::packet_count(Self) -> Int32
+pub fn Av1ContainerDecoder::position(Self) -> Int32
 pub fn Av1ContainerDecoder::presentation_timeline(Self) -> Result[Av1PresentationTimeline, DecodeError]
 pub fn Av1ContainerDecoder::reset(Self) -> Unit
 pub fn Av1ContainerDecoder::seek_timestamp(Self, Int64) -> Result[Av1ContainerSeekResult, DecodeError]
@@ -327,7 +327,7 @@ pub(all) enum Av1ContainerFormat {
 } derive(Eq, @debug.Debug)
 
 pub struct Av1ContainerFrame {
-  packet_index : Int
+  packet_index : Int32
   timestamp : Int64?
   duration : Int64?
   timescale : Int64
@@ -364,9 +364,9 @@ pub fn Av1ContainerStream::bytes_received(Self) -> Int64
 pub fn Av1ContainerStream::feed(Self, Array[Byte]) -> Result[Av1ContainerPacketBatch, DecodeError]
 pub fn Av1ContainerStream::finish(Self) -> Result[Av1ContainerPacketBatch, DecodeError]
 pub fn Av1ContainerStream::new(format? : Av1ContainerFormat?, track_id? : Int64?, limits? : DecodeLimits) -> Result[Self, DecodeError]
-pub fn Av1ContainerStream::packet_count(Self) -> Int
-pub fn Av1ContainerStream::peak_pending_bytes(Self) -> Int
-pub fn Av1ContainerStream::pending_bytes(Self) -> Int
+pub fn Av1ContainerStream::packet_count(Self) -> Int32
+pub fn Av1ContainerStream::peak_pending_bytes(Self) -> Int32
+pub fn Av1ContainerStream::pending_bytes(Self) -> Int32
 pub fn Av1ContainerStream::replay(Self) -> Result[Unit, DecodeError]
 pub fn Av1ContainerStream::reset(Self) -> Unit
 pub fn Av1ContainerStream::track_info(Self) -> Av1ContainerStreamInfo?
@@ -377,8 +377,8 @@ pub struct Av1ContainerStreamDecoder {
 pub fn Av1ContainerStreamDecoder::feed(Self, Array[Byte]) -> Result[Av1ContainerFrameBatch, DecodeError]
 pub fn Av1ContainerStreamDecoder::finish(Self) -> Result[Av1ContainerFrameBatch, DecodeError]
 pub fn Av1ContainerStreamDecoder::new(format? : Av1ContainerFormat?, track_id? : Int64?, limits? : DecodeLimits) -> Result[Self, DecodeError]
-pub fn Av1ContainerStreamDecoder::peak_pending_bytes(Self) -> Int
-pub fn Av1ContainerStreamDecoder::pending_bytes(Self) -> Int
+pub fn Av1ContainerStreamDecoder::peak_pending_bytes(Self) -> Int32
+pub fn Av1ContainerStreamDecoder::pending_bytes(Self) -> Int32
 pub fn Av1ContainerStreamDecoder::replay(Self) -> Result[Unit, DecodeError]
 pub fn Av1ContainerStreamDecoder::reset(Self) -> Unit
 pub fn Av1ContainerStreamDecoder::track_info(Self) -> Av1ContainerStreamInfo?
@@ -386,8 +386,8 @@ pub fn Av1ContainerStreamDecoder::track_info(Self) -> Av1ContainerStreamInfo?
 pub struct Av1ContainerStreamInfo {
   format : Av1ContainerFormat
   track_id : Int64
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   timescale : Int64
   movie_timescale : Int64?
   edits : Array[Av1TrackEdit]
@@ -404,8 +404,8 @@ pub(all) enum Av1ContainerStreamStatus {
 pub struct Av1DemuxedTrack {
   format : Av1ContainerFormat
   track_id : Int64
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   timescale : Int64
   movie_timescale : Int64?
   edits : Array[Av1TrackEdit]
@@ -415,57 +415,57 @@ pub struct Av1DemuxedTrack {
 
 pub(all) struct Av1FilmGrainParams {
   apply_grain : Bool
-  grain_seed : Int
-  num_y_points : Int
-  point_y_value : Array[Int]
-  point_y_scaling : Array[Int]
+  grain_seed : Int32
+  num_y_points : Int32
+  point_y_value : Array[Int32]
+  point_y_scaling : Array[Int32]
   chroma_scaling_from_luma : Bool
-  num_cb_points : Int
-  point_cb_value : Array[Int]
-  point_cb_scaling : Array[Int]
-  num_cr_points : Int
-  point_cr_value : Array[Int]
-  point_cr_scaling : Array[Int]
-  grain_scaling_minus8 : Int
-  ar_coeff_lag : Int
-  ar_coeffs_y : Array[Int]
-  ar_coeffs_cb : Array[Int]
-  ar_coeffs_cr : Array[Int]
-  ar_coeff_shift_minus6 : Int
-  grain_scale_shift : Int
-  cb_mult : Int
-  cb_luma_mult : Int
-  cb_offset : Int
-  cr_mult : Int
-  cr_luma_mult : Int
-  cr_offset : Int
+  num_cb_points : Int32
+  point_cb_value : Array[Int32]
+  point_cb_scaling : Array[Int32]
+  num_cr_points : Int32
+  point_cr_value : Array[Int32]
+  point_cr_scaling : Array[Int32]
+  grain_scaling_minus8 : Int32
+  ar_coeff_lag : Int32
+  ar_coeffs_y : Array[Int32]
+  ar_coeffs_cb : Array[Int32]
+  ar_coeffs_cr : Array[Int32]
+  ar_coeff_shift_minus6 : Int32
+  grain_scale_shift : Int32
+  cb_mult : Int32
+  cb_luma_mult : Int32
+  cb_offset : Int32
+  cr_mult : Int32
+  cr_luma_mult : Int32
+  cr_offset : Int32
   overlap_flag : Bool
   clip_to_restricted_range : Bool
 }
 
 pub(all) struct Av1FrameCdfs {
-  tables : Array[Array[Array[Int]]]
+  tables : Array[Array[Array[Int32]]]
 }
 
 pub(all) struct Av1FrameHeaderInfo {
-  frame_width : Int
-  upscaled_width : Int
-  frame_height : Int
-  superres_denom : Int
-  header_bytes : Int
+  frame_width : Int32
+  upscaled_width : Int32
+  frame_height : Int32
+  superres_denom : Int32
+  header_bytes : Int32
   tile_payload : Array[Byte]
-  base_q_idx : Int
+  base_q_idx : Int32
   quant_matrix : Av1QuantMatrix?
-  delta_lf_res : Int
+  delta_lf_res : Int32
   delta_lf_multi : Bool
-  tile_cols : Int
-  tile_rows : Int
-  tile_cols_log2 : Int
-  tile_rows_log2 : Int
-  tile_col_starts_sb : Array[Int]
-  tile_row_starts_sb : Array[Int]
-  tile_size_bytes : Int
-  context_update_tile_id : Int
+  tile_cols : Int32
+  tile_rows : Int32
+  tile_cols_log2 : Int32
+  tile_rows_log2 : Int32
+  tile_col_starts_sb : Array[Int32]
+  tile_row_starts_sb : Array[Int32]
+  tile_size_bytes : Int32
+  context_update_tile_id : Int32
   tx_mode_select : Bool
   reduced_tx_set : Bool
   coded_lossless : Bool
@@ -477,109 +477,109 @@ pub(all) struct Av1FrameHeaderInfo {
   film_grain : Av1FilmGrainParams?
   quant_deltas : Av1QuantDeltas
   delta_q_present : Bool
-  delta_q_res : Int
+  delta_q_res : Int32
   delta_lf_present : Bool
   segmentation : Av1SegmentationParams
-  frame_type : Int
+  frame_type : Int32
   frame_is_intra : Bool
   show_frame : Bool
   show_existing_frame : Bool
-  frame_to_show_map_idx : Int
+  frame_to_show_map_idx : Int32
   error_resilient : Bool
   showable_frame : Bool
   disable_frame_end_update_cdf : Bool
-  force_integer_mv : Int
-  current_frame_id : Int
-  order_hint : Int
-  primary_ref_frame : Int
-  refresh_frame_flags : Int
-  ref_frame_idx : Array[Int]
-  order_hints : Array[Int]
-  ref_frame_sign_bias : Array[Int]
+  force_integer_mv : Int32
+  current_frame_id : Int32
+  order_hint : Int32
+  primary_ref_frame : Int32
+  refresh_frame_flags : Int32
+  ref_frame_idx : Array[Int32]
+  order_hints : Array[Int32]
+  ref_frame_sign_bias : Array[Int32]
   allow_high_precision_mv : Bool
-  interpolation_filter : Int
+  interpolation_filter : Int32
   is_motion_mode_switchable : Bool
   use_ref_frame_mvs : Bool
   allow_warped_motion : Bool
   reference_select : Bool
   skip_mode_present : Bool
-  skip_mode_frame : Array[Int]
-  gm_type : Array[Int]
-  gm_params : Array[Array[Int]]
-  prev_gm_params : Array[Array[Int]]
-  mut loop_filter_ref_deltas : Array[Int]
-  mut loop_filter_mode_deltas : Array[Int]
+  skip_mode_frame : Array[Int32]
+  gm_type : Array[Int32]
+  gm_params : Array[Array[Int32]]
+  prev_gm_params : Array[Array[Int32]]
+  mut loop_filter_ref_deltas : Array[Int32]
+  mut loop_filter_mode_deltas : Array[Int32]
   allow_intrabc : Bool
-  render_width : Int
-  render_height : Int
+  render_width : Int32
+  render_height : Int32
 }
 
 pub(all) struct Av1FrameInfo {
   key_frame : Bool
   show_frame : Bool
-  payload_size : Int
+  payload_size : Int32
 }
 
 pub(all) struct Av1FrameMap {
   slots : Array[Av1RefFrame?]
   valid : Array[Bool]
-  order_hints : Array[Int]
-  frame_types : Array[Int]
-  frame_ids : Array[Int]
-  upscaled_widths : Array[Int]
-  frame_widths : Array[Int]
-  frame_heights : Array[Int]
-  render_widths : Array[Int]
-  render_heights : Array[Int]
-  saved_gm_params : Array[Array[Array[Int]]]
-  saved_loop_filter_ref_deltas : Array[Array[Int]]
-  saved_loop_filter_mode_deltas : Array[Array[Int]]
+  order_hints : Array[Int32]
+  frame_types : Array[Int32]
+  frame_ids : Array[Int32]
+  upscaled_widths : Array[Int32]
+  frame_widths : Array[Int32]
+  frame_heights : Array[Int32]
+  render_widths : Array[Int32]
+  render_heights : Array[Int32]
+  saved_gm_params : Array[Array[Array[Int32]]]
+  saved_loop_filter_ref_deltas : Array[Array[Int32]]
+  saved_loop_filter_mode_deltas : Array[Array[Int32]]
   saved_segmentation : Array[Av1SegmentationParams]
-  saved_segment_ids : Array[Array[Int]]
+  saved_segment_ids : Array[Array[Int32]]
   saved_film_grain : Array[Av1FilmGrainParams?]
   saved_showable : Array[Bool]
-  mut current_frame_id : Int
+  mut current_frame_id : Int32
   mut has_frame_id : Bool
   mut saved_cdfs : Av1FrameCdfs?
 }
 
 pub(all) struct Av1InterBlock {
-  mi_row : Int
-  mi_col : Int
-  width4 : Int
-  height4 : Int
-  block_width : Int
-  block_height : Int
-  size_index : Int
+  mi_row : Int32
+  mi_col : Int32
+  width4 : Int32
+  height4 : Int32
+  block_width : Int32
+  block_height : Int32
+  size_index : Int32
   avail_u : Bool
   avail_l : Bool
-  mut skip : Int
+  mut skip : Int32
   mut skip_mode : Bool
-  mut segment_ref : Int
+  mut segment_ref : Int32
   mut segment_skip : Bool
   mut segment_global : Bool
   mut is_inter : Bool
-  mut y_mode : Int
-  mut ref_frame : Int
-  mut ref_frame1 : Int
-  mut mv_row : Int
-  mut mv_col : Int
-  mut mv_row1 : Int
-  mut mv_col1 : Int
-  mut interintra : Int
-  mut interintra_mode : Int
-  mut wedge_interintra : Int
-  mut wedge_index_ii : Int
-  mut compound_type : Int
-  mut compound_idx : Int
-  mut comp_group_idx : Int
-  mut wedge_index : Int
-  mut wedge_sign : Int
-  mut mask_type : Int
-  mut interp_vertical : Int
-  mut interp_horizontal : Int
-  mut ref_mv_idx : Int
-  mut motion_mode : Int
+  mut y_mode : Int32
+  mut ref_frame : Int32
+  mut ref_frame1 : Int32
+  mut mv_row : Int32
+  mut mv_col : Int32
+  mut mv_row1 : Int32
+  mut mv_col1 : Int32
+  mut interintra : Int32
+  mut interintra_mode : Int32
+  mut wedge_interintra : Int32
+  mut wedge_index_ii : Int32
+  mut compound_type : Int32
+  mut compound_idx : Int32
+  mut comp_group_idx : Int32
+  mut wedge_index : Int32
+  mut wedge_sign : Int32
+  mut mask_type : Int32
+  mut interp_vertical : Int32
+  mut interp_horizontal : Int32
+  mut ref_mv_idx : Int32
+  mut motion_mode : Int32
   mut warp : Array[Av1WarpModel]
 }
 
@@ -587,141 +587,141 @@ pub(all) struct Av1InterFrame {
   field : Av1MotionField
   frame : Av1MvFrame
   refs : Array[Av1RefFrame?]
-  interpolation_filter : Int
+  interpolation_filter : Int32
   enable_dual_filter : Bool
   skip_mode_present : Bool
-  skip_mode_frame : Array[Int]
+  skip_mode_frame : Array[Int32]
   reference_select : Bool
   enable_interintra_compound : Bool
-  ref_distances : Array[Int]
+  ref_distances : Array[Int32]
   enable_masked_compound : Bool
   enable_jnt_comp : Bool
-  mi_cols : Int
-  mi_rows : Int
+  mi_cols : Int32
+  mi_rows : Int32
 }
 
 pub(all) struct Av1LoopFilterBlockMap {
-  cols : Int
-  rows : Int
-  segment_ids : Array[Int]
-  deltas : Array[Int]
+  cols : Int32
+  rows : Int32
+  segment_ids : Array[Int32]
+  deltas : Array[Int32]
   segmentation : Av1SegmentationParams
 }
 
 pub(all) struct Av1LoopFilterConfig {
-  levels : Array[Int]
-  sharpness : Int
+  levels : Array[Int32]
+  sharpness : Int32
   delta_enabled : Bool
-  ref_deltas : Array[Int]
-  mode_deltas : Array[Int]
+  ref_deltas : Array[Int32]
+  mode_deltas : Array[Int32]
 }
 
 pub(all) struct Av1MotionField {
-  cols : Int
-  rows : Int
-  width4 : Array[Int]
-  height4 : Array[Int]
-  y_modes : Array[Int]
+  cols : Int32
+  rows : Int32
+  width4 : Array[Int32]
+  height4 : Array[Int32]
+  y_modes : Array[Int32]
   is_inter : Array[Bool]
   written : Array[Bool]
-  skips : Array[Int]
-  skip_modes : Array[Int]
-  tx_width : Array[Int]
-  tx_height : Array[Int]
-  tx_types : Array[Int]
-  interp_v : Array[Int]
-  interp_h : Array[Int]
-  refs : Array[Int]
-  mv_rows : Array[Int]
-  mv_cols : Array[Int]
-  compound_idxs : Array[Int]
-  comp_group_idxs : Array[Int]
+  skips : Array[Int32]
+  skip_modes : Array[Int32]
+  tx_width : Array[Int32]
+  tx_height : Array[Int32]
+  tx_types : Array[Int32]
+  interp_v : Array[Int32]
+  interp_h : Array[Int32]
+  refs : Array[Int32]
+  mv_rows : Array[Int32]
+  mv_cols : Array[Int32]
+  compound_idxs : Array[Int32]
+  comp_group_idxs : Array[Int32]
 }
 
 pub(all) struct Av1MotionFieldGrid {
-  refs : Array[Int]
-  mv_rows : Array[Array[Int]]
-  mv_cols : Array[Array[Int]]
-  w8 : Int
-  h8 : Int
+  refs : Array[Int32]
+  mv_rows : Array[Array[Int32]]
+  mv_cols : Array[Array[Int32]]
+  w8 : Int32
+  h8 : Int32
 }
 
 pub(all) struct Av1MotionRequest {
   reference : Av1RefFrame
-  frame_width : Int
-  frame_height : Int
-  plane : Int
-  x : Int
-  y : Int
-  width : Int
-  height : Int
-  mv_row : Int
-  mv_col : Int
-  filter_vertical : Int
-  filter_horizontal : Int
+  frame_width : Int32
+  frame_height : Int32
+  plane : Int32
+  x : Int32
+  y : Int32
+  width : Int32
+  height : Int32
+  mv_row : Int32
+  mv_col : Int32
+  filter_vertical : Int32
+  filter_horizontal : Int32
   compound : Bool
 }
 
 pub(all) struct Av1MvBlock {
-  mi_row : Int
-  mi_col : Int
-  width4 : Int
-  height4 : Int
-  block_width : Int
-  block_height : Int
-  refs : Array[Int]
-  tile_row_start : Int
-  tile_row_end : Int
-  tile_col_start : Int
-  tile_col_end : Int
+  mi_row : Int32
+  mi_col : Int32
+  width4 : Int32
+  height4 : Int32
+  block_width : Int32
+  block_height : Int32
+  refs : Array[Int32]
+  tile_row_start : Int32
+  tile_row_end : Int32
+  tile_col_start : Int32
+  tile_col_end : Int32
 }
 
 pub(all) struct Av1MvFrame {
   allow_high_precision_mv : Bool
   use_ref_frame_mvs : Bool
-  force_integer_mv : Int
+  force_integer_mv : Int32
   is_motion_mode_switchable : Bool
   allow_warped_motion : Bool
-  gm_type : Array[Int]
-  gm_params : Array[Array[Int]]
-  ref_frame_sign_bias : Array[Int]
-  frame_width : Int
-  frame_height : Int
+  gm_type : Array[Int32]
+  gm_params : Array[Array[Int32]]
+  ref_frame_sign_bias : Array[Int32]
+  frame_width : Int32
+  frame_height : Int32
   temporal : Av1MotionFieldGrid?
 }
 
 pub(all) struct Av1MvStack {
-  mv_rows : Array[Int]
-  mv_cols : Array[Int]
-  weights : Array[Int]
-  mut count : Int
-  mut newmv_count : Int
-  mut found_match : Int
-  mut close_matches : Int
-  mut total_matches : Int
-  mut zero_mv_context : Int
-  mut newmv_context : Int
-  mut refmv_context : Int
-  drl_contexts : Array[Int]
-  global_rows : Array[Int]
-  global_cols : Array[Int]
+  mv_rows : Array[Int32]
+  mv_cols : Array[Int32]
+  weights : Array[Int32]
+  mut count : Int32
+  mut newmv_count : Int32
+  mut found_match : Int32
+  mut close_matches : Int32
+  mut total_matches : Int32
+  mut zero_mv_context : Int32
+  mut newmv_context : Int32
+  mut refmv_context : Int32
+  drl_contexts : Array[Int32]
+  global_rows : Array[Int32]
+  global_cols : Array[Int32]
 }
 
 pub struct Av1NativeFrame {
-  width : Int
-  height : Int
-  bit_depth : Int
+  width : Int32
+  height : Int32
+  bit_depth : Int32
   subsampling_x : Bool
   subsampling_y : Bool
   full_range : Bool
-  matrix_coefficients : Int
-  color_primaries : Int
-  transfer_characteristics : Int
+  matrix_coefficients : Int32
+  color_primaries : Int32
+  transfer_characteristics : Int32
   planes : FixedArray[Av1PixelPlane]
 }
-pub fn Av1NativeFrame::copy_plane_into(Self, Int, FixedArray[Byte], Int, PixelPacking, offset? : Int) -> Result[Unit, DecodeError]
+pub fn Av1NativeFrame::copy_plane_into(Self, Int32, FixedArray[Byte], Int32, PixelPacking, offset? : Int32) -> Result[Unit, DecodeError]
 pub fn Av1NativeFrame::to_rgba16(Self) -> Image16?
-pub fn Av1NativeFrame::to_rgba16_into(Self, FixedArray[UInt16], Int, offset? : Int) -> Result[Unit, DecodeError]
+pub fn Av1NativeFrame::to_rgba16_into(Self, FixedArray[UInt16], Int32, offset? : Int32) -> Result[Unit, DecodeError]
 pub fn Av1NativeFrame::to_sdr_rgba16(Self, options? : HdrToneMapOptions) -> Result[Image16, DecodeError]
 
 pub struct Av1Packet {
@@ -733,9 +733,9 @@ pub struct Av1Packet {
 }
 
 pub struct Av1PixelPlane {
-  width : Int
-  height : Int
-  data : FixedArray[Int]
+  width : Int32
+  height : Int32
+  data : FixedArray[Int32]
 }
 
 pub(all) enum Av1PresentationPoint {
@@ -747,7 +747,7 @@ pub(all) enum Av1PresentationPoint {
 pub struct Av1PresentationTimeline {
   // private fields
 }
-pub fn Av1PresentationTimeline::edit_count(Self) -> Int
+pub fn Av1PresentationTimeline::edit_count(Self) -> Int32
 pub fn Av1PresentationTimeline::has_edits(Self) -> Bool
 pub fn Av1PresentationTimeline::map_movie_time(Self, Int64) -> Result[Av1PresentationPoint, DecodeError]
 pub fn Av1PresentationTimeline::media_timescale(Self) -> Int64
@@ -755,17 +755,17 @@ pub fn Av1PresentationTimeline::movie_timescale(Self) -> Int64?
 pub fn Av1PresentationTimeline::new(Av1DemuxedTrack) -> Result[Self, DecodeError]
 
 pub(all) struct Av1QuantDeltas {
-  y_dc : Int
-  u_dc : Int
-  u_ac : Int
-  v_dc : Int
-  v_ac : Int
+  y_dc : Int32
+  u_dc : Int32
+  u_ac : Int32
+  v_dc : Int32
+  v_ac : Int32
 }
 
 pub(all) struct Av1QuantMatrix {
-  y : Int
-  u : Int
-  v : Int
+  y : Int32
+  u : Int32
+  v : Int32
 } derive(Eq, @debug.Debug)
 
 pub struct Av1RationalTime {
@@ -774,68 +774,68 @@ pub struct Av1RationalTime {
 } derive(Eq, @debug.Debug)
 
 pub(all) struct Av1RefFrame {
-  planes : Array[Array[Int]]
-  coded_width : Int
-  coded_height : Int
-  width : Int
-  height : Int
-  sub_x : Int
-  sub_y : Int
-  bit_depth : Int
-  frame_width : Int
-  upscaled_width : Int
-  frame_height : Int
-  render_width : Int
-  render_height : Int
-  order_hint : Int
-  frame_type : Int
-  frame_id : Int
-  order_hints : Array[Int]
-  gm_params : Array[Array[Int]]
-  loop_filter_ref_deltas : Array[Int]
-  loop_filter_mode_deltas : Array[Int]
+  planes : Array[Array[Int32]]
+  coded_width : Int32
+  coded_height : Int32
+  width : Int32
+  height : Int32
+  sub_x : Int32
+  sub_y : Int32
+  bit_depth : Int32
+  frame_width : Int32
+  upscaled_width : Int32
+  frame_height : Int32
+  render_width : Int32
+  render_height : Int32
+  order_hint : Int32
+  frame_type : Int32
+  frame_id : Int32
+  order_hints : Array[Int32]
+  gm_params : Array[Array[Int32]]
+  loop_filter_ref_deltas : Array[Int32]
+  loop_filter_mode_deltas : Array[Int32]
   cdfs : Av1FrameCdfs?
-  mf_refs : Array[Int]
-  mf_mvs : Array[Int]
-  mi_cols : Int
-  mi_rows : Int
-  saved_order_hints : Array[Int]
+  mf_refs : Array[Int32]
+  mf_mvs : Array[Int32]
+  mi_cols : Int32
+  mi_rows : Int32
+  saved_order_hints : Array[Int32]
 }
 
 pub(all) struct Av1ReferenceState {
   images : Array[Image?]
-  frame_types : Array[Int]
+  frame_types : Array[Int32]
 }
 
 pub(all) struct Av1RestorationConfig {
   modes : Array[Av1RestorationType]
-  unit_sizes : Array[Int]
+  unit_sizes : Array[Int32]
 }
 
 pub(all) struct Av1RestorationLayout {
   config : Av1RestorationConfig
-  frame_width : Int
-  upscaled_width : Int
-  frame_height : Int
-  superres_denom : Int
-  unit_cols : Array[Int]
-  unit_rows : Array[Int]
+  frame_width : Int32
+  upscaled_width : Int32
+  frame_height : Int32
+  superres_denom : Int32
+  unit_cols : Array[Int32]
+  unit_rows : Array[Int32]
 }
 
 pub(all) struct Av1RestorationPlaneStripes {
-  count : Int
-  width : Int
-  height : Int
-  starts : Array[Int]
-  ends : Array[Int]
-  top : Array[Array[Int]]
-  bottom : Array[Array[Int]]
+  count : Int32
+  width : Int32
+  height : Int32
+  starts : Array[Int32]
+  ends : Array[Int32]
+  top : Array[Array[Int32]]
+  bottom : Array[Array[Int32]]
 }
 
 pub(all) struct Av1RestorationSourceView {
   store : Av1RestorationStripeStore
-  frame : Array[Array[Int]]
-  frame_strides : Array[Int]
+  frame : Array[Array[Int32]]
+  frame_strides : Array[Int32]
 }
 
 pub(all) struct Av1RestorationStripeStore {
@@ -843,11 +843,11 @@ pub(all) struct Av1RestorationStripeStore {
 }
 
 pub(all) struct Av1RestorationTileState {
-  cdf_switchable : Array[Int]
-  cdf_wiener : Array[Int]
-  cdf_sgr : Array[Int]
-  ref_wiener : Array[Array[Array[Int]]]
-  ref_sgr : Array[Array[Int]]
+  cdf_switchable : Array[Int32]
+  cdf_wiener : Array[Int32]
+  cdf_sgr : Array[Int32]
+  ref_wiener : Array[Array[Array[Int32]]]
+  ref_sgr : Array[Array[Int32]]
   units : Array[Av1RestorationUnitRecord]
 }
 
@@ -860,22 +860,22 @@ pub(all) enum Av1RestorationType {
 
 pub(all) enum Av1RestorationUnit {
   Av1RestorationUnitNone
-  Av1RestorationUnitWiener(Array[Int], Array[Int])
-  Av1RestorationUnitSgrproj(Int, Array[Int])
+  Av1RestorationUnitWiener(Array[Int32], Array[Int32])
+  Av1RestorationUnitSgrproj(Int32, Array[Int32])
 }
 
 pub(all) struct Av1RestorationUnitRecord {
-  plane : Int
-  unit_row : Int
-  unit_col : Int
+  plane : Int32
+  unit_row : Int32
+  unit_col : Int32
   unit : Av1RestorationUnit
 }
 
 pub(all) struct Av1SbBlock {
-  row : Int
-  col : Int
-  width : Int
-  height : Int
+  row : Int32
+  col : Int32
+  width : Int32
+  height : Int32
 }
 
 pub(all) enum Av1SbPartition {
@@ -892,11 +892,11 @@ pub(all) enum Av1SbPartition {
 }
 
 pub(all) struct Av1SbPartitionNode {
-  row : Int
-  col : Int
-  size : Int
-  frame_width : Int
-  frame_height : Int
+  row : Int32
+  col : Int32
+  size : Int32
+  frame_width : Int32
+  frame_height : Int32
 }
 pub fn Av1SbPartitionNode::edge_forces_split(Self) -> Bool
 pub fn Av1SbPartitionNode::has_cols(Self) -> Bool
@@ -908,16 +908,16 @@ pub(all) struct Av1SegmentationParams {
   temporal_update : Bool
   update_data : Bool
   feature_enabled : Array[Array[Bool]]
-  feature_data : Array[Array[Int]]
+  feature_data : Array[Array[Int32]]
   seg_id_pre_skip : Bool
-  last_active_seg_id : Int
+  last_active_seg_id : Int32
 }
 
 pub(all) struct Av1SequenceInfo {
-  profile : Int
-  width : Int
-  height : Int
-  bit_depth : Int
+  profile : Int32
+  width : Int32
+  height : Int32
+  bit_depth : Int32
   monochrome : Bool
   subsampling_x : Bool
   subsampling_y : Bool
@@ -931,64 +931,64 @@ pub(all) struct Av1SequenceInfo {
   full_range : Bool
   separate_uv_delta_q : Bool
   film_grain_params_present : Bool
-  color_primaries : Int
-  transfer_characteristics : Int
-  matrix_coefficients : Int
+  color_primaries : Int32
+  transfer_characteristics : Int32
+  matrix_coefficients : Int32
   still_picture : Bool
   enable_order_hint : Bool
-  order_hint_bits : Int
+  order_hint_bits : Int32
   enable_ref_frame_mvs : Bool
   enable_warped_motion : Bool
   enable_dual_filter : Bool
   enable_jnt_comp : Bool
   enable_masked_compound : Bool
   enable_interintra_compound : Bool
-  seq_force_screen_content_tools : Int
-  seq_force_integer_mv : Int
+  seq_force_screen_content_tools : Int32
+  seq_force_integer_mv : Int32
   frame_id_numbers_present : Bool
-  delta_frame_id_length_minus_2 : Int
-  additional_frame_id_length_minus_1 : Int
+  delta_frame_id_length_minus_2 : Int32
+  additional_frame_id_length_minus_1 : Int32
   decoder_model_info_present : Bool
   equal_picture_interval : Bool
-  buffer_delay_length_minus_1 : Int
-  buffer_removal_time_length_minus_1 : Int
-  frame_presentation_time_length_minus_1 : Int
-  operating_points_cnt_minus_1 : Int
-  operating_point_idc : Array[Int]
+  buffer_delay_length_minus_1 : Int32
+  buffer_removal_time_length_minus_1 : Int32
+  frame_presentation_time_length_minus_1 : Int32
+  operating_points_cnt_minus_1 : Int32
+  operating_point_idc : Array[Int32]
   decoder_model_present_for_this_op : Array[Bool]
-  frame_width_bits_minus_1 : Int
-  frame_height_bits_minus_1 : Int
+  frame_width_bits_minus_1 : Int32
+  frame_height_bits_minus_1 : Int32
 }
 
 pub(all) struct Av1ShowExistingFrameConfig {
   decoder_model_info_present : Bool
   equal_picture_interval : Bool
-  frame_presentation_time_length_minus_1 : Int
+  frame_presentation_time_length_minus_1 : Int32
   frame_id_numbers_present : Bool
-  additional_frame_id_len_minus1 : Int
-  delta_frame_id_length_minus2 : Int
-  reference_frame_types : Array[Int]
+  additional_frame_id_len_minus1 : Int32
+  delta_frame_id_length_minus2 : Int32
+  reference_frame_types : Array[Int32]
 }
 
 pub(all) struct Av1ShowExistingFrameEnvelope {
   show_existing_frame : Bool
-  frame_to_show_map_idx : Int
-  reference_frame_type : Int
+  frame_to_show_map_idx : Int32
+  reference_frame_type : Int32
   frame_presentation_time : Int64?
-  display_frame_id : Int?
-  header_bits : Int
-  header_bytes : Int
+  display_frame_id : Int32?
+  header_bits : Int32
+  header_bytes : Int32
 }
 
 pub(all) struct Av1Stage1Input {
-  width : Int
-  frame_width : Int
-  superres_denom : Int
-  height : Int
-  bit_depth : Int
+  width : Int32
+  frame_width : Int32
+  superres_denom : Int32
+  height : Int32
+  bit_depth : Int32
   monochrome : Bool
-  header_bytes : Int
-  base_q_idx : Int
+  header_bytes : Int32
+  base_q_idx : Int32
   disable_cdf_update : Bool
   allow_screen_content_tools : Bool
   tx_mode_select : Bool
@@ -996,17 +996,17 @@ pub(all) struct Av1Stage1Input {
   cdef : Av1CdefConfig?
   loop_filter : Av1LoopFilterConfig?
   restoration : Av1RestorationConfig?
-  tile_cols : Int
-  tile_rows : Int
-  tile_cols_log2 : Int
-  tile_rows_log2 : Int
-  tile_col_starts_sb : Array[Int]
-  tile_row_starts_sb : Array[Int]
-  tile_size_bytes : Int
+  tile_cols : Int32
+  tile_rows : Int32
+  tile_cols_log2 : Int32
+  tile_rows_log2 : Int32
+  tile_col_starts_sb : Array[Int32]
+  tile_row_starts_sb : Array[Int32]
+  tile_size_bytes : Int32
   enable_filter_intra : Bool
   enable_intra_edge_filter : Bool
   full_range : Bool
-  matrix_coefficients : Int
+  matrix_coefficients : Int32
   use_128x128_superblock : Bool
   tile_payload : Array[Byte]
   film_grain : Av1FilmGrainParams?
@@ -1025,7 +1025,7 @@ pub fn Av1StreamDecoder::end_temporal_unit(Self) -> Result[Av1StreamBatch, Decod
 pub fn Av1StreamDecoder::feed(Self, Array[Byte]) -> Result[Av1StreamBatch, DecodeError]
 pub fn Av1StreamDecoder::finish(Self) -> Result[Av1StreamBatch, DecodeError]
 pub fn Av1StreamDecoder::new(limits? : DecodeLimits, allow_monochrome? : Bool) -> Result[Self, DecodeError]
-pub fn Av1StreamDecoder::pending_bytes(Self) -> Int
+pub fn Av1StreamDecoder::pending_bytes(Self) -> Int32
 pub fn Av1StreamDecoder::reset(Self) -> Unit
 
 pub(all) enum Av1StreamStatus {
@@ -1035,37 +1035,37 @@ pub(all) enum Av1StreamStatus {
 } derive(Eq, @debug.Debug)
 
 pub(all) struct Av1TilePayload {
-  index : Int
-  row : Int
-  col : Int
-  offset : Int
-  length : Int
+  index : Int32
+  row : Int32
+  col : Int32
+  offset : Int32
+  length : Int32
   bytes : Array[Byte]
 }
 
 pub struct Av1TrackEdit {
   duration : Int64
   media_time : Int64
-  media_rate : Int
+  media_rate : Int32
 }
 
 pub struct Av1TxDepthState {
-  cdf8 : Array[Array[Int]]
-  cdf16 : Array[Array[Int]]
-  cdf32 : Array[Array[Int]]
-  cdf64 : Array[Array[Int]]
+  cdf8 : Array[Array[Int32]]
+  cdf16 : Array[Array[Int32]]
+  cdf32 : Array[Array[Int32]]
+  cdf64 : Array[Array[Int32]]
 }
 
 pub(all) struct Av1TxLeaf {
   node : Av1TxNode
-  depth : Int
+  depth : Int32
 }
 
 pub(all) struct Av1TxNode {
-  row : Int
-  col : Int
-  width : Int
-  height : Int
+  row : Int32
+  col : Int32
+  width : Int32
+  height : Int32
 }
 
 pub(all) enum Av1TxPartition {
@@ -1076,10 +1076,10 @@ pub(all) enum Av1TxPartition {
 }
 
 pub struct Av1TxTraversalState {
-  cols : Int
-  rows : Int
-  above_width : Array[Int]
-  left_height : Array[Int]
+  cols : Int32
+  rows : Int32
+  above_width : Array[Int32]
+  left_height : Array[Int32]
 }
 
 pub(all) enum Av1TxType {
@@ -1109,21 +1109,21 @@ pub(all) struct Av1VideoDecoder {
 }
 
 pub(all) struct Av1WarpModel {
-  matrix : Array[Int]
-  coefficients : Array[Int]
+  matrix : Array[Int32]
+  coefficients : Array[Int32]
 }
 
 pub struct AvifAlphaExtent {
-  offset : Int
-  length : Int
-  construction_method : Int
+  offset : Int32
+  length : Int32
+  construction_method : Int32
 }
 
 pub struct AvifAlphaItemDescriptor {
-  item_id : Int
-  width : Int
-  height : Int
-  bit_depth : Int
+  item_id : Int32
+  width : Int32
+  height : Int32
+  bit_depth : Int32
   auxiliary_property : Bool
   premultiplied : Bool
   extents : Array[AvifAlphaExtent]
@@ -1132,41 +1132,41 @@ pub struct AvifAlphaItemDescriptor {
 pub struct AvifAnimationDecoder {
   // private fields
 }
-pub fn AvifAnimationDecoder::frame_count(Self) -> Int
-pub fn AvifAnimationDecoder::frame_timing(Self, Int) -> Result[AvifAnimationFrame, DecodeError]
-pub fn AvifAnimationDecoder::is_keyframe(Self, Int) -> Result[Bool, DecodeError]
+pub fn AvifAnimationDecoder::frame_count(Self) -> Int32
+pub fn AvifAnimationDecoder::frame_timing(Self, Int32) -> Result[AvifAnimationFrame, DecodeError]
+pub fn AvifAnimationDecoder::is_keyframe(Self, Int32) -> Result[Bool, DecodeError]
 pub fn AvifAnimationDecoder::metadata(Self) -> AvifMetadata
-pub fn AvifAnimationDecoder::nearest_keyframe(Self, Int) -> Result[Int?, DecodeError]
+pub fn AvifAnimationDecoder::nearest_keyframe(Self, Int32) -> Result[Int32?, DecodeError]
 pub fn AvifAnimationDecoder::new(Array[Byte], limits? : DecodeLimits) -> Result[Self, DecodeError]
 pub fn AvifAnimationDecoder::next_frame(Self) -> Result[AvifNativeAnimationFrame?, DecodeError]
-pub fn AvifAnimationDecoder::position(Self) -> Int
+pub fn AvifAnimationDecoder::position(Self) -> Int32
 pub fn AvifAnimationDecoder::reset(Self) -> Unit
-pub fn AvifAnimationDecoder::seek_frame(Self, Int) -> Result[AvifNativeAnimationFrame, DecodeError]
+pub fn AvifAnimationDecoder::seek_frame(Self, Int32) -> Result[AvifNativeAnimationFrame, DecodeError]
 
 pub struct AvifAnimationDescriptor {
-  timescale : Int
+  timescale : Int32
   frames : Array[AvifAnimationFrame]
 }
 
 pub struct AvifAnimationFrame {
-  index : Int
-  offset : Int
-  length : Int
-  timestamp : Int
-  duration : Int
-  timescale : Int
+  index : Int32
+  offset : Int32
+  length : Int32
+  timestamp : Int32
+  duration : Int32
+  timescale : Int32
 }
 
 pub struct AvifAnimationPixelFrame {
-  index : Int
-  timestamp : Int
-  duration : Int
-  timescale : Int
+  index : Int32
+  timestamp : Int32
+  duration : Int32
+  timescale : Int32
   image : Image
 }
 
 pub struct AvifAnimationPixels {
-  timescale : Int
+  timescale : Int32
   frames : Array[AvifAnimationPixelFrame]
 }
 
@@ -1182,9 +1182,9 @@ pub(all) struct AvifCleanAperture {
 } derive(Eq, @debug.Debug)
 
 pub struct AvifContainer {
-  width : Int
-  height : Int
-  bit_depth : Int
+  width : Int32
+  height : Int32
+  bit_depth : Int32
   monochrome : Bool
   subsampling_x : Bool
   subsampling_y : Bool
@@ -1192,67 +1192,67 @@ pub struct AvifContainer {
   has_alpha : Bool
   av1c : Array[Byte]
   payload : Array[Byte]
-  operating_point : Int
-  spatial_layer : Int?
-  nclx_primaries : Int?
-  nclx_transfer : Int?
-  nclx_matrix : Int?
+  operating_point : Int32
+  spatial_layer : Int32?
+  nclx_primaries : Int32?
+  nclx_transfer : Int32?
+  nclx_matrix : Int32?
   nclx_full_range : Bool?
 }
 
 pub(all) enum AvifDisplayTransform {
   Crop(AvifCleanAperture)
-  Rotate(Int)
-  Mirror(Int)
+  Rotate(Int32)
+  Mirror(Int32)
 } derive(Eq, @debug.Debug)
 
 pub struct AvifGridDescriptor {
-  item_id : Int
-  rows : Int
-  columns : Int
-  output_width : Int
-  output_height : Int
+  item_id : Int32
+  rows : Int32
+  columns : Int32
+  output_width : Int32
+  output_height : Int32
   tiles : Array[AvifGridTile]
 }
 
 pub struct AvifGridExtent {
-  offset : Int
-  length : Int
-  construction_method : Int
+  offset : Int32
+  length : Int32
+  construction_method : Int32
 }
 
 pub struct AvifGridTile {
-  item_id : Int
+  item_id : Int32
   extents : Array[AvifGridExtent]
 }
 
 pub struct AvifMetadata {
-  primary_item_id : Int?
-  track_id : Int?
+  primary_item_id : Int32?
+  track_id : Int32?
   icc : FixedArray[Byte]?
   exif : FixedArray[Byte]?
-  exif_tiff_offset : Int?
+  exif_tiff_offset : Int32?
   xmp : FixedArray[Byte]?
   pixel_aspect_ratio : (Int64, Int64)?
   transforms : FixedArray[AvifDisplayTransform]
 }
 pub fn AvifMetadata::apply_rgba16(Self, Image16) -> Result[Image16, DecodeError]
 pub fn AvifMetadata::apply_rgba8(Self, Image) -> Result[Image, DecodeError]
-pub fn AvifMetadata::display_size(Self, Int, Int) -> Result[(Int, Int), DecodeError]
-pub fn AvifMetadata::resample_rgba16(Self, Image16, Int, Int) -> Result[Image16, DecodeError]
-pub fn AvifMetadata::resample_rgba8(Self, Image, Int, Int) -> Result[Image, DecodeError]
+pub fn AvifMetadata::display_size(Self, Int32, Int32) -> Result[(Int32, Int32), DecodeError]
+pub fn AvifMetadata::resample_rgba16(Self, Image16, Int32, Int32) -> Result[Image16, DecodeError]
+pub fn AvifMetadata::resample_rgba8(Self, Image, Int32, Int32) -> Result[Image, DecodeError]
 
 pub struct AvifNativeAnimation {
-  timescale : Int
+  timescale : Int32
   frames : FixedArray[AvifNativeAnimationFrame]
 }
-pub fn AvifNativeAnimation::frame_at(Self, Int) -> AvifNativeAnimationFrame?
+pub fn AvifNativeAnimation::frame_at(Self, Int32) -> AvifNativeAnimationFrame?
 
 pub struct AvifNativeAnimationFrame {
-  index : Int
-  timestamp : Int
-  duration : Int
-  timescale : Int
+  index : Int32
+  timestamp : Int32
+  duration : Int32
+  timescale : Int32
   image : AvifNativeImage
 }
 
@@ -1262,7 +1262,7 @@ pub struct AvifNativeImage {
   premultiplied : Bool
 }
 pub fn AvifNativeImage::to_rgba16(Self) -> Image16?
-pub fn AvifNativeImage::to_rgba16_into(Self, FixedArray[UInt16], Int, offset? : Int) -> Result[Unit, DecodeError]
+pub fn AvifNativeImage::to_rgba16_into(Self, FixedArray[UInt16], Int32, offset? : Int32) -> Result[Unit, DecodeError]
 pub fn AvifNativeImage::to_sdr_rgba16(Self, options? : HdrToneMapOptions) -> Result[Image16, DecodeError]
 
 pub struct DecodeError {
@@ -1285,10 +1285,10 @@ pub(all) enum DecodeErrorKind {
 } derive(Eq, @debug.Debug)
 
 pub(all) struct DecodeLimits {
-  max_input_bytes : Int
-  max_frame_pixels : Int
-  max_total_pixels : Int
-  max_frames : Int
+  max_input_bytes : Int32
+  max_frame_pixels : Int32
+  max_total_pixels : Int32
+  max_frames : Int32
 }
 pub fn DecodeLimits::av1_decode(Self, Array[Byte]) -> Image?
 pub fn DecodeLimits::av1_decode_alpha(Self, Array[Byte]) -> Array[Byte]?
@@ -1303,13 +1303,13 @@ pub fn DecodeLimits::avif_container_parse(Self, Array[Byte]) -> AvifContainer?
 pub fn DecodeLimits::avif_decode(Self, Array[Byte]) -> Image?
 pub fn DecodeLimits::avif_decode_alpha(Self, Array[Byte]) -> Array[Byte]?
 pub fn DecodeLimits::avif_decode_animation(Self, Array[Byte]) -> AvifAnimationPixels?
-pub fn DecodeLimits::avif_decode_animation_frame(Self, Array[Byte], Int) -> Image?
+pub fn DecodeLimits::avif_decode_animation_frame(Self, Array[Byte], Int32) -> Image?
 pub fn DecodeLimits::avif_decode_animation_frames(Self, AvifAnimationDescriptor, Array[Array[Byte]]) -> AvifAnimationPixels?
 pub fn DecodeLimits::avif_decode_animation_native(Self, Array[Byte]) -> AvifNativeAnimation?
-pub fn DecodeLimits::avif_decode_animation_samples(Self, Int, Array[Int], Array[Int], Array[Array[Byte]]) -> AvifAnimationPixels?
+pub fn DecodeLimits::avif_decode_animation_samples(Self, Int32, Array[Int32], Array[Int32], Array[Array[Byte]]) -> AvifAnimationPixels?
 pub fn DecodeLimits::avif_decode_grid(Self, Array[Byte], AvifGridDescriptor) -> Image?
 pub fn DecodeLimits::avif_decode_grid_auto(Self, Array[Byte]) -> Image?
-pub fn DecodeLimits::avif_decode_grid_tiles(Self, Int, Int, Int, Int, Array[Array[Byte]]) -> Image?
+pub fn DecodeLimits::avif_decode_grid_tiles(Self, Int32, Int32, Int32, Int32, Array[Array[Byte]]) -> Image?
 pub fn DecodeLimits::avif_decode_native(Self, Array[Byte]) -> AvifNativeImage?
 pub fn DecodeLimits::avif_decode_rgba(Self, Array[Byte]) -> Image?
 pub fn DecodeLimits::avif_decode_rgba16(Self, Array[Byte]) -> Image16?
@@ -1346,23 +1346,23 @@ pub fn IccTransformOptions::new(IccRenderingIntent, Bool) -> Self
 pub fn IccTransformOptions::relative_colorimetric() -> Self
 
 pub(all) struct Image {
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   data : FixedArray[Byte]
 }
 pub fn Image::copy(Self) -> Self
-pub fn Image::from_bytes(Int, Int, FixedArray[Byte]) -> Self
-pub fn Image::get_pixel(Self, Int, Int) -> (Byte, Byte, Byte, Byte)
-pub fn Image::new(Int, Int) -> Self
-pub fn Image::pixel_count(Self) -> Int
-pub fn Image::set_pixel(Self, Int, Int, Byte, Byte, Byte, Byte) -> Unit
+pub fn Image::from_bytes(Int32, Int32, FixedArray[Byte]) -> Self
+pub fn Image::get_pixel(Self, Int32, Int32) -> (Byte, Byte, Byte, Byte)
+pub fn Image::new(Int32, Int32) -> Self
+pub fn Image::pixel_count(Self) -> Int32
+pub fn Image::set_pixel(Self, Int32, Int32, Byte, Byte, Byte, Byte) -> Unit
 
 pub struct Image16 {
-  width : Int
-  height : Int
+  width : Int32
+  height : Int32
   data : FixedArray[UInt16]
 }
-pub fn Image16::copy_bytes_into(Self, FixedArray[Byte], Int, big_endian? : Bool, offset? : Int) -> Result[Unit, DecodeError]
+pub fn Image16::copy_bytes_into(Self, FixedArray[Byte], Int32, big_endian? : Bool, offset? : Int32) -> Result[Unit, DecodeError]
 
 pub(all) enum PixelPacking {
   U8

@@ -6,7 +6,7 @@ cd "$task_root"
 task_target=_build/extensions-linux-verify
 mkdir -p "$task_target"
 moon version --all > _build/extensions-linux-version.log
-grep -q 'moonc v0.10.14+7d59c7ec9' _build/extensions-linux-version.log
+grep -q 'moonc v0.10.16+b1a0e846e' _build/extensions-linux-version.log
 uname -sm > _build/extensions-linux-system.log
 gcc --version >> _build/extensions-linux-system.log
 if [ "${1:-}" != "--file-only" ]; then
