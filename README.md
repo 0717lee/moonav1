@@ -99,7 +99,7 @@ moon test --target wasm-gc
 moon test --target native
 ```
 
-普通测试使用随库提交的独立参考，不需要外部解码器。`tests/fixtures/` 中的说明和 manifest 记录样本来源、工具版本和像素约定。生成器位于 `scripts/`，外部参考工具只在重新生成或复核参考时使用。
+普通测试使用随库提交的独立参考，不需要外部解码器。`tests/fixtures/` 中的说明和 manifest 记录样本来源、工具版本和像素约定。只依赖公开 API 的生成参考测试位于 [`tests/reference/`](tests/reference/README.md)；需要访问私有实现的 `*_wbtest.mbt` 因 MoonBit 包级可见性约束保留在根包。生成器位于 `scripts/`，外部参考工具只在重新生成或复核参考时使用。
 
 ## 扩展验证与基准
 

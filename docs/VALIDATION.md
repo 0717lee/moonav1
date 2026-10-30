@@ -56,8 +56,10 @@ PQ/HLG, VFR and long video. Source credits and exact scope are in each manifest.
 RGBA16 numeric references allow at most one UInt16 RGB step and exact alpha.
 ICC references retain the existing eight-step RGB bound and exact alpha.
 Native plane comparisons are exact. The saved expected output never comes
-from MoonAV1 itself. Reference generators document their own external tool
-requirements; the color checks use LittleCMS 2.19, and container-record checks
+from MoonAV1 itself. Public-API reference suites live under
+[`tests/reference`](../tests/reference/README.md); white-box reference tests
+remain in the root package because MoonBit requires package-level access.
+Reference generators document their own external tool requirements; the color checks use LittleCMS 2.19, and container-record checks
 use ffprobe. Read each generator's help before regeneration: some older
 `--check` modes also write generated test source.
 

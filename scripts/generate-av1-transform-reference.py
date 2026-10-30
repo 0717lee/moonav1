@@ -340,7 +340,11 @@ def main() -> int:
     parser.add_argument("--cc", default=shutil.which("cc") or shutil.which("gcc") or (str(moon_tcc) if moon_tcc.exists() else "cc"))
     parser.add_argument("--moonfmt", default=shutil.which("moonfmt") or "moonfmt")
     parser.add_argument("--source-dir", type=Path, default=Path(tempfile.gettempdir()) / ("pixelforge-aom-transform-" + REVISION))
-    parser.add_argument("--output", type=Path, default=ROOT / "av1_transform_reference_test.mbt")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / "tests/reference/av1_transform_reference_test.mbt",
+    )
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     formatter = shutil.which(args.moonfmt)

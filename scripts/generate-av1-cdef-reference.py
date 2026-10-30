@@ -410,7 +410,11 @@ def main() -> int:
     parser.add_argument("--moonfmt", default=shutil.which("moonfmt") or "moonfmt",
                         help="standalone MoonBit formatter executable")
     parser.add_argument("--source-dir", type=Path, default=ROOT / "_refs/aom-cdef")
-    parser.add_argument("--output", type=Path, default=ROOT / "av1_cdef_reference_test.mbt")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / "tests/reference/av1_cdef_reference_test.mbt",
+    )
     parser.add_argument("--check", action="store_true", help="compare existing goldens without rewriting")
     args = parser.parse_args()
     formatter = shutil.which(args.moonfmt)

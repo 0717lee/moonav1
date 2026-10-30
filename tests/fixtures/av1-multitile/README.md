@@ -18,7 +18,7 @@ constants to `manifest.json`. The manifest includes executable versions and
 hashes, encoder/decoder commands, source/OBU/decoded hashes, and traced frame
 header constraints. Temporary command paths use `{work_dir}`.
 
-`av1_multitile_reference_test.mbt` embeds the original OBU bytes and calls the
+`tests/reference/av1_multitile_reference_test.mbt` embeds the original OBU bytes and calls the
 public `av1_decode` entry. It compares every output pixel with PixelForge's
 YUV conversion applied to the recorded dav1d planes, so RGB converter rounding
 does not obscure tile entropy/reconstruction differences. For 12-bit input the

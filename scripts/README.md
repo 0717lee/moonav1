@@ -1,8 +1,10 @@
 # AV1/AVIF reference generators
 
 These generators and their shared helpers produce independent AV1/AVIF
-references. [`tests/fixtures`](../tests/fixtures) retains manifests, small
-reference data, encoder commands, syntax records and license notices. Larger
+references. [`tests/reference`](../tests/reference) contains the generated
+black-box reference suites and their package-level index;
+[`tests/fixtures`](../tests/fixtures) retains manifests, small reference data,
+encoder commands, syntax records and license notices. Larger
 media are distributed as versioned release assets; restore selected groups with
 `python scripts/fetch-fixtures.py --list` and `python scripts/fetch-fixtures.py GROUP`.
 See

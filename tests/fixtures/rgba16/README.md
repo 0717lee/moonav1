@@ -65,7 +65,7 @@ python scripts/generate-rgba16-reference.py --check
 python scripts/generate-rgba16-reference.py --check --libavif /path/to/avif.dll
 ```
 
-To generate only this new reference directory and `rgba16_reference_test.mbt`,
+To generate only this new reference directory and `tests/reference/rgba16_reference_test.mbt`,
 omit `--check` and provide the recorded libavif version. Python's standard
 library and `moonfmt` are required for generation/checking; ordinary MoonBit
 tests require neither Python nor an external codec.

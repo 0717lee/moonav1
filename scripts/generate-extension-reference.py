@@ -22,7 +22,7 @@ import sys
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'tests/fixtures/extensions'
-TEST = ROOT / 'extension_reference_test.mbt'
+TEST = ROOT / 'tests/reference/extension_reference_test.mbt'
 
 
 def load(name, filename):

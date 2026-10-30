@@ -26,7 +26,7 @@ decoded pictures, including all color/alpha planes and displayed RGBA16 channels
 ```sh
 python scripts/generate-extension-reference.py --check
 python scripts/generate-extension-reference.py --verify --libavif <libavif-0.11.1-library>
-moon test extension_reference_test.mbt --target js
+moon test --package 0717lee/moonav1/tests/reference --target js
 moon run examples/extensions --target js
 ```
 

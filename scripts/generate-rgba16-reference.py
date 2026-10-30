@@ -26,7 +26,7 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / 'tests/fixtures'
 OUT = FIXTURES / 'rgba16'
-TEST = ROOT / 'rgba16_reference_test.mbt'
+TEST = ROOT / 'tests/reference/rgba16_reference_test.mbt'
 
 
 def load(name, filename):

@@ -199,7 +199,11 @@ def check_generated(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=Path("tests/fixtures/av1-multitile"))
-    parser.add_argument("--moon-test", type=Path, default=Path("av1_multitile_reference_test.mbt"))
+    parser.add_argument(
+        "--moon-test",
+        type=Path,
+        default=Path("tests/reference/av1_multitile_reference_test.mbt"),
+    )
     parser.add_argument("--aomenc", default=shutil.which("aomenc") or "aomenc")
     parser.add_argument("--ffmpeg", default=shutil.which("ffmpeg") or "ffmpeg")
     parser.add_argument("--moonfmt", default=shutil.which("moonfmt") or "moonfmt")

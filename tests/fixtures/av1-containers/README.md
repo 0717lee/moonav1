@@ -36,7 +36,7 @@ python scripts/generate-container-reference.py --check
 The check does not run FFmpeg or write a temporary output. It reopens the
 existing files, compares their hashes and ffprobe packet records, validates the
 native reference CRCs against the unchanged AV1 stream corpus, and checks the
-generated `container_reference_test.mbt` source. The MoonBit source embeds only
+generated `tests/reference/container_reference_test.mbt` source. The MoonBit source embeds only
 the small eight-packet prefix, its CFR variant, and four remuxed files; it does not embed the
 multi-megabyte native reference planes.
 

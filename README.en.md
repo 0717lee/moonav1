@@ -82,7 +82,7 @@ moon test --target wasm-gc
 moon test --target native
 ```
 
-Ordinary tests are self-contained and do not require an external decoder. Fixture manifests preserve independent pixels, source versions and commands. Reference-generation tools are in `scripts/`.
+Ordinary tests are self-contained and do not require an external decoder. Generated reference tests that only use the public API live under [`tests/reference/`](tests/reference/README.md); `*_wbtest.mbt` reference suites remain in the root package because MoonBit white-box tests require package-level access. Fixture manifests preserve independent pixels, source versions and commands. Reference-generation tools are in `scripts/`.
 
 ## Extended validation and benchmarks
 
