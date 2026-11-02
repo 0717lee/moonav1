@@ -1,0 +1,488 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "0717lee/moonav1/tests/reference"
+
+import {
+  "0717lee/moonav1",
+}
+
+// Values
+pub const AV1_INTRA_DC : Int32 = 0
+
+pub const AV1_INTRA_H : Int32 = 2
+
+pub const AV1_INTRA_PAETH : Int32 = 12
+
+pub const AV1_INTRA_SMOOTH : Int32 = 9
+
+pub const AV1_INTRA_SMOOTH_H : Int32 = 11
+
+pub const AV1_INTRA_SMOOTH_V : Int32 = 10
+
+pub const AV1_INTRA_V : Int32 = 1
+
+pub fn av1_apply_alpha(@moonav1.Image, Array[Byte]) -> @moonav1.Image?
+
+pub fn av1_apply_film_grain_planes(Array[Array[Int32]], Int32, Int32, Int32, Bool, Bool, Bool, Int32, @moonav1.Av1FilmGrainParams) -> Unit?
+
+pub fn av1_cdef_filter_plane(Int32, Int32, Array[Int32], Array[@moonav1.Av1CdefParams], bit_depth? : Int32) -> Array[Int32]?
+
+pub fn av1_cdef_filter_yuv420(Int32, Int32, Array[Int32], Array[Int32], Array[Int32], Array[@moonav1.Av1CdefParams], Array[@moonav1.Av1CdefParams], bit_depth? : Int32) -> (Array[Int32], Array[Int32], Array[Int32])?
+
+pub fn av1_coeff_base_default(Int32, Int32, Int32, Int32) -> Array[Int32]
+
+pub fn av1_coeff_base_eob_default(Int32, Int32, Int32, Int32) -> Array[Int32]
+
+pub fn av1_coeff_br_default(Int32, Int32, Int32, Int32) -> Array[Int32]
+
+pub fn av1_coeff_dc_sign_default(Int32, Int32, Int32) -> Array[Int32]
+
+pub fn av1_coeff_eob1024_default(Int32, Int32) -> Array[Int32]
+
+pub fn av1_coeff_eob_extra_default(Int32, Int32, Int32, Int32) -> Array[Int32]
+
+pub fn av1_coeff_eob_small_default(Int32, Int32, Int32, Int32) -> Array[Int32]
+
+pub fn av1_decode(Array[Byte]) -> @moonav1.Image?
+
+pub fn av1_decode_alpha(Array[Byte]) -> Array[Byte]?
+
+pub fn av1_decode_alpha_tile(Int32, Int32, Array[Byte], Int32, use_128x128_superblock? : Bool, allow_screen_content_tools? : Bool, bit_depth? : Int32, disable_cdf_update? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : @moonav1.Av1CdefConfig?, loop_filter? : @moonav1.Av1LoopFilterConfig?, restoration? : @moonav1.Av1RestorationConfig?, upscaled_width? : Int32, quant_deltas? : @moonav1.Av1QuantDeltas) -> Array[Byte]?
+
+pub fn av1_decode_dc_tile(Int32, Int32, Array[Byte], Int32, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int32, use_128x128_superblock? : Bool, bit_depth? : Int32, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : @moonav1.Av1CdefConfig?, loop_filter? : @moonav1.Av1LoopFilterConfig?, restoration? : @moonav1.Av1RestorationConfig?, upscaled_width? : Int32, superres_denom? : Int32) -> @moonav1.Image?
+
+pub fn av1_decode_native(Array[Byte]) -> @moonav1.Av1NativeFrame?
+
+pub fn av1_decode_native_result(Array[Byte], limits? : @moonav1.DecodeLimits) -> Result[@moonav1.Av1NativeFrame, @moonav1.DecodeError]
+
+pub fn av1_decode_partition_leaves(Array[Byte], Int32, Int32, disable_cdf_update? : Bool, use_128x128_superblock? : Bool) -> Array[@moonav1.Av1SbBlock]?
+
+pub fn av1_decode_result(Array[Byte], limits? : @moonav1.DecodeLimits) -> Result[@moonav1.Image, @moonav1.DecodeError]
+
+pub fn av1_decode_rgba16(Array[Byte]) -> @moonav1.Image16?
+
+pub fn av1_decode_rgba16_result(Array[Byte], limits? : @moonav1.DecodeLimits) -> Result[@moonav1.Image16, @moonav1.DecodeError]
+
+pub fn av1_decode_show_existing_frame(Array[Byte], @moonav1.Av1ReferenceState, @moonav1.Av1ShowExistingFrameConfig) -> @moonav1.Image?
+
+pub fn av1_decode_split_tile_64x64(Array[Byte], Int32, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int32, use_128x128_superblock? : Bool, allow_screen_content_tools? : Bool) -> @moonav1.Image?
+
+pub fn av1_decode_tile_group(Int32, Int32, Int32, Int32, Array[Byte], Int32, Int32, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int32, use_128x128_superblock? : Bool, bit_depth? : Int32, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : @moonav1.Av1CdefConfig?, loop_filter? : @moonav1.Av1LoopFilterConfig?, restoration? : @moonav1.Av1RestorationConfig?, upscaled_width? : Int32, superres_denom? : Int32) -> @moonav1.Image?
+
+pub fn av1_decode_tile_group_with_boundaries(Int32, Int32, Array[Int32], Array[Int32], Int32, Array[Byte], Int32, Int32, disable_cdf_update? : Bool, full_range? : Bool, matrix_coefficients? : Int32, use_128x128_superblock? : Bool, bit_depth? : Int32, allow_screen_content_tools? : Bool, tx_mode_select? : Bool, reduced_tx_set? : Bool, enable_filter_intra? : Bool, enable_intra_edge_filter? : Bool, cdef? : @moonav1.Av1CdefConfig?, loop_filter? : @moonav1.Av1LoopFilterConfig?, restoration? : @moonav1.Av1RestorationConfig?, upscaled_width? : Int32, monochrome? : Bool, superres_denom? : Int32) -> @moonav1.Image?
+
+pub fn av1_decode_tx_partition_tree_payload(Array[Byte], @moonav1.Av1TxNode, Int32, disable_cdf_update? : Bool) -> Array[@moonav1.Av1TxLeaf]?
+
+pub fn av1_demux(Array[Byte], format? : @moonav1.Av1ContainerFormat?, track_id? : Int64?, limits? : @moonav1.DecodeLimits) -> Result[@moonav1.Av1DemuxedTrack, @moonav1.DecodeError]
+
+pub fn av1_demux_ivf(Array[Byte], limits? : @moonav1.DecodeLimits) -> Result[@moonav1.Av1DemuxedTrack, @moonav1.DecodeError]
+
+pub fn av1_demux_mp4(Array[Byte], track_id? : Int64?, limits? : @moonav1.DecodeLimits) -> Result[@moonav1.Av1DemuxedTrack, @moonav1.DecodeError]
+
+pub fn av1_demux_webm(Array[Byte], track_id? : Int64?, limits? : @moonav1.DecodeLimits) -> Result[@moonav1.Av1DemuxedTrack, @moonav1.DecodeError]
+
+pub fn av1_extract_tile_payloads(Array[Byte], Int32, Int32, Int32) -> Array[@moonav1.Av1TilePayload]?
+
+pub fn av1_find_mv_stack(@moonav1.Av1MotionField, @moonav1.Av1MvBlock, @moonav1.Av1MvFrame, Bool) -> @moonav1.Av1MvStack?
+
+pub fn av1_frame_info(Array[Byte]) -> @moonav1.Av1FrameInfo?
+
+pub fn av1_frame_map() -> @moonav1.Av1FrameMap
+
+pub fn av1_frame_map_show(@moonav1.Av1FrameMap, Int32) -> @moonav1.Av1RefFrame?
+
+pub fn av1_frame_tile_payloads(@moonav1.Av1FrameHeaderInfo) -> Array[@moonav1.Av1TilePayload]?
+
+pub fn av1_inter_frame_of(@moonav1.Av1FrameHeaderInfo, @moonav1.Av1SequenceInfo, @moonav1.Av1FrameMap) -> @moonav1.Av1InterFrame?
+
+pub fn av1_inter_frame_supported(@moonav1.Av1FrameHeaderInfo, @moonav1.Av1SequenceInfo) -> Bool
+
+pub fn av1_intra_predict(Int32, Int32, Int32, Array[Int32], Array[Int32], Int32, Int32, have_above? : Bool, have_left? : Bool) -> Array[Int32]?
+
+pub fn av1_inverse_dct(Array[Int32], Int32, Int32) -> Array[Int32]?
+
+pub fn av1_inverse_dct_2d(Array[Int32], Int32, Int32, Int32, lossless? : Bool) -> Array[Int32]?
+
+pub fn av1_inverse_dct_dc(Int32, Int32, Int32) -> Array[Int32]?
+
+pub fn av1_inverse_transform_2d(@moonav1.Av1TxType, Array[Int32], Int32, Int32, Int32, lossless? : Bool) -> Array[Int32]?
+
+pub fn av1_motion_field(Int32, Int32) -> @moonav1.Av1MotionField
+
+pub fn av1_motion_field_estimation(@moonav1.Av1SequenceInfo, Int32, Array[Int32], Array[@moonav1.Av1RefFrame?], Int32, Int32) -> @moonav1.Av1MotionFieldGrid
+
+pub fn av1_motion_field_store(@moonav1.Av1MotionField, Int32, Int32, Int32, Int32, Int32, Array[Int32], Array[Int32], Array[Int32], skip? : Int32, skip_mode? : Int32, interp? : Array[Int32], compound_idx? : Int32, comp_group_idx? : Int32) -> Unit
+
+pub fn av1_msac_decode_first(Array[Byte], Array[Int32]) -> Int32?
+
+pub fn av1_msac_read_first(Array[Byte], Int32) -> Int32?
+
+pub fn av1_mv_block_position(Int32, Int32, Int32, Int32, Int32, Int32, Int32) -> (Int32, Int32, Bool)
+
+pub let av1_mv_div_mult_size : Int32
+
+pub fn av1_mv_frame_of(@moonav1.Av1FrameHeaderInfo, temporal? : @moonav1.Av1MotionFieldGrid?) -> @moonav1.Av1MvFrame
+
+pub let av1_mv_invalid : Int32
+
+pub let av1_mv_max_frame_distance : Int32
+
+pub let av1_mv_max_offset_height : Int32
+
+pub let av1_mv_max_offset_width : Int32
+
+pub fn av1_mv_projection(Int32, Int32, Int32, Int32) -> (Int32, Int32)
+
+pub fn av1_mv_projection_component(Int32, Int32, Int32) -> Int32
+
+pub let av1_mv_refmvs_limit : Int32
+
+pub let av1_mv_stack_stamp : Int32
+
+pub fn av1_parse_show_existing_frame(Array[Byte], @moonav1.Av1ShowExistingFrameConfig) -> @moonav1.Av1ShowExistingFrameEnvelope?
+
+pub fn av1_parse_show_existing_frame_envelope(Array[Byte], @moonav1.Av1ShowExistingFrameConfig) -> @moonav1.Av1ShowExistingFrameEnvelope?
+
+pub fn av1_parse_stage1_frame(Array[Byte], @moonav1.Av1SequenceInfo, allow_monochrome? : Bool, allow_highbd? : Bool, map? : @moonav1.Av1FrameMap, frame_header_obu? : Bool, tile_groups? : Array[Array[Byte]], temporal_id? : Int32, spatial_id? : Int32) -> @moonav1.Av1FrameHeaderInfo?
+
+pub fn av1_partition_children(@moonav1.Av1SbPartitionNode, @moonav1.Av1SbPartition) -> Array[@moonav1.Av1SbBlock]
+
+pub fn av1_partition_context(Int32, Int32?, Int32?) -> Int32
+
+pub fn av1_partition_leaves(@moonav1.Av1SbPartitionNode, Array[@moonav1.Av1SbPartition]) -> Array[@moonav1.Av1SbBlock]?
+
+pub fn av1_partition_node(Int32, Int32, Int32, Int32, Int32) -> @moonav1.Av1SbPartitionNode
+
+pub fn av1_reconstruct_split_64x64(Array[Array[Int32]], Array[Array[Int32]], Array[Array[Int32]], Array[Int32], Array[Int32], Array[Int32], full_range? : Bool, matrix_coefficients? : Int32) -> @moonav1.Image?
+
+pub fn av1_reconstruct_split_yuv420(Array[Array[Int32]], Array[Array[Int32]], Array[Array[Int32]], Array[Int32], Array[Int32], Array[Int32]) -> (Array[Byte], Array[Byte], Array[Byte])?
+
+pub fn av1_reconstruct_split_yuv420_with_types(Array[Array[Int32]], Array[Array[Int32]], Array[Array[Int32]], Array[Int32], Array[Int32], Array[Int32], Array[@moonav1.Av1TxType], Array[@moonav1.Av1TxType], Array[@moonav1.Av1TxType]) -> (Array[Byte], Array[Byte], Array[Byte])?
+
+pub fn av1_reconstruct_tx_chroma(Array[@moonav1.Av1TxLeaf], Array[Array[Int32]], Int32, Array[@moonav1.Av1TxType], size? : Int32, bit_depth? : Int32) -> Array[Int32]?
+
+pub fn av1_reconstruct_tx_luma(Int32, Int32, Array[@moonav1.Av1TxLeaf], Array[Array[Int32]], Int32, Array[@moonav1.Av1TxType], bit_depth? : Int32) -> Array[Int32]?
+
+pub fn av1_reconstruct_tx_rgba(Int32, Int32, Array[@moonav1.Av1TxLeaf], Array[Array[Int32]], Array[@moonav1.Av1TxLeaf], Array[Array[Int32]], Array[@moonav1.Av1TxLeaf], Array[Array[Int32]], Int32, Int32, Array[@moonav1.Av1TxType], Array[@moonav1.Av1TxType], Array[@moonav1.Av1TxType], Int32, full_range? : Bool, matrix_coefficients? : Int32) -> @moonav1.Image?
+
+pub fn av1_reference_show_existing(@moonav1.Av1ReferenceState, @moonav1.Av1ShowExistingFrameEnvelope) -> @moonav1.Image?
+
+pub fn av1_reference_state() -> @moonav1.Av1ReferenceState
+
+pub fn av1_reference_store(@moonav1.Av1ReferenceState, Int32, @moonav1.Image, Int32) -> Bool
+
+pub fn av1_relative_dist(@moonav1.Av1SequenceInfo, Int32, Int32) -> Int32
+
+pub fn av1_restoration_active(@moonav1.Av1RestorationConfig) -> Bool
+
+pub let av1_seg_level_alt_q : Int32
+
+pub let av1_seg_level_ref_frame : Int32
+
+pub let av1_segment_levels : Int32
+
+pub fn av1_segmentation_features_supported(@moonav1.Av1SegmentationParams) -> Bool
+
+pub fn av1_segmentation_supported(@moonav1.Av1SegmentationParams) -> Bool
+
+pub let av1_segments : Int32
+
+pub fn av1_sequence_info(Array[Byte]) -> @moonav1.Av1SequenceInfo?
+
+pub fn av1_tx_children(@moonav1.Av1TxNode, @moonav1.Av1TxPartition) -> Array[@moonav1.Av1TxNode]
+
+pub fn av1_tx_depth_context_for_node(@moonav1.Av1TxTraversalState, @moonav1.Av1TxNode) -> Int32
+
+pub fn av1_tx_depth_context_from_neighbors(Int32, Int32) -> Int32
+
+pub fn av1_tx_depth_context_from_sizes(Int32, Int32, Int32, Int32) -> Int32
+
+pub fn av1_tx_leaves(@moonav1.Av1TxNode, Array[@moonav1.Av1TxPartition]) -> Array[@moonav1.Av1TxNode]?
+
+pub fn av1_tx_rect_supported(Int32, Int32) -> Bool
+
+pub fn av1_tx_traversal_record(@moonav1.Av1TxTraversalState, @moonav1.Av1TxNode) -> Unit
+
+pub fn av1_tx_traversal_state(Int32, Int32) -> @moonav1.Av1TxTraversalState
+
+pub fn av1_video_decode_frame(@moonav1.Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool) -> @moonav1.Image?
+
+pub fn av1_video_decode_temporal_unit(@moonav1.Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool) -> Array[@moonav1.Image]?
+
+pub fn av1_video_decode_temporal_unit_native(@moonav1.Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool) -> Array[@moonav1.Av1NativeFrame]?
+
+pub fn av1_video_decode_temporal_unit_native_result(@moonav1.Av1VideoDecoder, Array[Byte], allow_monochrome? : Bool, limits? : @moonav1.DecodeLimits) -> Result[Array[@moonav1.Av1NativeFrame], @moonav1.DecodeError]
+
+pub fn av1_video_decoder() -> @moonav1.Av1VideoDecoder
+
+pub fn av1_warp_from_global_motion(Array[Int32]) -> @moonav1.Av1WarpModel?
+
+pub let av1_warp_samples_scan_limit : Int32
+
+pub fn av1_wedge_mask(Int32, Int32, Int32, Int32) -> Array[Int32]?
+
+pub fn av1_wedge_shape_ok(Int32, Int32) -> Bool
+
+pub fn av1_yuv420_highbd_to_rgba(Int32, Int32, Array[Int32], Array[Int32], Array[Int32], Int32, full_range? : Bool, matrix_coefficients? : Int32, color_primaries? : Int32, transfer_characteristics? : Int32) -> @moonav1.Image?
+
+pub fn av1_yuv420_to_rgba(Int32, Int32, Array[Byte], Array[Byte], Array[Byte]) -> @moonav1.Image?
+
+pub fn av1_yuv420_to_rgba_color(Int32, Int32, Array[Byte], Array[Byte], Array[Byte], full_range? : Bool, matrix_coefficients? : Int32, color_primaries? : Int32, transfer_characteristics? : Int32) -> @moonav1.Image?
+
+pub fn av1_yuv420_to_rgba_range(Int32, Int32, Array[Byte], Array[Byte], Array[Byte], full_range? : Bool) -> @moonav1.Image?
+
+pub fn av1_yuv_highbd_to_rgba(Int32, Int32, Array[Int32], Array[Int32], Array[Int32], Int32, subsampling_x? : Bool, subsampling_y? : Bool, full_range? : Bool, matrix_coefficients? : Int32, color_primaries? : Int32, transfer_characteristics? : Int32) -> @moonav1.Image?
+
+pub fn avif_alpha_item_descriptor(Array[Byte]) -> @moonav1.AvifAlphaItemDescriptor?
+
+pub fn avif_alpha_item_payload(Array[Byte]) -> Array[Byte]?
+
+pub fn avif_animation_descriptor(Array[Byte]) -> @moonav1.AvifAnimationDescriptor?
+
+pub fn avif_animation_frame_at(@moonav1.AvifAnimationPixels, Int32) -> @moonav1.Image?
+
+pub fn avif_animation_sample_payloads(Array[Byte]) -> (@moonav1.AvifAnimationDescriptor, Array[Array[Byte]])?
+
+pub fn avif_container_parse(Array[Byte]) -> @moonav1.AvifContainer?
+
+pub fn avif_container_parse_result(Array[Byte], limits? : @moonav1.DecodeLimits) -> Result[@moonav1.AvifContainer, @moonav1.DecodeError]
+
+pub fn avif_decode(Array[Byte]) -> @moonav1.Image?
+
+pub fn avif_decode_alpha(Array[Byte]) -> Array[Byte]?
+
+pub fn avif_decode_animation(Array[Byte]) -> @moonav1.AvifAnimationPixels?
+
+pub fn avif_decode_animation_frame(Array[Byte], Int32) -> @moonav1.Image?
+
+pub fn avif_decode_animation_frames(@moonav1.AvifAnimationDescriptor, Array[Array[Byte]]) -> @moonav1.AvifAnimationPixels?
+
+pub fn avif_decode_animation_native(Array[Byte]) -> @moonav1.AvifNativeAnimation?
+
+pub fn avif_decode_animation_samples(Int32, Array[Int32], Array[Int32], Array[Array[Byte]]) -> @moonav1.AvifAnimationPixels?
+
+pub fn avif_decode_grid(Array[Byte], @moonav1.AvifGridDescriptor) -> @moonav1.Image?
+
+pub fn avif_decode_grid_auto(Array[Byte]) -> @moonav1.Image?
+
+pub fn avif_decode_grid_tiles(Int32, Int32, Int32, Int32, Array[Array[Byte]]) -> @moonav1.Image?
+
+pub fn avif_decode_native(Array[Byte]) -> @moonav1.AvifNativeImage?
+
+pub fn avif_decode_native_result(Array[Byte], limits? : @moonav1.DecodeLimits) -> Result[@moonav1.AvifNativeImage, @moonav1.DecodeError]
+
+pub fn avif_decode_rgba(Array[Byte]) -> @moonav1.Image?
+
+pub fn avif_decode_rgba16(Array[Byte]) -> @moonav1.Image16?
+
+pub fn avif_decode_rgba16_result(Array[Byte], limits? : @moonav1.DecodeLimits) -> Result[@moonav1.Image16, @moonav1.DecodeError]
+
+pub fn avif_decode_rgba_result(Array[Byte], limits? : @moonav1.DecodeLimits) -> Result[@moonav1.Image, @moonav1.DecodeError]
+
+pub fn avif_grid_descriptor(Array[Byte]) -> @moonav1.AvifGridDescriptor?
+
+pub fn avif_metadata(Array[Byte], limits? : @moonav1.DecodeLimits) -> Result[@moonav1.AvifMetadata, @moonav1.DecodeError]
+
+pub fn avif_reconstruct_grid(Int32, Int32, Int32, Int32, Array[@moonav1.Image]) -> @moonav1.Image?
+
+pub fn avif_stage1_input(Array[Byte]) -> @moonav1.Av1Stage1Input?
+
+pub fn clamp_byte(Int32) -> Byte
+
+// Errors
+
+// Types and methods
+
+// Type aliases
+pub using @moonav1 {type Av1CdefConfig}
+
+pub using @moonav1 {type Av1CdefParams}
+
+pub using @moonav1 {type Av1ContainerDecoder}
+
+pub using @moonav1 {type Av1ContainerFormat}
+
+pub using @moonav1 {type Av1ContainerFrame}
+
+pub using @moonav1 {type Av1ContainerFrameBatch}
+
+pub using @moonav1 {type Av1ContainerPacketBatch}
+
+pub using @moonav1 {type Av1ContainerSeekOutcome}
+
+pub using @moonav1 {type Av1ContainerSeekResult}
+
+pub using @moonav1 {type Av1ContainerStream}
+
+pub using @moonav1 {type Av1ContainerStreamDecoder}
+
+pub using @moonav1 {type Av1ContainerStreamInfo}
+
+pub using @moonav1 {type Av1ContainerStreamStatus}
+
+pub using @moonav1 {type Av1DemuxedTrack}
+
+pub using @moonav1 {type Av1FilmGrainParams}
+
+pub using @moonav1 {type Av1FrameCdfs}
+
+pub using @moonav1 {type Av1FrameHeaderInfo}
+
+pub using @moonav1 {type Av1FrameInfo}
+
+pub using @moonav1 {type Av1FrameMap}
+
+pub using @moonav1 {type Av1InterBlock}
+
+pub using @moonav1 {type Av1InterFrame}
+
+pub using @moonav1 {type Av1LoopFilterBlockMap}
+
+pub using @moonav1 {type Av1LoopFilterConfig}
+
+pub using @moonav1 {type Av1MotionField}
+
+pub using @moonav1 {type Av1MotionFieldGrid}
+
+pub using @moonav1 {type Av1MotionRequest}
+
+pub using @moonav1 {type Av1MvBlock}
+
+pub using @moonav1 {type Av1MvFrame}
+
+pub using @moonav1 {type Av1MvStack}
+
+pub using @moonav1 {type Av1NativeFrame}
+
+pub using @moonav1 {type Av1Packet}
+
+pub using @moonav1 {type Av1PixelPlane}
+
+pub using @moonav1 {type Av1PresentationPoint}
+
+pub using @moonav1 {type Av1PresentationTimeline}
+
+pub using @moonav1 {type Av1QuantDeltas}
+
+pub using @moonav1 {type Av1QuantMatrix}
+
+pub using @moonav1 {type Av1RationalTime}
+
+pub using @moonav1 {type Av1RefFrame}
+
+pub using @moonav1 {type Av1ReferenceState}
+
+pub using @moonav1 {type Av1RestorationConfig}
+
+pub using @moonav1 {type Av1RestorationLayout}
+
+pub using @moonav1 {type Av1RestorationPlaneStripes}
+
+pub using @moonav1 {type Av1RestorationSourceView}
+
+pub using @moonav1 {type Av1RestorationStripeStore}
+
+pub using @moonav1 {type Av1RestorationTileState}
+
+pub using @moonav1 {type Av1RestorationType}
+
+pub using @moonav1 {type Av1RestorationUnit}
+
+pub using @moonav1 {type Av1RestorationUnitRecord}
+
+pub using @moonav1 {type Av1SbBlock}
+
+pub using @moonav1 {type Av1SbPartition}
+
+pub using @moonav1 {type Av1SbPartitionNode}
+
+pub using @moonav1 {type Av1SegmentationParams}
+
+pub using @moonav1 {type Av1SequenceInfo}
+
+pub using @moonav1 {type Av1ShowExistingFrameConfig}
+
+pub using @moonav1 {type Av1ShowExistingFrameEnvelope}
+
+pub using @moonav1 {type Av1Stage1Input}
+
+pub using @moonav1 {type Av1StreamBatch}
+
+pub using @moonav1 {type Av1StreamDecoder}
+
+pub using @moonav1 {type Av1StreamStatus}
+
+pub using @moonav1 {type Av1TilePayload}
+
+pub using @moonav1 {type Av1TrackEdit}
+
+pub using @moonav1 {type Av1TxDepthState}
+
+pub using @moonav1 {type Av1TxLeaf}
+
+pub using @moonav1 {type Av1TxNode}
+
+pub using @moonav1 {type Av1TxPartition}
+
+pub using @moonav1 {type Av1TxTraversalState}
+
+pub using @moonav1 {type Av1TxType}
+
+pub using @moonav1 {type Av1VideoDecoder}
+
+pub using @moonav1 {type Av1WarpModel}
+
+pub using @moonav1 {type AvifAlphaExtent}
+
+pub using @moonav1 {type AvifAlphaItemDescriptor}
+
+pub using @moonav1 {type AvifAnimationDecoder}
+
+pub using @moonav1 {type AvifAnimationDescriptor}
+
+pub using @moonav1 {type AvifAnimationFrame}
+
+pub using @moonav1 {type AvifAnimationPixelFrame}
+
+pub using @moonav1 {type AvifAnimationPixels}
+
+pub using @moonav1 {type AvifCleanAperture}
+
+pub using @moonav1 {type AvifContainer}
+
+pub using @moonav1 {type AvifDisplayTransform}
+
+pub using @moonav1 {type AvifGridDescriptor}
+
+pub using @moonav1 {type AvifGridExtent}
+
+pub using @moonav1 {type AvifGridTile}
+
+pub using @moonav1 {type AvifMetadata}
+
+pub using @moonav1 {type AvifNativeAnimation}
+
+pub using @moonav1 {type AvifNativeAnimationFrame}
+
+pub using @moonav1 {type AvifNativeImage}
+
+pub using @moonav1 {type DecodeError}
+
+pub using @moonav1 {type DecodeErrorKind}
+
+pub using @moonav1 {type DecodeLimits}
+
+pub using @moonav1 {type HdrToneMapOptions}
+
+pub using @moonav1 {type IccProfile}
+
+pub using @moonav1 {type IccRenderingIntent}
+
+pub using @moonav1 {type IccTransformOptions}
+
+pub using @moonav1 {type Image}
+
+pub using @moonav1 {type Image16}
+
+pub using @moonav1 {type PixelPacking}
+
+// Traits
