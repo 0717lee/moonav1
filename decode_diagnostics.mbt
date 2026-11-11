@@ -1,6 +1,7 @@
 ///|
 /// InvalidData includes failures for which the decoder cannot identify a more
 /// specific cause. Unsupported is never guessed from an opaque syntax failure.
+#derive(Eq, Debug)
 pub(all) enum DecodeErrorKind {
   InvalidData
   TruncatedInput
@@ -11,18 +12,19 @@ pub(all) enum DecodeErrorKind {
   InvalidState
   InvalidBuffer
   NoPresentation
-} derive(Eq, Debug)
+}
 
 ///|
 /// Zero-based checked field or failing payload start, not a bit-level entropy
 /// position. Incremental input uses absolute stream offsets. None is used when
 /// an assembled AVIF payload cannot be mapped to one container byte location.
+#derive(Eq, Debug)
 pub struct DecodeError {
   kind : DecodeErrorKind
   byte_offset : Int64?
   context : String
   message : String
-} derive(Eq, Debug)
+}
 
 ///|
 fn decode_error(

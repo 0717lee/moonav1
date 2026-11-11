@@ -1,6 +1,7 @@
 ///|
 /// Exact clap fractions. Sizes/denominators are unsigned 32-bit values;
 /// offsets are signed 32-bit numerators. No floating-point rounding is applied.
+#derive(Eq, Debug)
 pub(all) struct AvifCleanAperture {
   width_n : Int64
   width_d : Int64
@@ -10,16 +11,17 @@ pub(all) struct AvifCleanAperture {
   horizontal_d : Int64
   vertical_n : Int64
   vertical_d : Int64
-} derive(Eq, Debug)
+}
 
 ///|
 /// Rotation is anticlockwise in quarter turns. Mirror mode 0 exchanges top
 /// and bottom; mode 1 exchanges left and right (HEIF mode, not the old axis).
+#derive(Eq, Debug)
 pub(all) enum AvifDisplayTransform {
   Crop(AvifCleanAperture)
   Rotate(Int)
   Mirror(Int)
-} derive(Eq, Debug)
+}
 
 ///|
 /// Owned metadata for a primary item or a selected picture track. Exif is the

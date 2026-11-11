@@ -4,11 +4,12 @@
 /// Per-plane matrix levels signalled by quantization_params. Levels 0..14
 /// select the normative inverse matrix; level 15 selects uniform weights.
 /// U and V select independently from the common chroma matrix family.
+#derive(Eq, Debug)
 pub(all) struct Av1QuantMatrix {
   y : Int
   u : Int
   v : Int
-} derive(Eq, Debug)
+}
 
 ///|
 fn av1_quant_matrix_valid(matrix : Av1QuantMatrix?) -> Bool {

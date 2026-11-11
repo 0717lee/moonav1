@@ -16,7 +16,7 @@ CI 固定版本：`0.10.20+65efd5b93`（`.github/workflows/ci.yml`）。
 
 | 项目 | 结果 |
 |---|---|
-| `moon check` | 0 errors（648 warnings） |
+| `moon check` | 0 errors（637 warnings） |
 | `moon build` | 通过 |
 | `moon test --target native` | 1645/1645 |
 | `moon test --target js` | 1645/1645 |
@@ -29,7 +29,7 @@ CI 对 wasm-gc / js / native 三个目标分别执行 `check`、`build`、`moon 
 ## 适配记录
 
 - `pkg.generated.mbti` 已按 0.10.20 重新生成：新编译器把 `} derive(...)` 的接口输出规范化为 `#derive(...)` 前缀形式，三目标一致，CI 的接口漂移检查通过。
-- 源码中仍有 13 处 `} derive(...)` 旧写法，当前工具链标记为 `deprecated_syntax` 但完全可用，0 error；按官方"已正常构建和测试即可保持现有验证流程"的说明暂不批量迁移。
+- 13 处 `} derive(...)` 旧语法已迁移为 `#derive(...)` 前缀形式，`moon check` 警告从 648 降到 637，0 error；三目标测试与公开 API 示例结果不变。
 - 其余警告为 `test_unqualified_package` 等提示，不影响构建与测试。
 
 ## 平台限制

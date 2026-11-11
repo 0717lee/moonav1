@@ -1,10 +1,11 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Av1ContainerStreamStatus {
   NeedMoreInput
   Ready
   ReplayRequired
   Finished
-} derive(Eq, Debug)
+}
 
 ///|
 /// Owned metadata for the selected track. Packet payloads are delivered only

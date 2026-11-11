@@ -1,10 +1,11 @@
 ///|
 /// File containers carrying AV1 low-overhead temporal units.
+#derive(Eq, Debug)
 pub(all) enum Av1ContainerFormat {
   Ivf
   Mp4
   WebM
-} derive(Eq, Debug)
+}
 
 ///|
 /// One encoded temporal unit in container/decode order. Timestamps and

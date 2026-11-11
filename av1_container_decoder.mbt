@@ -14,12 +14,13 @@ pub struct Av1ContainerFrame {
 /// Result classification for a timestamp seek. `Next` means the selected
 /// presentation is the first one in container decode order whose known PTS is
 /// later than the request; it does not assert that the media has a gap.
+#derive(Eq, Debug)
 pub(all) enum Av1ContainerSeekOutcome {
   Exact
   Next
   End
   UnknownTimestamp
-} derive(Eq, Debug)
+}
 
 ///|
 /// A timestamp seek result. `frame` is present for `Exact`, `Next` and

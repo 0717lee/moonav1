@@ -2,20 +2,22 @@
 /// An exact, unreduced rational timestamp. `denominator` is always positive;
 /// callers can compare two values by checked cross multiplication or retain
 /// the fraction when a movie tick does not land on an integer media tick.
+#derive(Eq, Debug)
 pub struct Av1RationalTime {
   numerator : Int64
   denominator : Int64
-} derive(Eq, Debug)
+}
 
 ///|
 /// Mapping a movie presentation tick through an explicit MP4 edit list.
 /// Empty edits intentionally carry no media time. End is returned after the
 /// final edit; an edit list is interpreted as half-open movie intervals.
+#derive(Eq, Debug)
 pub(all) enum Av1PresentationPoint {
   Empty
   Media(Av1RationalTime)
   End
-} derive(Eq, Debug)
+}
 
 ///|
 /// An explicit presentation timeline for one demuxed track. An empty edit

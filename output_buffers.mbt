@@ -1,13 +1,14 @@
 ///|
 /// Native samples: U16 stores unshifted values; High16 left-aligns the original
 /// sample bits. U8 is valid only for eight-bit pictures. No range/RGB conversion.
+#derive(Eq, Debug)
 pub(all) enum PixelPacking {
   U8
   U16LE
   U16BE
   High16LE
   High16BE
-} derive(Eq, Debug)
+}
 
 ///|
 fn output_buffer_fits(

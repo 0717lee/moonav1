@@ -11,12 +11,13 @@
 /// size bits occur and libaom implicitly assigns U256 to all planes.
 
 ///|
+#derive(Eq, Debug)
 pub(all) enum Av1RestorationType {
   Av1RestorationNone
   Av1RestorationWiener
   Av1RestorationSgrproj
   Av1RestorationSwitchable
-} derive(Eq, Debug)
+}
 
 ///|
 pub(all) struct Av1RestorationConfig {

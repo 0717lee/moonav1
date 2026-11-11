@@ -1,9 +1,10 @@
 ///|
+#derive(Eq, Debug)
 pub(all) enum Av1StreamStatus {
   NeedMoreInput
   FramesReady
   Finished
-} derive(Eq, Debug)
+}
 
 ///|
 /// Every picture owns its buffers. Always consume frames, including when
