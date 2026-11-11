@@ -88,7 +88,7 @@ fn decode_image(bytes : Array[Byte]) -> @moonav1.Image? {
 
 ## 本地构建与验证
 
-使用与 CI 相同的 MoonBit 编译器 `0.10.19+97801ee1b`；native 目标需要 C 工具链。从 GitHub 克隆源码后，在仓库根目录执行：
+使用与 CI 相同的 MoonBit 编译器 `0.10.20+65efd5b93`；native 目标需要 C 工具链。从 GitHub 克隆源码后，在仓库根目录执行：
 
 ```sh
 moon version --all

@@ -320,11 +320,12 @@ pub fn Av1ContainerDecoder::reset(Self) -> Unit
 pub fn Av1ContainerDecoder::seek_timestamp(Self, Int64) -> Result[Av1ContainerSeekResult, DecodeError]
 pub fn Av1ContainerDecoder::timescale(Self) -> Int64
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Av1ContainerFormat {
   Ivf
   Mp4
   WebM
-} derive(Eq, @debug.Debug)
+}
 
 pub struct Av1ContainerFrame {
   packet_index : Int32
@@ -344,12 +345,13 @@ pub struct Av1ContainerPacketBatch {
   status : Av1ContainerStreamStatus
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Av1ContainerSeekOutcome {
   Exact
   Next
   End
   UnknownTimestamp
-} derive(Eq, @debug.Debug)
+}
 
 pub struct Av1ContainerSeekResult {
   requested_timestamp : Int64
@@ -394,12 +396,13 @@ pub struct Av1ContainerStreamInfo {
   codec_initialization : Array[Byte]
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Av1ContainerStreamStatus {
   NeedMoreInput
   Ready
   ReplayRequired
   Finished
-} derive(Eq, @debug.Debug)
+}
 
 pub struct Av1DemuxedTrack {
   format : Av1ContainerFormat
@@ -738,11 +741,12 @@ pub struct Av1PixelPlane {
   data : FixedArray[Int32]
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Av1PresentationPoint {
   Empty
   Media(Av1RationalTime)
   End
-} derive(Eq, @debug.Debug)
+}
 
 pub struct Av1PresentationTimeline {
   // private fields
@@ -762,16 +766,18 @@ pub(all) struct Av1QuantDeltas {
   v_ac : Int32
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) struct Av1QuantMatrix {
   y : Int32
   u : Int32
   v : Int32
-} derive(Eq, @debug.Debug)
+}
 
+#derive(Eq, @debug.Debug)
 pub struct Av1RationalTime {
   numerator : Int64
   denominator : Int64
-} derive(Eq, @debug.Debug)
+}
 
 pub(all) struct Av1RefFrame {
   planes : Array[Array[Int32]]
@@ -851,12 +857,13 @@ pub(all) struct Av1RestorationTileState {
   units : Array[Av1RestorationUnitRecord]
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Av1RestorationType {
   Av1RestorationNone
   Av1RestorationWiener
   Av1RestorationSgrproj
   Av1RestorationSwitchable
-} derive(Eq, @debug.Debug)
+}
 
 pub(all) enum Av1RestorationUnit {
   Av1RestorationUnitNone
@@ -1028,11 +1035,12 @@ pub fn Av1StreamDecoder::new(limits? : DecodeLimits, allow_monochrome? : Bool) -
 pub fn Av1StreamDecoder::pending_bytes(Self) -> Int32
 pub fn Av1StreamDecoder::reset(Self) -> Unit
 
+#derive(Eq, @debug.Debug)
 pub(all) enum Av1StreamStatus {
   NeedMoreInput
   FramesReady
   Finished
-} derive(Eq, @debug.Debug)
+}
 
 pub(all) struct Av1TilePayload {
   index : Int32
@@ -1170,6 +1178,7 @@ pub struct AvifAnimationPixels {
   frames : Array[AvifAnimationPixelFrame]
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) struct AvifCleanAperture {
   width_n : Int64
   width_d : Int64
@@ -1179,7 +1188,7 @@ pub(all) struct AvifCleanAperture {
   horizontal_d : Int64
   vertical_n : Int64
   vertical_d : Int64
-} derive(Eq, @debug.Debug)
+}
 
 pub struct AvifContainer {
   width : Int32
@@ -1200,11 +1209,12 @@ pub struct AvifContainer {
   nclx_full_range : Bool?
 }
 
+#derive(Eq, @debug.Debug)
 pub(all) enum AvifDisplayTransform {
   Crop(AvifCleanAperture)
   Rotate(Int32)
   Mirror(Int32)
-} derive(Eq, @debug.Debug)
+}
 
 pub struct AvifGridDescriptor {
   item_id : Int32
@@ -1265,13 +1275,15 @@ pub fn AvifNativeImage::to_rgba16(Self) -> Image16?
 pub fn AvifNativeImage::to_rgba16_into(Self, FixedArray[UInt16], Int32, offset? : Int32) -> Result[Unit, DecodeError]
 pub fn AvifNativeImage::to_sdr_rgba16(Self, options? : HdrToneMapOptions) -> Result[Image16, DecodeError]
 
+#derive(Eq, @debug.Debug)
 pub struct DecodeError {
   kind : DecodeErrorKind
   byte_offset : Int64?
   context : String
   message : String
-} derive(Eq, @debug.Debug)
+}
 
+#derive(Eq, @debug.Debug)
 pub(all) enum DecodeErrorKind {
   InvalidData
   TruncatedInput
@@ -1282,7 +1294,7 @@ pub(all) enum DecodeErrorKind {
   InvalidState
   InvalidBuffer
   NoPresentation
-} derive(Eq, @debug.Debug)
+}
 
 pub(all) struct DecodeLimits {
   max_input_bytes : Int32
@@ -1364,13 +1376,14 @@ pub struct Image16 {
 }
 pub fn Image16::copy_bytes_into(Self, FixedArray[Byte], Int32, big_endian? : Bool, offset? : Int32) -> Result[Unit, DecodeError]
 
+#derive(Eq, @debug.Debug)
 pub(all) enum PixelPacking {
   U8
   U16LE
   U16BE
   High16LE
   High16BE
-} derive(Eq, @debug.Debug)
+}
 
 // Type aliases
 

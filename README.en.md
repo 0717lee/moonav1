@@ -72,7 +72,7 @@ Use `av1_decode` for raw AV1, `avif_decode_rgba` for AVIF with alpha/grid compos
 
 ## Build
 
-The pinned compiler is `0.10.19+97801ee1b`; native tests require a C toolchain. Clone the GitHub source and run these commands from the repository root:
+The pinned compiler is `0.10.20+65efd5b93`; native tests require a C toolchain. Clone the GitHub source and run these commands from the repository root:
 
 ```sh
 moon check
