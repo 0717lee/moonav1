@@ -1,8 +1,10 @@
 # MoonAV1
 
+[![CI](https://github.com/0717lee/moonav1/actions/workflows/ci.yml/badge.svg)](https://github.com/0717lee/moonav1/actions/workflows/ci.yml)
+
 A pure MoonBit AV1/AVIF decoder for native, JavaScript and wasm-gc. The decoding core does not call browser image decoders or native codec libraries. External decoders are used only to produce independent test references.
 
-[简体中文](README.md) · [Third-party notices](THIRD_PARTY_NOTICES.md)
+[简体中文](README.md) · [Third-party notices](THIRD_PARTY_NOTICES.md) · [Mooncakes](https://mooncakes.io/docs/0717lee/moonav1) · [Changelog](CHANGELOG.md)
 
 ## Scope
 
@@ -21,7 +23,7 @@ RGBA preserves source primaries/transfer, uses nearest-neighbor chroma replicati
 Add the dependency to a MoonBit project:
 
 ```sh
-moon add 0717lee/moonav1@0.2.0
+moon add 0717lee/moonav1@0.2.1
 ```
 
 Import it in the caller's `moon.pkg`:

@@ -1,8 +1,10 @@
 # MoonAV1
 
+[![CI](https://github.com/0717lee/moonav1/actions/workflows/ci.yml/badge.svg)](https://github.com/0717lee/moonav1/actions/workflows/ci.yml)
+
 纯 MoonBit AV1/AVIF 解码基础库，面向 native、JavaScript 和 wasm-gc。核心解码不调用浏览器图片解码器，不通过 FFI 调用 libaom、dav1d 或 libavif；这些工具仅用于生成独立测试参考。
 
-[English](README.en.md) · [第三方声明](THIRD_PARTY_NOTICES.md)
+[English](README.en.md) · [第三方声明](THIRD_PARTY_NOTICES.md) · [Mooncakes](https://mooncakes.io/docs/0717lee/moonav1) · [版本历史](CHANGELOG.md)
 
 ## 能力与边界
 
@@ -21,7 +23,7 @@ RGBA 使用源 primaries/transfer、最近邻色度上采样及最终裁剪/舍�
 在 MoonBit 项目中添加依赖：
 
 ```sh
-moon add 0717lee/moonav1@0.2.0
+moon add 0717lee/moonav1@0.2.1
 ```
 
 在调用方的 `moon.pkg` 中导入：
