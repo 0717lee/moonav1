@@ -5,12 +5,12 @@
 ## 实际工具链（`moon version --all`）
 
 ```
-moon     0.1.20261104 (940aa18 2026-11-04)
-moonc    v0.10.20+65efd5b93 (2026-11-05)
-moonrun  0.1.20261104 (940aa18 2026-11-04)
+moon     0.1.20261117 (eb64713 2026-11-17)
+moonc    v0.10.21+06da1ed44 (2026-11-16)
+moonrun  0.1.20261117 (eb64713 2026-11-17)
 ```
 
-CI 固定版本：`0.10.20+65efd5b93`（`.github/workflows/ci.yml`）。
+CI 固定版本：`0.10.21+06da1ed44`（`.github/workflows/ci.yml`）。
 
 ## 标准入口验证结果
 
@@ -35,3 +35,8 @@ CI 对 wasm-gc / js / native 三个目标分别执行 `check`、`build`、`moon 
 ## 平台限制
 
 `native` 目标需要平台 C 编译器；`tests/fixtures/` 的大型输入按版本保存在 Release 下载包中，普通测试无需下载。
+
+## 0.10.21 升级（2026-11-18）
+
+- 官方发布 `moonc 0.10.21+06da1ed44`，CI、README 与本文档同步固定；源码无需改动。
+- 三目标 `moon info` 接口零漂移，测试 1645/1645（native / js / wasm-gc）。
