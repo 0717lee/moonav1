@@ -23,7 +23,7 @@ RGBA 使用源 primaries/transfer、最近邻色度上采样及最终裁剪/舍�
 在 MoonBit 项目中添加依赖：
 
 ```sh
-moon add 0717lee/moonav1@0.2.1
+moon add 0717lee/moonav1@0.2.2
 ```
 
 在调用方的 `moon.pkg` 中导入：

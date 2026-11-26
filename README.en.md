@@ -23,7 +23,7 @@ RGBA preserves source primaries/transfer, uses nearest-neighbor chroma replicati
 Add the dependency to a MoonBit project:
 
 ```sh
-moon add 0717lee/moonav1@0.2.1
+moon add 0717lee/moonav1@0.2.2
 ```
 
 Import it in the caller's `moon.pkg`:
