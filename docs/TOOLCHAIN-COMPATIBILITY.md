@@ -1,22 +1,22 @@
-# 工具链兼容验证（2026-11-11）
+# 工具链兼容验证（2026-11-26）
 
 按 MoonBit 开源大赛组委会统一维护提醒，使用官方当前发布工具链重新验证。
 
 ## 实际工具链（`moon version --all`）
 
 ```
-moon     0.1.20261117 (eb64713 2026-11-17)
-moonc    v0.10.21+06da1ed44 (2026-11-16)
-moonrun  0.1.20261117 (eb64713 2026-11-17)
+moon     0.1.20261126 (ccd306a 2026-11-26)
+moonc    v1.0.0-rc1+3c0520448 (2026-11-26)
+moonrun  0.1.20261126 (ccd306a 2026-11-26)
 ```
 
-CI 固定版本：`0.10.21+06da1ed44`（`.github/workflows/ci.yml`）。
+CI 固定版本：`1.0.0-rc1+3c0520448`（`.github/workflows/ci.yml`）。
 
 ## 标准入口验证结果
 
 | 项目 | 结果 |
 |---|---|
-| `moon check` | 0 errors（637 warnings） |
+| `moon check` | 0 errors（611 warnings） |
 | `moon build` | 通过 |
 | `moon test --target native` | 1645/1645 |
 | `moon test --target js` | 1645/1645 |
@@ -40,3 +40,10 @@ CI 对 wasm-gc / js / native 三个目标分别执行 `check`、`build`、`moon 
 
 - 官方发布 `moonc 0.10.21+06da1ed44`，CI、README 与本文档同步固定；源码无需改动。
 - 三目标 `moon info` 接口零漂移，测试 1645/1645（native / js / wasm-gc）。
+
+## 1.0 升级（2026-11-26）
+
+- 官方发布 `moonc 1.0.0-rc1+3c0520448`（`moon` / `moonrun 0.1.20261126`），CI、README、`docs/VALIDATION.md` 与 `scripts/check-linux.sh` 同步固定；源码无需改动。
+- 三目标 `moon check` / `moon build` / `moon test` 全部通过，测试仍为 1645/1645；`moon info` 三目标接口零漂移，`pkg.generated.mbti` 无变化。
+- 默认 `moon check` 警告由 637 降至 611，剩余为 `test_unqualified_package` 等提示，0 error。
+- 五个公开 API 示例（`decode`、`native_pixels`、`extensions`、`containers`、`color_video`）在 wasm-gc 下运行通过。

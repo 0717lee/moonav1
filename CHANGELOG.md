@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Upgrade CI and development to the official MoonBit `1.0.0-rc1+3c0520448` toolchain (`moon` / `moonrun 0.1.20261126`).
+- No source changes required: 1645/1645 tests pass on native, JavaScript and wasm-gc, and `moon info` reports no interface drift on all three targets.
+
 ## 0.2.1 — 2026-11-18
 
 ### Changed
